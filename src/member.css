@@ -1,12 +1,17 @@
 *{
     box-sizing: border-box;
     background: transparent;
+    margin:0; 
+    padding:0;
 }
 html{
     background-color: rgb(245, 244, 240);
 } 
 a{
     text-decoration: none;
+}
+ul, li{
+    list-style: none;
 }
 /* header */
 .header{
@@ -72,7 +77,7 @@ a{
     border-radius: 30px;
     margin: 20px auto 10px auto;
 }
-.user-card-name{
+#user-card-name{
     color:white;
     font-weight: bold;
 }
@@ -106,6 +111,7 @@ a{
     width: 340px;
     position: relative;
     overflow: hidden;
+    /* background:url('/Users/allie/Documents/appworks/github/surprise/public/imgs/b.JPG') top right/100% 100% no-repeat; */
 }
 .card-title{
     position: absolute;
@@ -322,6 +328,313 @@ a{
     color: #E5E8ED;
 }
 
+/*      each trip      */
+.plan-track-page{
+
+}
+.plan-track-content{
+    display: flex;
+}
+#trip-plan-step,#trip-track-step{
+    display: none;
+    width: 360px;
+    margin: 140px 40px 0 0;
+    background-color:rgb(243, 245, 247);
+}
+.trip-header{
+    display: flex;
+    align-items: center;
+    background-color: rgb(255, 255, 255);
+    position: fixed;
+    top:0;
+    margin-top: 70px;
+    height: 70px;
+    padding: 10px;
+    width: 100%;
+    z-index: 10;
+}
+.trip-header-img{
+    width: 20px;
+}
+.trip-header-name{
+    color: rgb(0, 46, 61);
+    margin: 0 10px;
+}
+#card-add-plan,#card-add-track{
+    color: rgb(0, 46, 61);
+    font-size: 12px;
+    font-weight: bold;
+    /* border: 1px white solid;
+    border-radius: 40px; */
+    margin: 0 15px;
+}
+#card-add-plan::before,
+#card-add-track::before{
+    content: '+';
+    color: rgb(0, 46, 61);
+    font-weight: bold;
+    border: 1px white solid;
+    border-radius: 20px;
+    width: 20px;
+    height: 20px;
+    padding: 2px;
+    margin: 5px;
+}
+.trip-header-set{
+    width:100px;
+    border-radius: 20px;
+    margin-left: 150px;
+    padding: 6px auto;
+    text-align: center;
+    font-size: 12px;
+    color: rgb(78, 90, 106);
+    border: 1px rgb(232, 234, 238) solid;
+}
+.trip-cover{
+    /* background:url('surprise/public/imgs/b.JPG') top right/100% 100% no-repeat; */
+    background-color: rgba(10, 49, 63, 0.911) ;
+    width: 360px;
+    height: 270px;
+    padding: 100px;
+    position: relative;
+    text-align: center;
+}
+.trip-title{
+    color: white;
+    /* position: absolute;
+    top: 40%; */
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+.trip-summary{
+    color: white;
+    font-size: 16px;
+    padding: 12px;
+    /* position: absolute;
+    top: 300px;
+    right: 10%;
+    transform: translate(10%); */
+}
+.trip-cover-img{
+    width: 360px;
+    height: 270px;
+}
+.trip-details{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 10px 15px;
+    margin-top: -20px;
+    width: 360px;
+    height: 80px;
+    color: white;
+    background-color: rgba(10, 49, 63, 0.781);
+}
+.trip-steps-box{
+    padding: 20px 7px;
+}
+.trip-start,.trip-end{
+    display: flex;
+}
+.trip-start-p,.trip-end-p{
+    color:rgb(10, 49, 63);
+}
+.trip-start-date,.trip-end-date{
+    color: lightgrey;
+    font-size: 10px;
+}
+.trip-step{
+    width: 346px;
+    border: 1px rgb(185, 194, 206) solid ;
+    border-radius: 15px;
+    padding: 16px 10px;
+    margin: 15px auto;
+    /* background:url('/imgs/b.JPG') top right/100% 100% no-repeat; */
+    background-color: white;
+    text-align: left;
+}
+.trip-step-name{
+    font-size: 18px;
+    font-weight: bold;
+    color:rgb(rgb(10, 49, 63));
+}
+.trip-step-date,.trip-step-time{
+    font-size: 10px;
+    color: lightgray;
+}
+.trip-step-story{
+    font-size: 12px;
+    color: darkgrey;
+}
+.trip-step-pic{
+    width: 326px;
+}
+.trip-step-edit{
+    background-color: rgb(59, 89, 152);
+    width:80px;
+    /* border: 1px rgb(185, 194, 206) solid ; */
+    border-radius: 15px;
+    margin: 15px 0 0 240px;
+    padding: 6px 5px;
+    font-size: 12px;
+    color: white;
+    text-align: center;
+}
+.trip-step-add-btn{
+    background-color: rgba(59, 88, 152, 0.918);
+    width:18px;
+    height:18px;
+    /* border: 1px rgb(185, 194, 206) solid ; */
+    border-radius: 18px;
+    margin: 20px 0;
+    font-size: 12px;
+    color:white;
+    text-align: center;
+    line-height: 18px;
+}
+.trip-step-add-last{
+    display: flex;
+    margin-bottom: 30px;
+}
+.trip-step-add-last-btn{
+    background-color:#cc3e56e3;
+    width:26px;
+    height:26px;
+    /* border: 1px rgb(185, 194, 206) solid ; */
+    border-radius: 26px;
+    margin: 40px 15px 0 0;
+    font-size: 20px;
+    color:white;
+    text-align: center;
+    line-height: 26px;
+}
+.trip-step-add-last-p{
+    width: 290px;
+    height: 80px;
+    border: 1px rgb(185, 194, 206) solid ;
+    border-radius: 20px;
+    padding: 16px; 
+    margin:  10px 0;
+    background-color: white;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 50px;
+    color: rgb(0, 46, 61);
+}
+
+/* add step page */
+#add-step{
+    display: none;
+    margin-top:70px;
+    height:100vh;
+    width: 100%;
+    position: fixed;
+    top:0;
+    background-color: rgba(0, 0, 0, 0.671);;
+    z-index: 20;
+}
+.add-step-pop{
+    position: fixed;
+    top: 7%;
+    right: 50%;
+    transform: translate(50%);
+    width: 600px;
+    background: #FDFDFE;
+    border-radius: 15px;
+    /* box-shadow: 1px 1px 1px 1px rgba(158, 158, 158, 0.836); */
+    text-align: center;
+    padding: 7px 20px 30px 20px;
+}
+.add-step-list{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.add-step-close{
+    position: fixed;
+    top: 14px;
+    right: 20px;
+    width: 20px;
+    height: 20px;
+    color: white;
+    font-size: 14px;
+    line-height: 18px;
+    background-color: rgb(0, 46, 61);
+    border-radius: 10px;
+    text-align: center;
+}
+.add-step-title{
+    font-size: 28px;
+    font-weight: bold;
+    margin: 25px 0;
+    padding-bottom: 20px;
+    color: rgb(0, 46, 61);
+    border-bottom: 1px rgb(228, 232, 236) solid;
+    border-bottom-right-radius: 15px;
+}
+.add-step-p{
+    font-size: 18px;
+    /* font-weight: bold; */
+    color:rgb(0, 46, 61);
+    text-align: left;
+    margin-right:15px;
+}
+.add-step-place,.add-step-name,
+.add-step-arrive-date,.add-step-arrive-time,
+.add-step-depart-date,.add-step-depart-time,
+.add-step-story,
+.add-step-pic-box{
+    width: 70%;
+    border: 1px rgb(185, 194, 206) solid ;
+    border-radius: 3px;
+    padding: 20px;
+    margin:  10px;
+    align-self: flex-end;
+}
+.add-step-arrive-date,.add-step-depart-date{
+    width: 40%;
+    margin: 10px 5% 10px 0;
+}
+.add-step-arrive-time,.add-step-depart-time{
+    width: 25%;
+    margin-right: 0;
+}
+/* .add-step-arrive,.add-step-depart, */
+.add-step-pic-box{
+    display: flex;
+    width:70%;
+    margin: 10px auto;
+    align-items: center;
+}
+.add-step-story{
+    height: 250px;
+}
+.add-step-submit{
+    background-color: rgb(185, 192, 204);
+    width:150px;
+    border-radius: 30px;
+    margin-top: 20px;
+    padding: 13px 5px;
+    font-size: 16px;
+    color: white;
+}
+.add-step-cancel{
+    border: 1px rgb(185, 192, 204) solid;
+    width:150px;
+    border-radius: 30px;
+    margin: 22px 10px 22px 0;
+    padding: 13px 5px;
+    font-size: 16px;
+    color: rgb(185, 192, 204);
+}
+.add-step-remove{
+    width: 50px;
+    height: 50px;
+}
+
+
+@media (max-width: 800px) {
 /* each trip */
 .trip-add-step{
     display: flex;
@@ -443,106 +756,4 @@ a{
     font-size: 16px;
     font-weight: bold;
 }
-
-/* add step page */
-#add-step{
-    display: none;
-    margin-top:70px;
-    height:100vh;
-    width: 100%;
-    position: fixed;
-    top:0;
-    background-color: rgba(0,0,0,0.5);;
-    z-index: 1;
-}
-.add-step-pop{
-    position: fixed;
-    top: 10%;
-    right: 50%;
-    transform: translate(50%);
-    width: 600px;
-    background: #FDFDFE;
-    border-radius: 15px;
-    /* box-shadow: 1px 1px 1px 1px rgba(158, 158, 158, 0.836); */
-    text-align: center;
-    overflow: auto;
-}
-.add-step-close{
-    position: fixed;
-    top: 14px;
-    right: 20px;
-    width: 20px;
-    height: 20px;
-    color: white;
-    font-size: 14px;
-    line-height: 18px;
-    background-color: rgb(0, 46, 61);
-    border-radius: 10px;
-    text-align: center;
-}
-.add-step-title{
-    font-size: 28px;
-    font-weight: bold;
-    margin: 25px 0;
-    padding-bottom: 20px;
-    color: rgb(0, 46, 61);
-    border-bottom: 1px rgb(228, 232, 236) solid;
-    border-bottom-right-radius: 15px;
-}
-.add-step-p{
-    font-size: 24px;
-    font-weight: bold;
-    color:rgb(0, 46, 61);
-    text-align: left;
-    margin: 25px 0 0 10%;
-}
-.add-step-place,.add-step-name,.add-step-arrive-date,.add-step-arrive-time,
-.add-step-depart-date,.add-step-depart-time,
-.add-step-story,
-.add-step-pic-box{
-    width: 80%;
-    border: 1px rgb(185, 194, 206) solid ;
-    border-radius: 3px;
-    padding: 20px;
-    margin:  10px 12px;
-}
-.add-step-arrive-date,.add-step-depart-date{
-    width: 65%;
-    margin: 10px 5% 10px 0;
-}
-.add-step-arrive-time,.add-step-depart-time{
-    width: 30%;
-    margin-right: 0;
-}
-.add-step-arrive,.add-step-depart,
-.add-step-pic-box,.add-step-btn-box{
-    display: flex;
-    width:80%;
-    margin: 10px auto;
-    align-items: center;
-}
-.add-step-story{
-    height: 250px;
-}
-.add-step-submit{
-    background-color: rgb(185, 192, 204);
-    width:150px;
-    border-radius: 30px;
-    margin: 22px 30px 22px 0;
-    padding: 13px 5px;
-    font-size: 16px;
-    color: white;
-}
-.add-step-cancel{
-    border: 1px rgb(185, 192, 204) solid;
-    width:150px;
-    border-radius: 30px;
-    margin: 22px 10px 22px 0;
-    padding: 13px 5px;
-    font-size: 16px;
-    color: rgb(185, 192, 204);
-}
-.add-step-remove{
-    width: 50px;
-    height: 50px;
 }

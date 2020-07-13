@@ -13,7 +13,7 @@ class Banner extends React.Component{
   }
     render(){
       return  <div className='banner'>
-        <Link to='/member'>mem</Link>
+        {/* <Link to='/member'>mem</Link> */}
                 <div className='banner-top'>
                   <div className='banner-intro'>
                   <div className='intro-line1'>explore.</div>  
