@@ -43,11 +43,10 @@ class MHeader extends React.Component {
     e.preventDefault();
     firebase.auth().signOut()
     .then(() => {
-      console.log('logout ok');
-
       this.setState({
         islogin: false
       });
+      console.log('logout ok');
     })
     .catch(function(error) {
       console.log(error.message)
@@ -70,6 +69,7 @@ class MHeader extends React.Component {
         tripEnd: document.getElementById(`add-end-input`).value 
       });
 
+      console.log(this.state.tripName)
       let user = firebase.auth().currentUser;
       console.log(user.uid)    
 
@@ -93,7 +93,7 @@ class MHeader extends React.Component {
       
   render() {
     if(this.state.islogin === false){
-      return <Redirect exact to='/'/>
+      return <Redirect to='/'/>
     }
 
     return<div className='header'>

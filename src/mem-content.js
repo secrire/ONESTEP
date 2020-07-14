@@ -24,80 +24,41 @@ class MContent extends React.Component {
     componentDidMount() {
         let user = firebase.auth().currentUser;
         console.log(user)    
-
-        firebase.firestore().collection('users')
-        // .where('logEmail','==',user.email)
-        .get()
-        .then(querySnapshot => {
-            querySnapshot.forEach(doc => {
-                // console.log(doc.id, doc.data())
-                // if(user.email === doc.data().email || user.email ===  doc.data().logEmail){
-                //     this.setState({
-                //         userDisplayname: doc.data().username
-                //     });
-                // document.getElementById('user-card-name').textContent = doc.data().username
-                // }
-                
-            }) 
-        });
-        firebase.firestore().collection('trips').get()
-        // .orderBy('time','desc')
-        .then(querySnapshot => {
-            let data=[];       // 放state前先foreach處理資料
-            let tripID=[];
-            querySnapshot.forEach(doc => {
-                if(user.uid === doc.data().authorUid){
-                    data.push(doc.data());
-                    // console.log(doc.id,doc.data().tripName)
-                    tripID.push(doc.id);  
-                }
-            })
-            console.log(data) 
-            this.setState({
-                userTrips: data,
-                tripIDs: tripID
+        if(user){
+            firebase.firestore().collection('users')
+            .where('email','==',user.email)
+            .get()
+            .then(querySnapshot =>{
+                querySnapshot.forEach(doc => {
+                    console.log(doc.data().username)
+                    this.setState({
+                        userDisplayname: doc.data().username
+                    });
+                console.log(this.state.userDisplayname)
+                })    
             });
-            console.log(this.state.userTrips)
-            console.log(this.state.tripIDs)
-        })
-    
+            firebase.firestore().collection('trips')
+            .orderBy('createTime','desc').get()
+            .then(querySnapshot => {
+                let data=[];       // 放state前先foreach處理資料
+                let tripID=[];
+                querySnapshot.forEach(doc => {
+                    if(user.uid === doc.data().authorUid){
+                        data.push(doc.data());
+                        // console.log(doc.id,doc.data().tripName)
+                        tripID.push(doc.id);  
+                    }
+                })
+                console.log(data) 
+                this.setState({
+                    userTrips: data,
+                    tripIDs: tripID
+                });
+                console.log(this.state.userTrips)
+                console.log(this.state.tripIDs)
+            })
+        } 
     }
-    
-    // addPlan(e){
-    //     e.preventDefault();
-    //     // firebase.firestore().collection('trips').doc('BJtEvs1hzD8qZWutOLW1')
-    //     // .collection('plan').doc()
-    //     // .set({
-    //     //     location: ''
-    //     // })
-    //     console.log('db add plan subcollection ok');  
-    //     // document.getElementById(`card-add-plan`).style.display ='none';
-    //     this.setState({
-    //         isaddedPlan: true
-    //     });
-    // } 
-    
-    // addTrack(e){
-    //     e.preventDefault();   
-    //     firebase.firestore().collection('trips').doc('BJtEvs1hzD8qZWutOLW1')
-    //     .collection('track')
-    //     .doc()
-    //     .set({
-    //         location: '',
-    //     //     stepName:  document.getElementById(`add-step-name`).value,
-    //     //     stepArrDate: document.getElementById(`add-sum-input`).value,
-    //     //     stepArrTime: document.getElementById(`add-sum-input`).value,
-    //     //     stepDepDate: document.getElementById(`add-sum-input`).value,
-    //     //     stepDepTime: document.getElementById(`add-sum-input`).value,
-    //     //     stepStory: document.getElementById(`add-start-input`).value,
-    //     //     stepPic: ''
-    //     })
-    //     console.log('db add track subcollection ok');  
-    //     // document.getElementById(`card-add-track`).style.display ='none';
-    //     this.setState({
-    //         isaddedPlan: true
-    //     });
-    // } 
      
     render() {
         // let content;
@@ -131,12 +92,10 @@ class MContent extends React.Component {
     
         //     }
         // }else{content = ''}
-       
-        // console.log(content)
         let key=0;
-        let renderUserTrips = this.state.userTrips.map((n)=>{
+        let renderUserTrips = this.state.userTrips.map((n, index)=>{
             return  <li key={key++}>
-                        <Link to='/tripID'><div className='card'>  
+                        <Link to={"/"+this.state.tripIDs[index]}><div className='card'>  
                             <div className='card-title'>{n.tripName}</div>
                             <div className='card-main'>
                                 <div className='card-time'>{n.tripStart}</div>
@@ -147,7 +106,7 @@ class MContent extends React.Component {
                     </li>
         })
         
-        let renderTripIDs = this.state.tripIDs.map((k)=>{
+        // let renderTripIDs = this.state.tripIDs.map((k)=>{
             // firebase.firestore().collection('trips').doc(k).get()
             // .then(
             //     (doc)=>{
@@ -169,15 +128,12 @@ class MContent extends React.Component {
                     
             //     }
             // )
-            
-            return  <li key={key++}>
-                        <Link to={'/'+k} className='card'>
-                        
-                        {/* {renderUserTrips} */}
-                        </Link>
-                    </li>
-        })
-        
+        //     return  <li key={key++}>
+        //                 <Link to={'/'+k} className='card'>
+        //                 {/* {renderUserTrips} */}
+        //                 </Link>
+        //             </li>
+        // })
         
         // console.log(this.props)  
         return <div className='content'>
@@ -193,8 +149,6 @@ class MContent extends React.Component {
                         <div className='user-title'>Trips</div>
                         
                         <ul className='cards'>
-                            {renderTripIDs}
-                            {/* {content} */}
                             {renderUserTrips}
                             {/* <li><Link to='/tripID'><div className='card'>  
                                 <div className='card-title'>{this.state.tripName}</div>

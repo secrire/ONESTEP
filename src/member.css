@@ -436,11 +436,18 @@ ul, li{
 }
 .trip-start,.trip-end{
     display: flex;
+    align-items: center;
 }
-.trip-start-p,.trip-end-p{
+.trip-start-end-icon{
+    width: 46px;
+    height:48px;
+}
+.trip-start-end-p{
     color:rgb(10, 49, 63);
+    font-weight: bold;
+    margin: 0 10px;
 }
-.trip-start-date,.trip-end-date{
+.trip-start-end-date{
     color: lightgrey;
     font-size: 10px;
 }
@@ -524,7 +531,7 @@ ul, li{
 }
 
 /* add step page */
-#add-step{
+#add-plan-step,#add-track-step{
     display: none;
     margin-top:70px;
     height:100vh;
