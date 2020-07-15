@@ -219,7 +219,7 @@ ul, li{
     text-align: left;
     margin-left: 32px;
 }
-#add-name-input,#add-sum-input,#add-start-input,#add-end-input{
+#tripName,#add-sum-input,#tripStart,#add-end-input{
     width: 307px;
     border: 1px rgb(185, 194, 206) solid ;
     border-radius: 3px;
@@ -477,6 +477,17 @@ ul, li{
 .trip-step-pic{
     width: 326px;
 }
+#plan-step-like{
+    background-color: rgb(59, 89, 152);
+    width:60px;
+    /* border: 1px rgb(185, 194, 206) solid ; */
+    border-radius: 15px;
+    /* margin: 15px 0 0 240px; */
+    padding: 6px 5px;
+    font-size: 12px;
+    color: white;
+    text-align: center;
+}
 .trip-step-edit{
     background-color: rgb(59, 89, 152);
     width:80px;
@@ -530,8 +541,8 @@ ul, li{
     color: rgb(0, 46, 61);
 }
 
-/* add step page */
-#add-plan-step,#add-track-step{
+/* add + edit step page */
+#add-plan-step,#add-track-step,#edit-plan-step,#edit-track-step{
     display: none;
     margin-top:70px;
     height:100vh;

@@ -8,17 +8,15 @@ import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
 
-class AddStep extends React.Component {
+class EditStep extends React.Component {
   constructor(props){
     super(props);    
   }
 
-  addPlanStep(e){
+  editPlanStep(e){
     e.preventDefault();
 
-    let currentUrl = location.href;
-    let currentUrlNew = new URL(currentUrl);
-    let pickedTripID = currentUrlNew.pathname.substr(1);
+    let pickedTripID = new URL(location.href).pathname.substr(1);
     
     let stepPic='';
     if(localStorage.getItem('pic')){
@@ -34,22 +32,21 @@ class AddStep extends React.Component {
         document.getElementById(`add-plan-step-submit`).disabled = false;
       
 
-        firebase.firestore().collection('trips').doc(pickedTripID)
-        .collection('plan').doc()
-        .set({
-          location: document.getElementById(`add-plan-step-place`).value,
-          stepName:  document.getElementById(`add-plan-step-name`).value,
-          stepArrDate: document.getElementById(`add-plan-step-arrive-date`).value,
-          stepArrTime: document.getElementById(`add-plan-step-arrive-time`).value,
-          stepDepDate: document.getElementById(`add-plan-step-depart-date`).value,
-          stepDepTime: document.getElementById(`add-plan-step-depart-time`).value,
-          stepStory: document.getElementById(`add-plan-step-story`).value,
-          stepPic: stepPic,
-          stepLike:0
-        })
-        console.log('db plan step ok');
-        localStorage.removeItem('pic')  
-        document.getElementById(`add-plan-step`).style.display ='none';
+      firebase.firestore().collection('trips').doc(pickedTripID)
+      .collection('plan').doc()
+      .set({
+        location: document.getElementById(`add-plan-step-place`).value,
+        stepName:  document.getElementById(`add-plan-step-name`).value,
+        stepArrDate: document.getElementById(`add-plan-step-arrive-date`).value,
+        stepArrTime: document.getElementById(`add-plan-step-arrive-time`).value,
+        stepDepDate: document.getElementById(`add-plan-step-depart-date`).value,
+        stepDepTime: document.getElementById(`add-plan-step-depart-time`).value,
+        stepStory: document.getElementById(`add-plan-step-story`).value,
+        stepPic: stepPic
+      })
+      console.log('db edit plan step ok');
+      localStorage.removeItem('pic')  
+      document.getElementById(`add-plan-step`).style.display ='none';
     } 
   }
 
@@ -84,8 +81,7 @@ class AddStep extends React.Component {
         stepDepDate: document.getElementById(`add-track-step-depart-date`).value,
         stepDepTime: document.getElementById(`add-track-step-depart-time`).value,
         stepStory: document.getElementById(`add-track-step-story`).value,
-        stepPic: stepPic,
-        stepLike:0
+        stepPic: stepPic
       })
       console.log('db track step ok');
       localStorage.removeItem('pic') 
@@ -93,9 +89,9 @@ class AddStep extends React.Component {
     } 
   }
   
-  hideAddPlanStep(e){
+  hideEditPlanStep(e){
     e.preventDefault();
-    document.getElementById(`add-plan-step`).style.display ='none';
+    document.getElementById(`edit-plan-step`).style.display ='none';
   }  
   hideAddTrackStep(e){
     e.preventDefault();
@@ -132,25 +128,13 @@ class AddStep extends React.Component {
     });
   }
 
-  // downloadPic(e){
-  //   e.preventDefault();
-  //   let storage = firebase.storage();
-  //   var storageRef = storage.ref('pics/');
-  //   storageRef.child('q.png').getDownloadURL().then((url) => {
-  //     console.log('download'+url);
-  //     document.getElementById('pic').src = url;
-  //   }).catch((error) => {
-  //     console.log('download fail'+error.message)
-  //   });
-  // }
-
   render() {
     return(
         <div>
-            <div id='add-plan-step'>
+            <div id='edit-plan-step'>
                 <div className='add-step-pop'>
-                    <div  onClick={this.hideAddPlanStep.bind(this)} className='add-step-close'>x</div>
-                    <div className='add-step-title'>New step of Plan</div>
+                    <div  onClick={this.hideEditPlanStep.bind(this)} className='add-step-close'>x</div>
+                    <div className='add-step-title'>Edit step of Plan</div>
                     <div className='add-step-list'>
                         <div className='add-step-p'>Location</div>
                         <input type='text' className='add-step-place' id='add-plan-step-place'/>
@@ -169,22 +153,10 @@ class AddStep extends React.Component {
                         <input type='date' className='add-step-depart-date' id='add-plan-step-depart-date'/>
                         <input type='time' className='add-step-depart-time' id='add-plan-step-depart-time'/>
                     </div>     
-                    {/* <div className='add-step-type'>
-                        <img className='add-step-type-story' src="public/imgs/menu.png" />
-                        <img className='add-step-type-eat' src="public/imgs/menu.png" />
-                        <img className='add-step-type-event' src="public/imgs/menu.png" />
-                        <img className='add-step-type-traffic' src="public/imgs/menu.png" />
-                        <img className='add-step-type-stay' src="public/imgs/menu.png" />
-                    </div> */}
                     <div className='add-step-list'>
                         <div className='add-step-p'>Your note</div>    
                         <textarea className='add-step-story' id='add-plan-step-story'></textarea>
                     </div>    
-                    {/* <form action="/action_page.php"> */}
-                        {/* <label htmlFor="birthday">Birthday:</label>
-                        <input type="date" id="birthday" name="birthday"/>
-                        <input type="submit"/> */}
-                    {/* </form> */}
                     <div className='add-step-list'>
                         <div className='add-step-p'>Add your photos</div>
                         <div className='add-step-pic-box'>
@@ -193,7 +165,7 @@ class AddStep extends React.Component {
                         </div>
                     </div>    
                     <div className='add-step-list'> 
-                        <div className='add-step-submit' onClick={this.addPlanStep.bind(this)} id='add-plan-step-submit' aria-disabled='true'>Add step</div>
+                        <div className='add-step-submit' onClick={this.editPlanStep.bind(this)} id='add-plan-step-submit' aria-disabled='true'>Save changes</div>
                         {/* <div className='add-step-cancel'>Cancel</div>
                         <img className='add-step-remove' src='public/imgs/menu.png'></img> */}
                     </div>
@@ -243,4 +215,4 @@ class AddStep extends React.Component {
   }
 } 
 
-export default AddStep;
+export default EditStep;
