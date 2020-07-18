@@ -8,13 +8,15 @@ import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
 
+import mapboxgl from 'mapbox-gl';
+
 import Banner from "./banner";
 import Content from "./content";
 import MHeader from "./mem-header";
 import MContent from "./mem-content";
 import TripID from "./TripID";
-import AddStep from "./AddStep";
-import EditStep from "./EditStep";
+// import AddStep from "./AddStep";
+// import EditStep from "./EditStep";
 
 // -----  firebase set ----- //
 const firebaseConfig = {
@@ -57,18 +59,6 @@ class Header extends React.Component{
   //   e.preventDefault();
   //   firebase.auth().onAuthStateChanged((user)=> {
   //     if (user) {
-      //     firebase.firestore().collection('users')
-      // .doc()
-      // .set({
-      //   username: this.state.username,
-      //   email: this.state.email,
-      //   password: this.state.password,
-      //   isauthed: true
-      // })
-      //   this.setState({
-      //     isauthed: true
-      //   });
-          
   //         db.collection('users').get().then(querySnapshot => {
   //           querySnapshot.forEach(doc => {
   //           console.log(doc.data().email);
@@ -84,14 +74,11 @@ class Header extends React.Component{
   // }
 
   render(){
-    // if(this.state.isauthed === true){
-    //   return <Redirect to='/member'/>
-    // }
     return  <div className='header'>
-       <p><a href="mailto:">Send email</a></p>
-              <Link to='/' className='logo'>needaname</Link>
+       {/* <p><a href="mailto:">Send email</a></p> */}
+              <Link to='/' className='logo'></Link>
               <div onClick={this.showLoginPage.bind(this)} className='login'>Log in</div>
-              <div onClick={this.showSignupPage.bind(this)} className='signup'>Get started</div>
+              <div onClick={this.showSignupPage.bind(this)} className='signup'>Register</div>
               <img className='log-icon' src='./imgs/q.png'/>
             </div>         
   }
@@ -141,13 +128,7 @@ class SignUp extends React.Component{
 
     firebase.auth().createUserWithEmailAndPassword(this.props.state.email, this.props.state.password)
       .then(() => { 
-        /*firebase.firestore().collection('users')
-        .doc(firebase.auth().currentUser.uid)
-        .set({
-          username: this.state.username,
-          email: this.state.email,
-          isauthed: true
-        })        */
+        console.log('email create member ok')
       })
       .catch(err => {
         console.log(err.message);
@@ -162,7 +143,7 @@ class SignUp extends React.Component{
 
   render(){
     if(this.props.state.islogin=== true){
-      return <Redirect to='/member'/>
+      return <Redirect to={"/m"+this.props.state.userUid}/>
     }
     return    <div id='signup-page'>
                 <div className='signup-pop'>
@@ -242,7 +223,7 @@ class Login extends React.Component{
 
   render(){
     if(this.props.state.islogin=== true){
-      return <Redirect to='/member'/>
+      return <Redirect to={"/m"+this.props.state.userUid}/>
     }
     return  <div id='login-page'>
                 <div className='login-pop'>
@@ -273,18 +254,37 @@ class App extends React.Component {
         logEmail:'',
         logPassword:'',
         tripIDs:[],
-        islogin: null
+        islogin: null,
+        userUid:'',
+        totalUserUIDs:[]
        };
     }
 
     componentDidMount(){
+      firebase.firestore().collection('users')
+      .get()
+      .then(querySnapshot => {
+        let totalUserUID=[];      
+        querySnapshot.forEach(doc => {
+        totalUserUID.push(doc.id);
+        // console.log(doc.id,doc.data())
+        })
+        this.setState({
+          totalUserUIDs: totalUserUID  
+        });
+        console.log(this.state.totalUserUIDs)
+      })      
+
       firebase.auth().onAuthStateChanged((user)=> {
         if (user) {
           console.log('Sign In', user);
 
           this.setState({
-            islogin: true
+            islogin: true,
+            userUid:user.uid
           });
+
+          console.log(this.state.userUid)
 
           if(this.state.logEmail ==='' && this.state.email !==''){
             firebase.firestore().collection('users')
@@ -292,7 +292,6 @@ class App extends React.Component {
             .set({
               username: this.state.username,
               email: this.state.email,
-              // isauthed: true,
               logEmail: this.state.logEmail
             })
           }else{
@@ -301,7 +300,6 @@ class App extends React.Component {
             .update({
               // username: this.state.username,
               // email: this.state.email,
-              // isauthed: true,
               logEmail: this.state.logEmail
             })
           }
@@ -311,9 +309,9 @@ class App extends React.Component {
           .onSnapshot(querySnapshot => {      
             let tripID=[];
             querySnapshot.forEach(doc => {
-              if(user.uid === doc.data().authorUid){
+              // if(user.uid === doc.data().authorUid){
                 tripID.push(doc.id);  
-              }
+              // }
             })
             this.setState({
               tripIDs: tripID
@@ -324,6 +322,7 @@ class App extends React.Component {
           console.log(`No user is signed in.`, user)
         }
       });
+      console.log(this.state.userUid)
     }
 
     updateInput(e){
@@ -336,11 +335,11 @@ class App extends React.Component {
       firebase.auth().signOut()
       .then(() => {
         console.log('logout ok');
-        console.log(this.state)
 
         this.setState({
           islogin: false
         });
+        console.log(this.state)
       })
       .catch(function(error) {
         console.log(error.message)
@@ -367,19 +366,26 @@ class App extends React.Component {
       let tripRoute =[];
       if(this.state.tripIDs!==[]){
         for( let i=0; i<this.state.tripIDs.length; i++){
-          tripRoute.push(<Route path={'/'+this.state.tripIDs[i]}><MHeader changeIslogin={this.changeIslogin.bind(this)}  state={this.state}/><TripID state={this.state}/><AddStep/></Route>)
+          tripRoute.push(<Route exact path={'/'+this.state.tripIDs[i]}><MHeader changeIslogin={this.changeIslogin.bind(this)}  state={this.state}/><TripID state={this.state}/></Route>)
+        }
+      }
+      let totalUserUIDsRoute =[];
+      if(this.state.totalUserUIDs!==[]){
+        for( let i=0; i<this.state.totalUserUIDs.length; i++){
+          if(this.state.totalUserUIDs[i]!== this.state.userUid){
+            totalUserUIDsRoute.push(<Route exact path={'/m'+this.state.totalUserUIDs[i]}><MHeader changeIslogin={this.changeIslogin.bind(this)}  state={this.state}/><MContent/></Route>)
+          }
         }
       }
         return (
             <Router>
-                {/* <Links chapters={this.state.chapters}/> */}
                 <div>
                 {/* <Switch>  */}
                 <Route exact path='/'><Header/><Banner/><Content/><Login updateInput={this.updateInput.bind(this)} state={this.state}/><SignUp updateInput={this.updateInput.bind(this)} state={this.state}/></Route> 
-                <Route path='/member'><MHeader changeIslogin={this.changeIslogin.bind(this)}  state={this.state}/><MContent/></Route>
+                <Route exact path={"/m"+this.state.userUid}><MHeader changeIslogin={this.changeIslogin.bind(this)}  state={this.state}/><MContent/></Route>
                 {tripRoute}
+                {totalUserUIDsRoute}
                 {/* <Route path='/tripID'><MHeader/><TripID state={this.state}/><AddStep/></Route> */}
-                {/* <Route path='/addStep'><MHeader/></Route> */}
                 {/* <Route path='/signUp'><Header/><Banner/><Content/><SignUp/></Route> */}
                 {/* <Route path='/login'><Header/><Banner/><Content/><Login/></Route> */}
                 {/* </Switch> */}

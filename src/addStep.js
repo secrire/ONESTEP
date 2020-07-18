@@ -10,16 +10,14 @@ import "firebase/storage";
 
 class AddStep extends React.Component {
   constructor(props){
-    super(props);    
+    super(props);
   }
 
   addPlanStep(e){
     e.preventDefault();
 
-    let currentUrl = location.href;
-    let currentUrlNew = new URL(currentUrl);
-    let pickedTripID = currentUrlNew.pathname.substr(1);
-    
+    let pickedTripID = new URL(location.href).pathname.substr(1);
+
     let stepPic='';
     if(localStorage.getItem('pic')){
       stepPic= localStorage.getItem('pic');
@@ -27,8 +25,8 @@ class AddStep extends React.Component {
     console.log(stepPic)
 
     if (document.getElementById(`add-plan-step-place`).value &&
-        document.getElementById(`add-plan-step-arrive-date`).value &&
-        document.getElementById(`add-plan-step-arrive-time`).value 
+        document.getElementById(`add-plan-step-arrive-date`).value 
+        // &&document.getElementById(`add-plan-step-arrive-time`).value 
        ){
         document.getElementById(`add-plan-step-submit`).style.backgroundColor = '#CC3E55';
         document.getElementById(`add-plan-step-submit`).disabled = false;
@@ -56,10 +54,8 @@ class AddStep extends React.Component {
   addTrackStep(e){
     e.preventDefault();
 
-    let currentUrl = location.href;
-    let currentUrlNew = new URL(currentUrl);
-    let pickedTripID = currentUrlNew.pathname.substr(1);
-    
+    let pickedTripID = new URL(location.href).pathname.substr(1);
+
     let stepPic='';
     if(localStorage.getItem('pic')){
       stepPic= localStorage.getItem('pic');
@@ -67,8 +63,8 @@ class AddStep extends React.Component {
     console.log(stepPic)
 
     if (document.getElementById(`add-track-step-place`).value &&
-        document.getElementById(`add-track-step-arrive-date`).value &&
-        document.getElementById(`add-track-step-arrive-time`).value 
+        document.getElementById(`add-track-step-arrive-date`).value 
+        // &&document.getElementById(`add-track-step-arrive-time`).value 
        ){
         document.getElementById(`add-track-step-submit`).style.backgroundColor = '#CC3E55';
         document.getElementById(`add-track-step-submit`).disabled = false;
@@ -102,15 +98,13 @@ class AddStep extends React.Component {
     document.getElementById(`add-track-step`).style.display ='none';
   }  
   
-  uploadPic(e){
+  AddPlanStepPic(e){
     e.preventDefault();
     let storage = firebase.storage();
     let file = e.target.files[0];
     let storageRef = storage.ref('pics/'+file.name);
 
-    // let currentUrl = location.href;
-    // let currentUrlNew = new URL(currentUrl);
-    // let pickedTripID = currentUrlNew.pathname.substr(1);
+    let pickedTripID = new URL(location.href).pathname.substr(1);
 
     storageRef.put(file).then((snapshot) => {
       console.log('Uploaded', file.name);
@@ -123,7 +117,35 @@ class AddStep extends React.Component {
   
         // firebase.firestore().collection('trips').doc(pickedTripID)
         // .collection('plan').doc()
-        // .update({
+        // .set({
+        //   stepPic: url
+        // })
+      }).catch((error) => {
+        console.log('download fail'+error.message)
+      });
+    });
+  }
+
+  AddTrackStepPic(e){
+    e.preventDefault();
+    let storage = firebase.storage();
+    let file = e.target.files[0];
+    let storageRef = storage.ref('pics/'+file.name);
+
+    let pickedTripID = new URL(location.href).pathname.substr(1);
+
+    storageRef.put(file).then((snapshot) => {
+      console.log('Uploaded', file.name);
+
+      storageRef.getDownloadURL().then(
+        (url) => {
+        console.log('download'+url);
+
+        localStorage.setItem('pic',url);
+  
+        // firebase.firestore().collection('trips').doc(pickedTripID)
+        // .collection('plan').doc()
+        // .set({
         //   stepPic: url
         // })
       }).catch((error) => {
@@ -145,6 +167,7 @@ class AddStep extends React.Component {
   // }
 
   render() {
+    console.log(this.props.state)
     return(
         <div>
             <div id='add-plan-step'>
@@ -161,12 +184,12 @@ class AddStep extends React.Component {
                     </div>
                     <div className='add-step-list'>
                         <div className='add-step-p'>Arrival Date & Time</div>
-                        <input type='date' className='add-step-arrive-date' id='add-plan-step-arrive-date'/>
+                        <input type='date' className='add-step-arrive-date' id='add-plan-step-arrive-date' min={this.props.state.trip.tripStart} max={this.props.state.trip.tripEnd}/>
                         <input type='time' className='add-step-arrive-time' id='add-plan-step-arrive-time'/>
                     </div>
                     <div className='add-step-list'>
                         <div className='add-step-p'>Departure Date & Time</div>
-                        <input type='date' className='add-step-depart-date' id='add-plan-step-depart-date'/>
+                        <input type='date' className='add-step-depart-date' id='add-plan-step-depart-date' min={this.props.state.trip.tripStart} max={this.props.state.trip.tripEnd}/>
                         <input type='time' className='add-step-depart-time' id='add-plan-step-depart-time'/>
                     </div>     
                     {/* <div className='add-step-type'>
@@ -188,7 +211,7 @@ class AddStep extends React.Component {
                     <div className='add-step-list'>
                         <div className='add-step-p'>Add your photos</div>
                         <div className='add-step-pic-box'>
-                            <input onChange={this.uploadPic.bind(this)} id="uploadPicInput" type="file"></input>
+                            <input onChange={this.AddPlanStepPic.bind(this)} id="uploadPicInput" type="file"></input>
                             <img id='pic'/>
                         </div>
                     </div>    
@@ -214,12 +237,12 @@ class AddStep extends React.Component {
                     </div>
                     <div className='add-step-list'>
                         <div className='add-step-p'>Arrival Date & Time</div>
-                        <input type='date' className='add-step-arrive-date' id='add-track-step-arrive-date'/>
+                        <input type='date' className='add-step-arrive-date' id='add-track-step-arrive-date' min={this.props.state.trip.tripStart} max={this.props.state.trip.tripEnd}/>
                         <input type='time' className='add-step-arrive-time' id='add-track-step-arrive-time'/>
                     </div>
                     <div className='add-step-list'>
                         <div className='add-step-p'>Departure Date & Time</div>
-                        <input type='date' className='add-step-depart-date' id='add-track-step-depart-date'/>
+                        <input type='date' className='add-step-depart-date' id='add-track-step-depart-date' min={this.props.state.trip.tripStart} max={this.props.state.trip.tripEnd}/>
                         <input type='time' className='add-step-depart-time' id='add-track-step-depart-time'/>
                     </div>     
                     <div className='add-step-list'>
@@ -229,7 +252,7 @@ class AddStep extends React.Component {
                     <div className='add-step-list'>
                         <div className='add-step-p'>Add your photos</div>
                         <div className='add-step-pic-box'>
-                            <input onChange={this.uploadPic.bind(this)} id="uploadPicInput" type="file"></input>
+                            <input  id="uploadPicInput" type="file"></input>
                             <img id='pic'/>
                         </div>
                     </div>    

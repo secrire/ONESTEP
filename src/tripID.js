@@ -7,6 +7,9 @@ import firebase from 'firebase/app';
 import "firebase/auth";
 import "firebase/firestore";
 
+import AddStep from "./AddStep";
+import Map from "./Map";
+
 class TripID extends React.Component {
     constructor(props){
         super(props);
@@ -19,12 +22,16 @@ class TripID extends React.Component {
             planStepIDs:[],
             pickedStepID: null,
             trackStepIDs:[],
-            pickedTrackID: null
-          };        
+            pickedTrackID: null,
+            planStepPics:null,
+            display: null,
+        };        
     }
     componentDidMount() {
         let user = firebase.auth().currentUser;
-        console.log(user.email)    
+        let pickedTripID = new URL(location.href).pathname.substr(1);
+
+        console.log(user.uid)   
 
         firebase.firestore().collection('users')
         .where('email','==',user.email)
@@ -38,9 +45,6 @@ class TripID extends React.Component {
             }) 
         });
 
-        let currentUrl = location.href;
-        let currentUrlNew = new URL(currentUrl);
-        let pickedTripID = currentUrlNew.pathname.substr(1);
 
         firebase.firestore().collection('trips')
         .doc(pickedTripID)
@@ -48,7 +52,7 @@ class TripID extends React.Component {
             this.setState({
                 trip: querySnapshot.data(),
             });
-            console.log(this.state.trip)
+            // console.log(this.state.trip.tripStart)
         })
 
         firebase.firestore().collection('trips')
@@ -56,17 +60,21 @@ class TripID extends React.Component {
         .orderBy('stepArrDate','asc')
         .onSnapshot(querySnapshot => {
             let data=[]; 
-            let planStepID=[];   
+            let planStepID=[];
+            let planStepPic=[];   
             querySnapshot.forEach(doc => {
                 data.push(doc.data()); 
                 planStepID.push(doc.id);
+                planStepPic.push(doc.data().stepPic); 
             })
             this.setState({
                 planSteps:data,
-                planStepIDs: planStepID
+                planStepIDs: planStepID,
+                planStepPics:planStepPic
             });
             console.log(this.state.planSteps)
-            console.log(this.state.planStepIDs)
+            // console.log(this.state.planStepIDs)
+            console.log(this.state.planStepPics)
         })
 
         firebase.firestore().collection('trips')
@@ -75,22 +83,29 @@ class TripID extends React.Component {
         .onSnapshot(querySnapshot => {
             let data2=[];  
             let trackStepID=[];  
+         
             querySnapshot.forEach(doc => {
                 data2.push(doc.data()); 
                 trackStepID.push(doc.id);
+                // stepPic.push(doc.data().stepPic); 
             })
             this.setState({
                 trackSteps:data2,
-                trackStepIDs: trackStepID
+                trackStepIDs: trackStepID,
+                // stepPics: stepPic
             });
-            console.log(this.state.trackSteps)
-            console.log(this.state.trackStepIDs)
+            // console.log(this.state.trackSteps)
+            // console.log(this.state.trackStepIDs)
         })
     }
-    addPlan(e){
+
+    hidePlan(e){
         e.preventDefault();
-        document.getElementById(`trip-plan-step`).style.display ='block';
-        document.getElementById(`card-add-plan`).style.display ='none';
+        this.setState({
+            display: false,
+        });
+        // document.getElementById(`trip-plan-step`).style.display ='block';
+        // document.getElementById(`card-add-plan`).style.display ='none';
     } 
     addTrack(e){
         e.preventDefault();   
@@ -171,6 +186,7 @@ class TripID extends React.Component {
     deleteTrip(e){
         e.preventDefault();
         
+        // alert('Warning! all the steps including text, photos, locations for this trip will be deleted FOREVER!')
         let pickedTripID = new URL(location.href).pathname.substr(1);
         firebase.firestore().collection('trips')
         .doc(pickedTripID)
@@ -186,15 +202,10 @@ class TripID extends React.Component {
         e.preventDefault();
     
         let pickedTripID = new URL(location.href).pathname.substr(1);
-        let stepPic='';
-        if(localStorage.getItem('pic')){
-          stepPic= localStorage.getItem('pic');
-        }
-        console.log(stepPic)
     
         if (document.getElementById(`edit-plan-step-place`).value &&
-            document.getElementById(`edit-plan-step-arrive-date`).value &&
-            document.getElementById(`edit-plan-step-arrive-time`).value 
+            document.getElementById(`edit-plan-step-arrive-date`).value 
+            // &&document.getElementById(`edit-plan-step-arrive-time`).value 
            ){
             document.getElementById(`edit-plan-step-submit`).style.backgroundColor = '#CC3E55';
             document.getElementById(`edit-plan-step-submit`).disabled = false;
@@ -209,10 +220,9 @@ class TripID extends React.Component {
                 stepDepDate: document.getElementById(`edit-plan-step-depart-date`).value,
                 stepDepTime: document.getElementById(`edit-plan-step-depart-time`).value,
                 stepStory: document.getElementById(`edit-plan-step-story`).value,
-                stepPic: stepPic    
+                // stepPic: stepPic    
             })
             console.log('db edit plan step ok');
-            localStorage.removeItem('pic')  
             document.getElementById(`edit-plan-step`).style.display ='none';
             } 
     }
@@ -220,16 +230,10 @@ class TripID extends React.Component {
         e.preventDefault();
     
         let pickedTripID = new URL(location.href).pathname.substr(1);
-        
-        let stepPic='';
-        if(localStorage.getItem('pic')){
-          stepPic= localStorage.getItem('pic');
-        }
-        console.log(stepPic)
     
         if (document.getElementById(`edit-track-step-place`).value &&
-            document.getElementById(`edit-track-step-arrive-date`).value &&
-            document.getElementById(`edit-track-step-arrive-time`).value 
+            document.getElementById(`edit-track-step-arrive-date`).value 
+            // &&document.getElementById(`edit-track-step-arrive-time`).value 
            ){
             document.getElementById(`edit-track-step-submit`).style.backgroundColor = '#CC3E55';
             document.getElementById(`edit-track-step-submit`).disabled = false;
@@ -245,10 +249,9 @@ class TripID extends React.Component {
             stepDepDate: document.getElementById(`edit-track-step-depart-date`).value,
             stepDepTime: document.getElementById(`edit-track-step-depart-time`).value,
             stepStory: document.getElementById(`edit-track-step-story`).value,
-            stepPic: stepPic
+            // stepPic: stepPic
           })
           console.log('db edit track step ok');
-          localStorage.removeItem('pic') 
           document.getElementById(`edit-track-step`).style.display ='none'; 
         } 
     }
@@ -300,6 +303,7 @@ class TripID extends React.Component {
     
     likePlanStep(e){
         e.preventDefault();
+        // if(e.target.getAttribute('stepid')===)
         // document.getElementById(`plan-step-like`).style.backgroundColor ='red';
         console.log(e.target.getAttribute('stepid'))
 
@@ -307,20 +311,19 @@ class TripID extends React.Component {
         firebase.firestore().collection('trips').doc(pickedTripID)
         .collection('plan').doc(e.target.getAttribute('stepid'))
         .update({
-           stepLike: 1
+           stepLike: firebase.firestore.FieldValue.increment(1)
         })
         console.log('db like plan step ok');
+
     } 
       
-    uploadPic(e){
+    uploadPlanPic(e){
         e.preventDefault();
         let storage = firebase.storage();
         let file = e.target.files[0];
         let storageRef = storage.ref('pics/'+file.name);
     
-        // let currentUrl = location.href;
-        // let currentUrlNew = new URL(currentUrl);
-        // let pickedTripID = currentUrlNew.pathname.substr(1);
+        let pickedTripID = new URL(location.href).pathname.substr(1);
     
         storageRef.put(file).then((snapshot) => {
           console.log('Uploaded', file.name);
@@ -328,24 +331,60 @@ class TripID extends React.Component {
           storageRef.getDownloadURL().then(
             (url) => {
             console.log('download'+url);
-    
-            localStorage.setItem('pic',url);
       
-            // firebase.firestore().collection('trips').doc(pickedTripID)
-            // .collection('plan').doc()
-            // .update({
-            //   stepPic: url
-            // })
+            firebase.firestore().collection('trips').doc(pickedTripID)
+            .collection('plan').doc(this.state.pickedStepID)
+            .update({
+              stepPic: url
+            })
           }).catch((error) => {
             console.log('download fail'+error.message)
           });
         });
     }
   
+    uploadTrackPic(e){
+        e.preventDefault();
+        let storage = firebase.storage();
+        let file = e.target.files[0];
+        let storageRef = storage.ref('pics/'+file.name);
+    
+        let pickedTripID = new URL(location.href).pathname.substr(1);
+    
+        storageRef.put(file).then((snapshot) => {
+          console.log('Uploaded', file.name);
+    
+          storageRef.getDownloadURL().then(
+            (url) => {
+            console.log('download'+url);
+      
+            firebase.firestore().collection('trips').doc(pickedTripID)
+            .collection('track').doc(this.state.pickedStepID)
+            .update({
+              stepPic: url
+            })
+          }).catch((error) => {
+            console.log('download fail'+error.message)
+          });
+        });
+    }
     render() {
         if(this.state.deletePickedTrip === true){
-            return <Redirect to='/member'/>
+            return <Redirect to={"/m"+this.props.state.userUid}/>
         }
+
+        let cardAddPlan = null;
+        let cardAddTrack = null;
+        if(this.props.state.userUid === this.state.trip.authorUid){
+            cardAddPlan = <div onClick={this.hidePlan.bind(this)} id='card-add-plan'>Plan</div>;
+            cardAddTrack= <div onClick={this.addTrack.bind(this)} id='card-add-track'>Track</div>; 
+        }
+
+        // if(this.state.display === false){
+        //     cardAddPlan
+        // }
+        // console.log(this.props.state.userUid)
+        // console.log(this.state.trip.authorUid)
 
         let renderPlanSteps = this.state.planSteps.map((n, index)=>{
             return  <li className='trip-btn-step-box' key={this.state.planStepIDs[index]}>    
@@ -356,12 +395,15 @@ class TripID extends React.Component {
                             <div className='trip-step-time'>{n.stepArrTime}</div>
                             <div className='trip-step-story'>{n.stepStory}</div>
                             <img className='trip-step-pic'  src={n.stepPic}/>
-                            <div onClick={this.likePlanStep.bind(this)} stepid={this.state.planStepIDs[index]} id='plan-step-like'>Like</div>
-                            <div onClick={this.showEditPlanStep.bind(this)} stepid={this.state.planStepIDs[index]} className='trip-step-edit'>Edit step</div>
-                            <div onClick={this.deletePlanStep.bind(this)} stepid={this.state.planStepIDs[index]} className='trip-step-edit'>delete</div>
+                            <div className='trip-step-btn'>
+                                <div onClick={this.likePlanStep.bind(this)} stepid={this.state.planStepIDs[index]} id='plan-step-like'>Like</div>
+                                <div onClick={this.showEditPlanStep.bind(this)} stepid={this.state.planStepIDs[index]} className='trip-step-edit'>Edit step</div>
+                                <div onClick={this.deletePlanStep.bind(this)} stepid={this.state.planStepIDs[index]} className='trip-step-edit'>delete</div>
+                            </div>
                         </div>
                     </li>
         })
+
         let renderTrackSteps = this.state.trackSteps.map((n, index)=>{
             return  <li className='trip-btn-step-box' key={this.state.trackStepIDs[index]}>    
                         <div onClick={this.showAddTrackStep.bind(this)} className='trip-step-add-btn'>+</div>
@@ -377,12 +419,31 @@ class TripID extends React.Component {
                         </div>
                     </li>
         })
+
+        // let planStepUploadPicInput = this.state.planSteps.map((n, index)=>{
+        //     return  <div key={this.state.planStepIDs[index]}>    
+        //                 <input onChange={this.uploadPic.bind(this)} stepid={this.state.trackStepIDs[index]} className="uploadPicInput" type="file"/>
+        //                     {/* <img className='trip-step-pic'  src={n.stepPic}/> */}
+ 
+        //             </div>
+        // })
+
+        // let renderPlanStepPics = this.state.planStepPics.map((n, index)=>{
+        //     return  <div key={this.state.planStepPics[index]}>    
+        //                 <img stepid={this.state.planStepPics[index]} src={n}/>   
+        //             </div>
+        // })
+
         return  <div className='plan-track-page'>
+                    <Map/>
+
                     <div className='trip-header'>
                         <img className='trip-header-img' src='./imgs/q.png'></img>
                         <div className='trip-header-name'>{this.state.userDisplayname}</div>
-                        <div onClick={this.addPlan.bind(this)} id='card-add-plan'>Plan</div>
-                        <div onClick={this.addTrack.bind(this)} id='card-add-track'>Track</div> 
+                        {/* <div onClick={this.addPlan.bind(this)} id='card-add-plan'>Plan</div> */}
+                        {cardAddPlan}
+                        {/* <div onClick={this.addTrack.bind(this)} id='card-add-track'>Track</div>  */}
+                        {cardAddTrack}
                         <div onClick={this.showAddTrip.bind(this)} className='trip-header-set'>Edit trip</div>
                     </div>
                     <div className='plan-track-content'>
@@ -513,7 +574,7 @@ class TripID extends React.Component {
                     {/* -----   edit step   ----- */}
                     <div id='edit-plan-step'>
                         <div className='add-step-pop'>
-                            <div  onClick={this.hideEditPlanStep.bind(this)} className='add-step-close'>x</div>
+                            <div onClick={this.hideEditPlanStep.bind(this)} className='add-step-close'>x</div>
                             <div className='add-step-title'>Edit step of Plan</div>
                             <div className='add-step-list'>
                                 <div className='add-step-p'>Location</div>
@@ -525,12 +586,12 @@ class TripID extends React.Component {
                             </div>
                             <div className='add-step-list'>
                                 <div className='add-step-p'>Arrival Date & Time</div>
-                                <input type='date' className='add-step-arrive-date' id='edit-plan-step-arrive-date'/>
+                                <input type='date' className='add-step-arrive-date' id='edit-plan-step-arrive-date' min={this.state.trip.tripStart} max={this.state.trip.tripEnd}/>
                                 <input type='time' className='add-step-arrive-time' id='edit-plan-step-arrive-time'/>
                             </div>
                             <div className='add-step-list'>
                                 <div className='add-step-p'>Departure Date & Time</div>
-                                <input type='date' className='add-step-depart-date' id='edit-plan-step-depart-date'/>
+                                <input type='date' className='add-step-depart-date' id='edit-plan-step-depart-date' min={this.state.trip.tripStart} max={this.state.trip.tripEnd}/>
                                 <input type='time' className='add-step-depart-time' id='edit-plan-step-depart-time'/>
                             </div>     
                             <div className='add-step-list'>
@@ -540,8 +601,10 @@ class TripID extends React.Component {
                             <div className='add-step-list'>
                                 <div className='add-step-p'>Add your photos</div>
                                 <div className='add-step-pic-box'>
-                                    <input onChange={this.uploadPic.bind(this)} id="uploadPicInput" type="file"></input>
-                                    <img id='pic'/>
+                                    {/* {planStepUploadPicInput} */}
+                                    <input onChange={this.uploadPlanPic.bind(this)} className="uploadPicInput" type="file"/>
+                                    {/* <img id='stepPic' src={this.state.stepPic}/> */}
+                                    {/* {renderPlanStepPics} */}
                                 </div>
                             </div>    
                             <div className='add-step-list'> 
@@ -566,12 +629,12 @@ class TripID extends React.Component {
                             </div>
                             <div className='add-step-list'>
                                 <div className='add-step-p'>Arrival Date & Time</div>
-                                <input type='date' className='add-step-arrive-date' id='edit-track-step-arrive-date'/>
+                                <input type='date' className='add-step-arrive-date' id='edit-track-step-arrive-date' min={this.state.trip.tripStart} max={this.state.trip.tripEnd}/>
                                 <input type='time' className='add-step-arrive-time' id='edit-track-step-arrive-time'/>
                             </div>
                             <div className='add-step-list'>
                                 <div className='add-step-p'>Departure Date & Time</div>
-                                <input type='date' className='add-step-depart-date' id='edit-track-step-depart-date'/>
+                                <input type='date' className='add-step-depart-date' id='edit-track-step-depart-date' min={this.state.trip.tripStart} max={this.state.trip.tripEnd}/>
                                 <input type='time' className='add-step-depart-time' id='edit-track-step-depart-time'/>
                             </div>     
                             <div className='add-step-list'>
@@ -581,7 +644,7 @@ class TripID extends React.Component {
                             <div className='add-step-list'>
                                 <div className='add-step-p'>Add your photos</div>
                                 <div className='add-step-pic-box'>
-                                    <input onChange={this.uploadPic.bind(this)} id="uploadPicInput" type="file"></input>
+                                    <input onChange={this.uploadTrackPic.bind(this)} className="uploadPicInput" type="file"></input>
                                     <img id='pic'/>
                                 </div>
                             </div>    
@@ -590,6 +653,7 @@ class TripID extends React.Component {
                             </div>
                         </div>
                     </div>
+                    <AddStep state={this.state}/>
                 </div> 
         }
     }  

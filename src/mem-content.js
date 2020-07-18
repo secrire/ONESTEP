@@ -7,6 +7,8 @@ import firebase from 'firebase/app';
 import "firebase/auth";
 import "firebase/firestore";
 
+import Map from "./Map";
+
 class MContent extends React.Component {
     constructor(props){
         super(props);
@@ -15,29 +17,31 @@ class MContent extends React.Component {
             userTrips:[],
             tripIDs:[],
           };    
-        }
+    }
     componentDidMount() {
+        let urlUserUID = new URL(location.href).pathname.substr(2);
+
         let user = firebase.auth().currentUser;
-        console.log(user)    
-        if(user){
-            firebase.firestore().collection('users')
-            .where('email','==',user.email)
-            .get()
-            .then(querySnapshot =>{
+        
+        firebase.firestore().collection('users')
+            // .where('email','==',user.email)
+            .get().then(querySnapshot =>{
                 querySnapshot.forEach(doc => {
-                    this.setState({
-                        userDisplayname: doc.data().username
-                    });
+                    if(doc.id === urlUserUID){
+                        this.setState({
+                            userDisplayname: doc.data().username
+                        });
+                    }
                 })    
             });
 
             firebase.firestore().collection('trips')
             .orderBy('createTime','desc')
-            .onSnapshot(querySnapshot => {
+            .get().then(querySnapshot => {
                 let data=[];       // 放state前先foreach處理資料
                 let tripID=[];
                 querySnapshot.forEach(doc => {
-                    if(user.uid === doc.data().authorUid){
+                    if(urlUserUID === doc.data().authorUid){
                         data.push(doc.data());
                         // console.log(doc.id,doc.data().tripName)
                         tripID.push(doc.id);  
@@ -47,10 +51,72 @@ class MContent extends React.Component {
                     userTrips: data,
                     tripIDs: tripID
                 });
-                console.log(this.state.userTrips)
-                console.log(this.state.tripIDs)
+                //console.log(this.state.userTrips)
+                //console.log(this.state.tripIDs)
             })
-        } 
+            console.log(user)
+            // if(user){
+                if(user.uid === urlUserUID ){
+                    console.log('authour is here') 
+                    document.getElementById(`add-trip-btn`).style.display ='block';
+                }
+            // }
+   
+
+
+
+            // mapboxgl.accessToken = 'pk.eyJ1IjoidXNoaTczMSIsImEiOiJja2Mwa2llMmswdnk4MnJsbWF1YW8zMzN6In0._Re0cs24SGBi93Bwl_w0Ig';
+            // var map = new mapboxgl.Map({
+            //     container: 'map',
+            //     style: 'mapbox://styles/mapbox/streets-v11',
+            //     zoom: 13,
+            //     center: [4.899, 52.372]
+            // });
+
+            // var layerList = document.getElementById('menu');
+            // var inputs = layerList.getElementsByTagName('input');
+
+            // function switchLayer(layer) {
+            //     var layerId = layer.target.id;
+            //     map.setStyle('mapbox://styles/mapbox/' + layerId);
+            // }
+
+            // for (var i = 0; i < inputs.length; i++) {
+            //     inputs[i].onclick = switchLayer;
+            // }
+
+    //     if(user){
+    //         firebase.firestore().collection('users')
+    //         .where('email','==',user.email)
+    //         .get()
+    //         .then(querySnapshot =>{
+    //             querySnapshot.forEach(doc => {
+    //                 this.setState({
+    //                     userDisplayname: doc.data().username
+    //                 });
+    //             })    
+    //         });
+
+    //         firebase.firestore().collection('trips')
+    //         .orderBy('createTime','desc')
+    //         .onSnapshot(querySnapshot => {
+    //             let data=[];       // 放state前先foreach處理資料
+    //             let tripID=[];
+    //             querySnapshot.forEach(doc => {
+    //                 if(user.uid === doc.data().authorUid){
+    //                     data.push(doc.data());
+    //                     // console.log(doc.id,doc.data().tripName)
+    //                     tripID.push(doc.id);  
+    //                 }
+    //             })
+    //             this.setState({
+    //                 userTrips: data,
+    //                 tripIDs: tripID
+    //             });
+    //             console.log(this.state.userTrips)
+    //             console.log(this.state.tripIDs)
+    //         })
+    //     } 
     }
     updateInput(e){
         this.setState({
@@ -98,6 +164,7 @@ class MContent extends React.Component {
     }
      
     render() {
+        // console.log(this.state.userTrips)
         let key=0;
         let renderUserTrips = this.state.userTrips.map((n, index)=>{
             return  <li key={key++}>
@@ -111,7 +178,10 @@ class MContent extends React.Component {
                         </div></Link>
                     </li>
         })
-        
+
+        //   let user = firebase.auth().currentUser;
+        //   console.log(user.uid)
+
         // let renderTripIDs = this.state.tripIDs.map((k)=>{
             // firebase.firestore().collection('trips').doc(k).get()
             // .then(
@@ -134,8 +204,32 @@ class MContent extends React.Component {
                     
             //     }
             // )
+
+
         
-        return  <div className='content'>
+        return  <div className='MContent'>
+                    <Map/>
+                    {/* -----   map   -----
+                    <div id="map"></div>
+                    <div id="menu">
+                        <input
+                            id="streets-v11"
+                            type="radio"
+                            name="rtoggle"
+                            value="streets"
+                            checked="checked"
+                        />
+                        <label for="streets-v11">streets</label>
+                        <input id="light-v10" type="radio" name="rtoggle" value="light" />
+                        <label for="light-v10">light</label>
+                        <input id="dark-v10" type="radio" name="rtoggle" value="dark" />
+                        <label for="dark-v10">dark</label>
+                        <input id="outdoors-v11" type="radio" name="rtoggle" value="outdoors" />
+                        <label for="outdoors-v11">outdoors</label>
+                        <input id="satellite-v9" type="radio" name="rtoggle" value="satellite" />
+                        <label for="satellite-v9">satellite</label>
+                    </div> */}
+                    
                     <div className='user-total-trip'>
                         <div className='user-card'>
                             <img className='user-card-img' src='./imgs/b.JPG'></img>
@@ -146,9 +240,8 @@ class MContent extends React.Component {
                             </div>
                         </div>
                         <div className='user-title'>Trips</div>
-
-                        <div onClick={this.showAddTrip.bind(this)} className='add-trip'>+ Trip</div>
-                        
+                        <div onClick={this.showAddTrip.bind(this)} id='add-trip-btn'>+ Trip</div>
+                    
                         <ul className='cards'>
                             {renderUserTrips}
                             {/* <li><Link to='/tripID'><div className='card'>  
@@ -192,6 +285,7 @@ class MContent extends React.Component {
                         <div onClick={this.addTrip.bind(this)} id='add-trip-submit' aria-disabled='true'>Add trip</div>
                         </div>
                     </div>
+
                 </div>
     }
 }  

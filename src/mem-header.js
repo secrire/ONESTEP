@@ -10,7 +10,30 @@ import "firebase/firestore";
 class MHeader extends React.Component {
   constructor(props){
     super(props);
+    this.state ={
+      currentUserName: null
+    };
   }
+  componentDidMount() {
+    let urlUserUID = new URL(location.href).pathname.substr(2);
+
+    let user = firebase.auth().currentUser;
+    if(user){
+
+      firebase.firestore().collection('users')
+      .where('email','==',user.email)
+      .get()
+      .then(querySnapshot => {
+          querySnapshot.forEach(doc => {
+              console.log(doc.data().username)
+              this.setState({
+                  currentUserName: doc.data().username
+              });   
+          }) 
+      });
+    }  
+  }    
+
 
   showSideMenu(e){
     e.preventDefault();
@@ -82,23 +105,27 @@ class MHeader extends React.Component {
       return <Redirect to='/'/>
     }
 
-    return<div className='header'>
+    return<div className='MHeader'>
             <Link to='/'><div className='logo'>needaname</div></Link>
             <input className='search'placeholder='explore...'/>
             {/* <div onClick={this.showAddTrip.bind(this)} className='add-trip'>+ Trip</div> */}
             {/* <Link to='/addTrack'><div className='add-track'>+ Track</div></Link> */}
             {/* <div className='add-surprise'>+ Surprise</div> */}
-            <Link to='/member'><img className='user-img' src='./imgs/b.JPG'/></Link>
-            {/* <div className='user-displayname'>username</div> */}
+            <Link to={"/m"+this.props.state.userUid}>
+              <img className='user-img' src='./imgs/b.JPG'/>
+              <div className='user-displayname'>{this.state.currentUserName}</div>
+            </Link>
             <img onClick={this.showSideMenu.bind(this)} className='menu-icon' src='./imgs/menu.png'/>
-              
+
+
+            {/*  ------ side menu -----  */}
             <div id='side-menu'>
                 <div className='menu-pop'>
                   <div onClick={this.hideSideMenu.bind(this)} className='menu-close'>x</div>
                   <div className='menu-title'>My account</div>
                     <div className='menu-user-setting'>Account settings</div>
                   <div className='menu-title'>Explore travelers</div>
-                    <Link to='/'><div className='menu-friend'>Friends sharing</div></Link>
+                    <Link to='/'><div className='menu-friend'>Friends' trips</div></Link>
                     <Link to='/'><div className='menu-fav'>Our favourite</div></Link>
                   <div className='menu-title'>Connect with us</div>
                   <div className='menu-social'>
@@ -108,6 +135,7 @@ class MHeader extends React.Component {
                   </div>  
                   <div className='menu-title'>About SURPRISE</div>
                     <Link to='/'><div className='menu-story'>Our story</div></Link>
+                    <Link to='/'><div className='menu-cookie'>Cookie policy</div></Link>
                   <div onClick={this.props.changeIslogin} className='menu-logout'>Logout</div>
                 </div>
             </div>
