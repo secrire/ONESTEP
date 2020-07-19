@@ -172,7 +172,7 @@ class AddStep extends React.Component {
         <div>
             <div id='add-plan-step'>
                 <div className='add-step-pop'>
-                    <div  onClick={this.hideAddPlanStep.bind(this)} className='add-step-close'>x</div>
+                    <div onClick={this.hideAddPlanStep.bind(this)} className='add-step-close'>x</div>
                     <div className='add-step-title'>New step of Plan</div>
                     <div className='add-step-list'>
                         <div className='add-step-p'>Location</div>
@@ -183,12 +183,12 @@ class AddStep extends React.Component {
                         <input type='text' className='add-step-name' id='add-plan-step-name' placeholder='e.g. Europe Train Tour'/>
                     </div>
                     <div className='add-step-list'>
-                        <div className='add-step-p'>Arrival Date & Time</div>
+                        <div className='add-step-p'>Arrival</div>
                         <input type='date' className='add-step-arrive-date' id='add-plan-step-arrive-date' min={this.props.state.trip.tripStart} max={this.props.state.trip.tripEnd}/>
                         <input type='time' className='add-step-arrive-time' id='add-plan-step-arrive-time'/>
                     </div>
                     <div className='add-step-list'>
-                        <div className='add-step-p'>Departure Date & Time</div>
+                        <div className='add-step-p'>Departure</div>
                         <input type='date' className='add-step-depart-date' id='add-plan-step-depart-date' min={this.props.state.trip.tripStart} max={this.props.state.trip.tripEnd}/>
                         <input type='time' className='add-step-depart-time' id='add-plan-step-depart-time'/>
                     </div>     

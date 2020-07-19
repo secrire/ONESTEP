@@ -5,21 +5,21 @@
     padding:0;
 }
 html{
-    background-color: rgb(245, 244, 240);
+    background-color: rgba(255, 255, 255);
 } 
 a{
     text-decoration: none;
 }
 /* header */
-.header{
+#header{
     display: flex;
     width: 100%;
     align-items: center;
     position: fixed;
     top: 0;
     left: 0;
-    height: 70px;
-    background-color: rgba(245, 244, 240, 0.952);
+    height: 60px;
+    background-color: rgba(255, 255, 255);
     z-index: 1000;
 }
 #logo{
@@ -28,23 +28,37 @@ a{
     /* font-weight: bold;
     color:rgb(22, 22, 22); */
 }
-#elem{
-    transform: matrix(4.5, 0, 0, 4.5, 0, 170);
+.search{
+    width: 200px;
+    border: 1px rgb(219, 219, 219) solid;
+    background-color: rgb(250, 250, 250);
+    border-radius:5px;
+    padding: 7px 10px;
+    outline: none;
+    position: fixed;
+    left:30px;
+    text-align: center;
+}
+.search-icon{
+    position: fixed;
+    left:88px;
+    width: 14px;
+    height:14px;
 }
 .login{
     color: #161616;
     position: fixed;
-    top: 24px;
+    top: 20px;
     right: 170px;
 }
 .signup{
     /* border-radius: 20px; */
-    padding: 7px 24px;
+    padding: 6px 24px;
     border: 1px #161616 solid;
     color: #161616;
     position: fixed;
-    top: 15px;
-    right: 30px;
+    top: 14px;
+    right: 28px;
     /* background-color: #161616; */
     /* color: white; */
 }
@@ -55,9 +69,27 @@ a{
 /* banner */
 .banner{
     width: 100%;
-    margin: 70px 0 0 0;
+    margin: 60px 0 0 0;
     /* max-width: 1200px; */
     /* position: relative; */
+}
+#elem {
+    transform: matrix(5, 0, 0, 6, 0, 60);
+    /* width: 73px; */
+    margin: 0 auto;
+    font-weight: 450;
+    /* position: relative;
+    top: 100px;
+    left: 50%;
+    width: 50px;
+    height: 50px;
+    color: black; */
+    z-index: 1000;
+    transition-duration:2.5s;
+    position: fixed; 
+    top: 90px;  
+    right: 47%;
+    color:rgb(22,22,22);
 }
 .banner-top{
     /* display: flex; */
@@ -67,74 +99,97 @@ a{
     background-repeat: no-repeat;
     background-size: 100%; */
     position: fixed;
-    top:70px;
+    top: 160px;
     z-index: -10;
+    background-color: rgb(255, 255, 255);
 }
 .banner-intro{
     position: fixed;
-    top: 300px;
-    right: 50%;
-    transform: translate(50%);
+    top: 450px;
+    right: 55%;
+    transform: translate(55%);
     /* z-index: -5;  */
-    font-size: 50px;
+    font-size: 36px;
+    letter-spacing: 3px;
     width: 250px;
     margin: 0 auto;
+    color:white;
+    display:flex;
+    align-items: baseline;
+    text-shadow: 0px 0px 2px #303030ed;
 }
 .intro-line2{
-    font-size: 100%;
+    font-size: 42px;
     font-weight: bold;
+    letter-spacing: 1px;
+    margin-left:18px;
 }
-.search{
-    width: 230px;
-    border-radius: 20px;
-    padding: 7px 25px;
-    border: 1px rgb(22, 22, 22) solid;
+.banner-desc{
+    position: fixed;
+    top: 530px;
+    right: 41%;
+    transform: translate(41%);
+    font-size: 20px;
+    width: 400px;
+    margin: 0 auto;
+    color:white;
+    line-height: 32px;
+    border: 1.3px white solid;
+    padding: 12px 20px;
+    text-shadow: 0px 0px 3px 0px #303030ed;
+    box-shadow: 0 0 1px 0px #303030ed;
 }
 .banner-img{
     /* width: 68%;
     border-radius: 15px;
     margin-right: -22px; */
-    width:100%;
+    width:96%;
     height:85%;
+    margin: 0 2%;
 }
-.features,
-.favs,
-.pops{
-    margin: 70px auto;
-    display: flex;
-    width: 90%;
-    justify-content: space-between;
-}
+/* .features, */
 .features{
     background-color: white;
-    margin: 100% 0 0 0;
+    margin: 100% auto 0 auto;
+    padding: 4px 0 40px 0;
     width:100%;
 }
 .feature{
-    /* width: 20%; */
-    height: 300px;
-    margin: 0 40px;
-    text-align: center;
+    width:70%;
+    min-width: 800px;
+    margin:0 auto;
+    display:flex;
+    align-items:flex-end ;
+    height: 100px;
+    text-align: left;
 }
-.feature-title{
-    font-size: 24px;
-    font-weight: bold;
-    margin: 20px 0;
+.feature-title1{
+    font-size: 30px;
+    font-weight: 600;
+    margin: 0 60px 0 0;
+    width:30%;
+    min-width: 260px;
 }
-#elem {
-    transform: matrix(4.5, 0, 0, 4.5, 0, 170);
-    /* font-size: 50px; */
-    width: 60px;
+.feature-title2{
+    font-size: 30px;
+    font-weight: 600;
+    margin: 0 60px 0 0;
+    width:30%;
+    min-width: 260px;
+}
+.feature-content{
+    width:60%;
+    min-width: 420px;
+    font-size: 14px;
+}
+.feature-sep{
+    width: 80%;
     margin: 0 auto;
-    /* position: relative;
-    top: 100px;
-    left: 50%;
-    width: 50px;
-    height: 50px;
-    color: black; */
-    z-index: 1000;
-    transition-property:'margin-left';
-	transition-duration:5s;
+    padding-bottom: 40px;
+    border-bottom: 1px rgb(217, 217, 217) solid;
+}
+#count{
+    display:none;
 }
 #cover{
     height:70vh;
@@ -148,13 +203,14 @@ a{
 /* content */
 .content{
     width: 100%;
-    max-width: 1200px;
+    /* max-width: 1200px; */
     margin: 0 auto;
-    background-color: rgb(245, 244, 240);
+    padding: 110px 30px;
+    background-color: rgb(237, 236, 236);
 }
 .favs-title,
 .pops-title{
-   margin: 0 auto;
+   margin: 0 auto 36px auto;
    text-align: center;
    font-size: 25px;
    font-weight: bold;
@@ -162,21 +218,23 @@ a{
 .favs,
 .pops{
     margin: 30px auto 90px auto;
+    display: flex;
+    flex-wrap: wrap;
+    width: 90%;
 }
 .fav,
 .pop{
     /* height: 300px; */
-    margin: 0 20px;
+    margin: 20px auto;
     background-color: rgb(248, 248, 248);
     border-radius: 10px;
     box-shadow: 1px 1px 2px 1px rgba(211, 211, 211, 0.836);
-    width: 27%;
+    width: 45%;
 }
 .fav-who,
 .pop-who{
     display: flex;
-    margin: 25px 0;
-    background: transparent;
+    margin: 12px 30px 8px 30px;
     align-items: center;
 }
 .fav-profile,
@@ -184,18 +242,18 @@ a{
    width: 40px;
    height: 40px;
    border-radius: 25px;
-   margin: 0 20px;
+   margin: 0 16px 0 0;
 }
 .fav-name,
 .pop-name{
-    background: transparent;
     color: rgba(1, 20, 71, 0.89);
     font-weight: bold;
+    font-size: 16px;
 }
 .fav-main,
 .pop-main{
     position: relative;
-    margin: 10px 0;
+    margin: 0;
     overflow: hidden;
 }
 .fav-title,
@@ -206,13 +264,12 @@ a{
     color:rgb(255, 255, 255); 
     font-size: 17px;
     font-weight:bold;
-    background: transparent;
     z-index: 100;
 }
 .fav-img,
 .pop-img{
    width: 100%;
-   height: 170px;
+   height: 300px;
    transform: scale(1,1);
    transition: all 0.5s ease-out;
 }
@@ -220,11 +277,17 @@ a{
 .pop-img:hover{
     transform: scale(1.2, 1.2);
 }
+.fav-trip-name{
+    color:rgb(22,22,22); 
+    font-size: 17px;
+    font-weight:bold;
+    font-size: 26px;
+    margin: 8px 30px 0 30px;
+}
 .fav-content,
 .pop-content{
-   margin: 12px 20px 24px 20px;
-   background: transparent;
-   font-size: 13px;
+   margin: 4px 30px 36px 30px;
+   font-size: 14px;
    color: rgb(77, 77, 77);
 }
 
@@ -348,7 +411,7 @@ a{
 
 @media (max-width: 800px) {
 /* header */
-.header{
+/* .header{
     height: 60px;
 }
 .logo{
@@ -363,10 +426,10 @@ a{
     position: fixed;
     top: 15px;
     right: 30px;
-}
+} */
 
 /* banner */
-.banner{
+/* .banner{
     margin: 80px auto 30px auto;
 }
 .banner-top{
@@ -376,9 +439,9 @@ a{
     position: absolute;
     transform: translate( 20%, 15% );
     font-size: 40px;
-    width: 200px;
+    width: 200px; */
     /* margin: 0 auto; */
-    background: transparent;
+    /* background: transparent;
 }
 .intro-line1,
 .intro-line2{
@@ -389,22 +452,22 @@ a{
 }
 .banner-img{
     width: 100%;
-}
+} */
 
 .features,
 .favs,
 .pops{
-    margin: 40px auto;
+    /* margin: 40px auto; */
     /* display: flex; */
-    flex-direction: column;
-    width: 90%;
+    /* flex-direction: column;
+    width: 90%; */
     /* justify-content: space-between; */
 }
-.feature{
+/* .feature{
     height: 150px;
     margin: 0 auto;
     border-bottom: 1px lightgray solid;
-}
+} */
 .feature-title{
     /* font-size: 24px; */
 }
@@ -417,7 +480,7 @@ a{
 .pops-title{
    /* font-size: 25px; */
 }
-.favs,
+/* .favs,
 .pops{
     margin: 7px auto 90px auto;
 }
@@ -429,7 +492,7 @@ a{
 .fav-who,
 .pop-who{
     margin: 10px 0;
-}
+} */
 .fav-profile,
 .pop-profile{
 
@@ -442,7 +505,7 @@ a{
 .pop-main{
    
 }
-.fav-title,
+/* .fav-title,
 .pop-title{
     left: 14px;
     top: 35%;
@@ -451,7 +514,7 @@ a{
 .fav-img,
 .pop-img{
    height: 300px;
-}
+} */
 .fav-img:hover,
 .pop-img:hover{
 

@@ -45,16 +45,6 @@ class MHeader extends React.Component {
     document.getElementById(`side-menu`).style.display ='none';
   }
 
-  // showAddTrip(e){
-  //   e.preventDefault();
-  //   document.getElementById(`add-trip`).style.display ='block';
-  // }
-
-  // hideAddTrip(e){
-  //   e.preventDefault();
-  //   document.getElementById(`add-trip`).style.display ='none';
-  // }
-
   // logout(e){
   //   e.preventDefault(); 
   //   firebase.auth().signOut()
@@ -64,56 +54,25 @@ class MHeader extends React.Component {
   //   });
   // } 
 
-  // updateInput(e){
-  //   this.setState({
-  //       [e.target.id]: e.target.value
-  //   });
-  // }
 
-  // addTrip(e){
-  //   e.preventDefault();
-
-  //   if(document.getElementById(`tripName`).value &&
-  //      document.getElementById(`tripStart`).value){
-  //     document.getElementById(`add-trip-submit`).disabled = false;
-  //     document.getElementById(`add-trip-submit`).style.backgroundColor = '#CC3E55';
-
-  //     console.log(this.state)
-  //     let user = firebase.auth().currentUser;
-  //     console.log(user.uid)    
-
-  //     firebase.firestore().collection('trips')
-  //     .doc()
-  //     .set({
-  //       authorUid: user.uid,
-  //       planlike: 0,
-  //       trackLike: 0,
-  //       // surpriseLike: 0,
-  //       tripName: document.getElementById(`tripName`).value,
-  //       tripSum: document.getElementById(`add-sum-input`).value,
-  //       tripStart: document.getElementById(`tripStart`).value,
-  //       tripEnd: document.getElementById(`add-end-input`).value,
-  //       createTime: new Date() 
-  //     })
-  //     document.getElementById(`add-trip`).style.display ='none';
-  //     console.log('db add trip ok');  
-  //   } 
-  // }
-      
   render() {
     if(this.props.state.islogin === false){
-      return <Redirect to='/'/>
+      return <Redirect exact to='/'/>
     }
 
     return<div className='MHeader'>
-            <Link to='/'><div className='logo'>needaname</div></Link>
-            <input className='search'placeholder='explore...'/>
+            <div className='mheader-logo'><Link className='mheader-logo' exact to='/'>A N A M E</Link></div>
             {/* <div onClick={this.showAddTrip.bind(this)} className='add-trip'>+ Trip</div> */}
             {/* <Link to='/addTrack'><div className='add-track'>+ Track</div></Link> */}
             {/* <div className='add-surprise'>+ Surprise</div> */}
+
+            <input className='mheader-search'placeholder='Search'/>
+            <img className='mheader-search-icon' src='./imgs/search.svg'/>
             <Link to={"/m"+this.props.state.userUid}>
-              <img className='user-img' src='./imgs/b.JPG'/>
-              <div className='user-displayname'>{this.state.currentUserName}</div>
+              <div className='mheader-userinfo'>
+                <img className='user-img' src='./imgs/b.JPG'/>
+                {/* <div className='user-displayname'>{this.state.currentUserName}</div> */}
+              </div>
             </Link>
             <img onClick={this.showSideMenu.bind(this)} className='menu-icon' src='./imgs/menu.png'/>
 
@@ -124,8 +83,8 @@ class MHeader extends React.Component {
                   <div onClick={this.hideSideMenu.bind(this)} className='menu-close'>x</div>
                   <div className='menu-title'>My account</div>
                     <div className='menu-user-setting'>Account settings</div>
-                  <div className='menu-title'>Explore travelers</div>
-                    <Link to='/'><div className='menu-friend'>Friends' trips</div></Link>
+                  <div className='menu-title'>Explore trips</div>
+                    <Link to='/'><div className='menu-friend'>Popular trips</div></Link>
                     <Link to='/'><div className='menu-fav'>Our favourite</div></Link>
                   <div className='menu-title'>Connect with us</div>
                   <div className='menu-social'>
@@ -133,7 +92,7 @@ class MHeader extends React.Component {
                     <img  src="./imgs/ig.svg" />
                     {/* <img  src="public/imgs/menu.png" /> */}
                   </div>  
-                  <div className='menu-title'>About SURPRISE</div>
+                  <div className='menu-title'>About ANAME</div>
                     <Link to='/'><div className='menu-story'>Our story</div></Link>
                     <Link to='/'><div className='menu-cookie'>Cookie policy</div></Link>
                   <div onClick={this.props.changeIslogin} className='menu-logout'>Logout</div>

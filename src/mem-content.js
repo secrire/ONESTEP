@@ -37,7 +37,7 @@ class MContent extends React.Component {
 
             firebase.firestore().collection('trips')
             .orderBy('createTime','desc')
-            .get().then(querySnapshot => {
+            .onSnapshot(querySnapshot => {
                 let data=[];       // 放state前先foreach處理資料
                 let tripID=[];
                 querySnapshot.forEach(doc => {
@@ -56,7 +56,7 @@ class MContent extends React.Component {
             })
             console.log(user)
             // if(user){
-                if(user.uid === urlUserUID ){
+                if(this.props.state.userUid === urlUserUID ){
                     console.log('authour is here') 
                     document.getElementById(`add-trip-btn`).style.display ='block';
                 }
@@ -156,7 +156,9 @@ class MContent extends React.Component {
             tripSum: document.getElementById(`add-sum-input`).value,
             tripStart: document.getElementById(`tripStart`).value,
             tripEnd: document.getElementById(`add-end-input`).value,
-            createTime: new Date() 
+            createTime: new Date(),
+            addPlan:null,
+            addTrack:null, 
           })
           document.getElementById(`add-trip`).style.display ='none';
           console.log('db add trip ok');  
@@ -240,7 +242,7 @@ class MContent extends React.Component {
                             </div>
                         </div>
                         <div className='user-title'>Trips</div>
-                        <div onClick={this.showAddTrip.bind(this)} id='add-trip-btn'>+ Trip</div>
+                        <div onClick={this.showAddTrip.bind(this)} id='add-trip-btn'>Add a past, current, or future trip</div>
                     
                         <ul className='cards'>
                             {renderUserTrips}

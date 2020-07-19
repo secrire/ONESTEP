@@ -74,9 +74,11 @@ class Header extends React.Component{
   // }
 
   render(){
-    return  <div className='header'>
+    return  <div id='header'>
        {/* <p><a href="mailto:">Send email</a></p> */}
-              <Link to='/' className='logo'></Link>
+              {/* <Link to='/' className='logo'></Link> */}
+              <input className='search'placeholder='Search'/>
+              <img className='search-icon' src='./imgs/search.svg'/>
               <div onClick={this.showLoginPage.bind(this)} className='login'>Log in</div>
               <div onClick={this.showSignupPage.bind(this)} className='signup'>Register</div>
               <img className='log-icon' src='./imgs/q.png'/>
@@ -292,7 +294,11 @@ class App extends React.Component {
             .set({
               username: this.state.username,
               email: this.state.email,
-              logEmail: this.state.logEmail
+              logEmail: this.state.logEmail,
+              // planLike:[],
+              // trackLike:[],
+              // planSave:[],
+              // trackSave:[],
             })
           }else{
             firebase.firestore().collection('users')
@@ -363,6 +369,17 @@ class App extends React.Component {
     // componentWillMount() {
     // }
     render() {
+      // function borderHeader() {
+      //   let header = document.getElementById("header");
+      //   let desiredPosition = 300;
+      //   if (window.pageYOffset > desiredPosition) {
+      //     header.style.cssText += "box-shadow: 0px 0px 20px 0px #dbdbdb;" ;
+      //   } else {
+      //     header.style.cssText -= 'box-shadow: 0px 0px 20px 0px #dbdbdb;';
+      //   }
+      // }
+      // window.onscroll = borderHeader;
+
       let tripRoute =[];
       if(this.state.tripIDs!==[]){
         for( let i=0; i<this.state.tripIDs.length; i++){
@@ -373,7 +390,7 @@ class App extends React.Component {
       if(this.state.totalUserUIDs!==[]){
         for( let i=0; i<this.state.totalUserUIDs.length; i++){
           if(this.state.totalUserUIDs[i]!== this.state.userUid){
-            totalUserUIDsRoute.push(<Route exact path={'/m'+this.state.totalUserUIDs[i]}><MHeader changeIslogin={this.changeIslogin.bind(this)}  state={this.state}/><MContent/></Route>)
+            totalUserUIDsRoute.push(<Route exact path={'/m'+this.state.totalUserUIDs[i]}><MHeader changeIslogin={this.changeIslogin.bind(this)}  state={this.state}/><MContent state={this.state}/></Route>)
           }
         }
       }
@@ -382,7 +399,7 @@ class App extends React.Component {
                 <div>
                 {/* <Switch>  */}
                 <Route exact path='/'><Header/><Banner/><Content/><Login updateInput={this.updateInput.bind(this)} state={this.state}/><SignUp updateInput={this.updateInput.bind(this)} state={this.state}/></Route> 
-                <Route exact path={"/m"+this.state.userUid}><MHeader changeIslogin={this.changeIslogin.bind(this)}  state={this.state}/><MContent/></Route>
+                <Route exact path={"/m"+this.state.userUid}><MHeader changeIslogin={this.changeIslogin.bind(this)}  state={this.state}/><MContent state={this.state}/></Route>
                 {tripRoute}
                 {totalUserUIDsRoute}
                 {/* <Route path='/tripID'><MHeader/><TripID state={this.state}/><AddStep/></Route> */}

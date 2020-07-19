@@ -13,19 +13,19 @@ class Map extends React.Component {
     }
     
     componentDidMount() {
-            // mapboxgl.accessToken = 'pk.eyJ1IjoidXNoaTczMSIsImEiOiJja2Mwa2llMmswdnk4MnJsbWF1YW8zMzN6In0._Re0cs24SGBi93Bwl_w0Ig';
-            // var map = new mapboxgl.Map({
-            //     container: 'map',
-            //     style: 'mapbox://styles/mapbox/streets-v11',
-            //     zoom: 6,
-            //     center: [121, 24.5]
-            // });
-            // map.setStyle('mapbox://styles/mapbox/satellite-v9')
+            mapboxgl.accessToken = 'pk.eyJ1IjoidXNoaTczMSIsImEiOiJja2Mwa2llMmswdnk4MnJsbWF1YW8zMzN6In0._Re0cs24SGBi93Bwl_w0Ig';
+            var map = new mapboxgl.Map({
+                container: 'map',
+                style: 'mapbox://styles/mapbox/streets-v11',
+                zoom: 7,
+                center: [122, 24.5]
+            });
+            map.setStyle('mapbox://styles/mapbox/satellite-v9')
 
-            // if(new URL(location.href).pathname.substr(0,2) !== '/m'){
-            //     console.log('got you')
-            //     document.getElementById("map").style.cssText += 'left: 780px;width:50%;';
-            // }
+            if(new URL(location.href).pathname.substr(0,2) !== '/m'){
+                console.log('got you')
+                document.getElementById("map").style.cssText += 'left: 750px;width:50%;';
+            }
             
         // mapboxgl.accessToken = 'pk.eyJ1IjoidXNoaTczMSIsImEiOiJja2Mwa2llMmswdnk4MnJsbWF1YW8zMzN6In0._Re0cs24SGBi93Bwl_w0Ig';
         // var map = new mapboxgl.Map({
