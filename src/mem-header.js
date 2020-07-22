@@ -34,7 +34,11 @@ class MHeader extends React.Component {
               });   
           }) 
       });
-    }  
+    }else{
+      console.log('not a member!!!')
+      document.getElementById("mheader-userinfo").style.cssText += 'display:none;';
+      document.getElementById("menu-icon").style.cssText += 'display:none;';
+    } 
   }    
 
 
@@ -71,15 +75,15 @@ class MHeader extends React.Component {
 
             {/* <input className='mheader-search'placeholder='Search'/>
             <img className='mheader-search-icon' src='./imgs/search.svg'/> */}
-            {/* <Search/> */}
+            <Search/>
 
-            <Link to={"/m"+this.props.state.userUid}>
+            <Link to={"/m"+this.props.state.userUid} id='mheader-userinfo'>
               <div className='mheader-userinfo'>
                 <img className='user-img' src='./imgs/b.JPG'/>
                 <div className='user-displayname'>{this.state.currentUserName}</div>
               </div>
             </Link>
-            <img onClick={this.showSideMenu.bind(this)} className='menu-icon' src='./imgs/menu.png'/>
+            <img onClick={this.showSideMenu.bind(this)} id='menu-icon' src='./imgs/menu.png'/>
 
 
             {/*  ------ side menu -----  */}

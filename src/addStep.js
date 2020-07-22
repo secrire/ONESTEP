@@ -13,6 +13,26 @@ class AddStep extends React.Component {
     super(props);
   }
 
+  componentDidMount(){
+    function getLong() {
+      var xhr = new XMLHttpRequest();
+      xhr.open(
+        "GET",
+        "https://api.mapbox.com/geocoding/v5/mapbox.places/Los%20Angeles.json?access_token=pk.eyJ1IjoidXNoaTczMSIsImEiOiJja2Mwa2llMmswdnk4MnJsbWF1YW8zMzN6In0._Re0cs24SGBi93Bwl_w0Ig&limit=1"
+      );
+      
+      
+      xhr.onload = function() {
+        var response = JSON.parse(this.responseText);
+        console.log(response.features[0].center[0],response.features[0].center[1]);
+        
+      };
+      xhr.send();
+  }
+    getLong();
+    
+  }
+
   addPlanStep(e){
     e.preventDefault();
 
@@ -162,12 +182,11 @@ class AddStep extends React.Component {
   //     console.log('download'+url);
   //     document.getElementById('pic').src = url;
   //   }).catch((error) => {
-  //     console.log('download fail'+error.message)
   //   });
   // }
 
   render() {
-    console.log(this.props.state)
+    // console.log(this.props.state)
     return(
         <div>
             <div id='add-plan-step'>

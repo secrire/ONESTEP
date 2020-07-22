@@ -40,38 +40,215 @@ let storage = firebase.storage();
 class Header extends React.Component{         
   constructor(props){
     super(props);
+
+    this.state = {
+      
+    };
   }
 
-  componentDidMount(){
-    let user = firebase.auth().currentUser;
-    if(!user){
-      console.log(document.getElementById("header"))
-      document.getElementById("header").style.cssText += 'z-index: 1002;';
-    } 
-  }
+  // componentDidMount(){
+  //   let user = firebase.auth().currentUser;
+  //   if(!user){
+  //     console.log(document.getElementById("header"))
+  //     document.getElementById("header").style.cssText += 'z-index: 1002;';
+  //   } 
+  // }
 
 
   showSignupPage(e){
     e.preventDefault();
-    document.getElementById(`signup-page`).style.display ='block';
+    this.setState({
+      showSignupPage: true,
+    });
   }
 
   showLoginPage(e){
     e.preventDefault();
-    document.getElementById(`login-page`).style.display ='block';
+    this.setState({
+      showLoginPage: true,
+    });
   }
 
+/*          --------------   S I G N    U P       --------------      */
+  // ----- facebook sign up -----
+  FBsignUp(e){
+    e.preventDefault();
+
+    var provider = new firebase.auth.FacebookAuthProvider();
+    firebase.auth().signInWithPopup(provider)
+      .then((result) => {
+        var token = result.credential.accessToken;
+        var user = result.user;
+        console.log(token, user)
+        console.log(`fb sign up`)
+        firebase.firestore().collection('users')
+        .doc(user.uid)
+        .set({
+          username: user.displayName,
+          email: user.email,
+          isauthed: true
+        })
+
+        // this.setState({
+        //   username: user.displayName,
+        //   email: user.email,
+        //   isauthed: true
+        // })
+        console.log(`${user.displayName} fb sign up ok`)
+      })
+      .catch((error) => {
+        var email = error.email;
+        console.log(error.message);
+      });
+  }  
+
+  // ----- email sign up -----
+  emailSignUp(e){
+    e.preventDefault();
+
+    firebase.auth().createUserWithEmailAndPassword(this.props.state.email, this.props.state.password)
+      .then(() => { 
+        console.log('email create member ok')
+      })
+      .catch(err => {
+        console.log(err.message);
+        alert(`${this.state.username} sign up noooooooo`)
+      })
+  }
+  
+  hideSignupPage(e){
+    e.preventDefault();
+    // document.getElementById(`signup-page`).style.display ='none';
+    this.setState({
+      showSignupPage: false,
+    });
+  }
+
+
+
+/*          --------------   L O G I N       --------------      */
+  //----- facebook log in -----
+  FBlogin(e){
+    e.preventDefault();
+    var provider = new firebase.auth.FacebookAuthProvider();
+
+    firebase.auth().signInWithPopup(provider)
+    .then((result) => {
+      var token = result.credential.accessToken;
+      var user = result.user;
+      console.log(token, user);
+      firebase.firestore().collection('users')
+        .doc(user.uid)
+        .set({
+          username: user.displayName,
+          email: user.email,
+          isauthed: true
+        })
+      // this.setState({
+      //   isauthed: true
+      // });
+      console.log(`fb login`)
+    })
+    .catch((error) => {
+      // The email of the user's account used.
+      var email = error.email;
+      // The firebase.auth.AuthCredential type that was used.
+      var credential = error.credential;
+      console.log(error.message);
+    });
+  }  
+  // ----- email log in -----
+  emailLogIn(e){
+    e.preventDefault();
+
+    firebase.auth().signInWithEmailAndPassword(this.props.state.logEmail, this.props.state.logPassword) 
+    .then(() => {
+      console.log('email log in ok');
+    })
+    .catch(err => {
+    console.log(err.message);
+    // alert('email / password is not correct')
+    });
+  }
+
+  hideLoginPage(e){
+    e.preventDefault();
+    // document.getElementById(`login-page`).style.display ='none';
+    this.setState({
+      showLoginPage: false,
+    });
+  }
+
+
+
   render(){
-    return  <div id='header'>
-       {/* <p><a href="mailto:">Send email</a></p> */}
-              {/* <Link to='/' className='logo'></Link> */}
-              <input className='search'placeholder='Search'/>
-              <img className='search-icon' src='./imgs/search.svg'/>
-              {/* <Search/> */}
-              <div onClick={this.showLoginPage.bind(this)} className='login'>Log in</div>
-              <div onClick={this.showSignupPage.bind(this)} className='signup'>Register</div>
-              <img className='log-icon' src='./imgs/q.png'/>
-            </div>         
+
+    if(this.props.state.islogin === true){
+      return <Redirect to={"/m"+this.props.state.userUid}/>
+    }
+
+    let signupPage =null;
+    if(this.state.showSignupPage === true){
+      signupPage = (
+        <div id='signup-page'>
+          <div className='signup-pop'>
+            <div onClick={this.hideSignupPage.bind(this)} className='signup-close'>x</div>
+            <div className='signup-title'>New account</div>
+            <div className='signup-fb-btn'  onClick={this.FBsignUp.bind(this)}>Create new account with Facebook</div>
+            <div className='signup-fb-note'>We'll never post to Facebook without your permission.</div>
+            <div className='signup-or'>or</div>
+            <input type='text' className='signup-name' id='username' placeholder='Username'
+                  onChange={this.props.updateInput} value={this.props.state.username}/>
+            <input type="email" className='signup-email' id='email' placeholder='Email' 
+                  onChange={this.props.updateInput} value={this.props.state.email}/>
+            <input type='password' className='signup-psw' id='password' placeholder='Password'
+                  onChange={this.props.updateInput} value={this.props.state.password}/>
+            <div onClick={this.emailSignUp.bind(this)} className='signup-submit'>Create new account</div>
+            <div className='signup-to-login'>
+              <div>Already have an account? Log in</div>
+            </div>
+          </div>
+        </div>    
+      )
+    }
+
+    let loginPage =null;
+    if(this.state.showLoginPage === true){
+      loginPage = (
+              <div id='login-page'>
+                <div className='login-pop'>
+                  <div onClick={this.hideLoginPage.bind(this)} className='signup-close'>x</div>
+                  <div className='signup-title'>Log in to SURPRISE</div>
+                  <div className='signup-fb-btn'  onClick={this.FBlogin.bind(this)}>Log in with Facebook</div>
+                  <div className='signup-fb-note'>We'll never post to Facebook without your permission.</div>
+                  <div className='signup-or'>or</div>
+                  <input type='text' onChange={this.props.updateInput} id='logEmail' className='login-username' placeholder='Email or username'/>
+                  <input type='password' onChange={this.props.updateInput} id='logPassword' className='login-psw' placeholder='Password'/>
+                  <div onClick={this.emailLogIn.bind(this)} className='login-submit'>Log in</div>
+                  <div className='signup-to-login'>
+                    <div>New to SURPRISE?<Link to='/signUp'> Create an account</Link></div>
+                  </div>
+                </div>
+              </div>
+      )
+    }
+
+
+
+    return  <div>
+              <div id='header'>
+                {/* <p><a href="mailto:">Send email</a></p> */}
+                {/* <Link to='/' className='logo'></Link> */}
+                {/* <input className='search'placeholder='Search'/>
+                <img className='search-icon' src='./imgs/search.svg'/> */}
+                <Search/>
+                <div onClick={this.showLoginPage.bind(this)} className='login'>Log in</div>
+                <div onClick={this.showSignupPage.bind(this)} className='signup'>Register</div>
+                {signupPage}
+                {loginPage}
+                <img className='log-icon' src='./imgs/q.png'/>
+              </div>    
+            </div>
   }
 }
 
@@ -410,7 +587,7 @@ class App extends React.Component {
             <Router>
                 <div>
                 {/* <Switch>  */}
-                <Route exact path='/'><Header/><Banner/><Content/><Login updateInput={this.updateInput.bind(this)} state={this.state}/><SignUp updateInput={this.updateInput.bind(this)} state={this.state}/></Route> 
+                <Route exact path='/'><Header updateInput={this.updateInput.bind(this)} state={this.state}/><Banner/><Content/></Route> 
                 <Route exact path={"/m"+this.state.userUid}><MHeader changeIslogin={this.changeIslogin.bind(this)}  state={this.state}/><MContent state={this.state}/></Route>
                 {tripRoute}
                 {totalUserUIDsRoute}
@@ -424,3 +601,6 @@ class App extends React.Component {
 
   
 ReactDOM.render(<App/>, document.querySelector('#root'));
+
+{/* <Login updateInput={this.updateInput.bind(this)} state={this.state}/> */}
+{/* <SignUp updateInput={this.updateInput.bind(this)} state={this.state}/> */}

@@ -39,6 +39,7 @@ a{
     top: 15px;
     left:30px;
     text-align: center;
+    z-index: 1004;
 }
 .search-icon{
     position: fixed;
@@ -53,7 +54,7 @@ a{
     position: fixed;
     top: 60px;
     background-color: rgba(2, 72, 95, 0.596);
-    z-index: 1010;
+    z-index: 2010;
 }
 .search-pop{
     z-index: 30;
@@ -376,13 +377,13 @@ a{
 
 /* sign up & login page */
 #signup-page,#login-page{
-    display: none;
+    /* display: none; */
     height:100vh;
     width: 100%;
     position: fixed;
     top:0;
     background-color: rgba(21, 60, 73, 0.918);
-    z-index: 1010;
+    z-index: 5000;
 }
 .signup-pop,
 .login-pop{

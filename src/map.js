@@ -13,65 +13,74 @@ class Map extends React.Component {
     }
     
     componentDidMount() {
-        // mapboxgl.accessToken = 'pk.eyJ1IjoidXNoaTczMSIsImEiOiJja2Mwa2llMmswdnk4MnJsbWF1YW8zMzN6In0._Re0cs24SGBi93Bwl_w0Ig';
-        // var map = new mapboxgl.Map({
-        //     container: 'map',
-        //     style: 'mapbox://styles/mapbox/streets-v11',
-        //     zoom: 7,
-        //     center: [122, 24.5]
-        // });
-        // map.setStyle('mapbox://styles/mapbox/satellite-v9')
+        mapboxgl.accessToken = 'pk.eyJ1IjoidXNoaTczMSIsImEiOiJja2Mwa2llMmswdnk4MnJsbWF1YW8zMzN6In0._Re0cs24SGBi93Bwl_w0Ig';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            zoom: 7,
+            center: [122, 24.5]
+        });
+        map.setStyle('mapbox://styles/mapbox/satellite-v9')
 
         if(new URL(location.href).pathname.substr(0,2) !== '/m'){
             console.log('got you')
             document.getElementById("map").style.cssText += 'left: 750px;width:60%;';
         }
 
-        // function getDirection() {
-        //     var xhr = new XMLHttpRequest();
-        //     xhr.open(
-        //       "GET",
-        //       "https://api.mapbox.com/directions/v5/mapbox/driving/122%2C23.5%3B122%2C24?alternatives=false&geometries=geojson&steps=false&access_token=pk.eyJ1IjoidXNoaTczMSIsImEiOiJja2Mwa2llMmswdnk4MnJsbWF1YW8zMzN6In0._Re0cs24SGBi93Bwl_w0Ig"
-        //     );
+        function getDirection() {
+            var xhr = new XMLHttpRequest();
+            xhr.open(
+              "GET",
+              "https://api.mapbox.com/directions/v5/mapbox/driving/122%2C23.5%3B122%2C24?alternatives=false&geometries=geojson&steps=false&access_token=pk.eyJ1IjoidXNoaTczMSIsImEiOiJja2Mwa2llMmswdnk4MnJsbWF1YW8zMzN6In0._Re0cs24SGBi93Bwl_w0Ig"
+            );
             
             
-        //     xhr.onload = function() {
-        //       var response = JSON.parse(this.responseText);
-        //       console.log(response);
+            xhr.onload = function() {
+              var response = JSON.parse(this.responseText);
+              console.log(response);
 
-        //       var routeGeometries = response.routes[0].geometry;
+              var routeGeometries = response.routes[0].geometry;
               
-        //       //這邊的 code 改自 add a line with GeoJSON 的範例
-        //       map.on("load", function() {
-        //         map.addLayer({
-        //           id: "route",
-        //           type: "line",
-        //           source: {
-        //             type: "geojson",
-        //             data: {
-        //               type: "Feature",
-        //               properties: {},
-        //               geometry: {
-        //                 type: "LineString",
-        //                 // 把 coordinates 改成從 Direction API 拿回來的座標
-        //                 coordinates: routeGeometries.coordinates
-        //               }
-        //             }
-        //           },
-        //           layout: {
-        //             "line-join": "round",
-        //             "line-cap": "round"
-        //           },
-        //           paint: {
-        //             "line-color": "#fff",
-        //             "line-width": 10
-        //           }
-        //         });
-        //       });
-        //     };
-        //     xhr.send();
-        //   }
-        //   getDirection();
+              //這邊的 code 改自 add a line with GeoJSON 的範例
+              map.on("load", function() {
+                map.addLayer({
+                  id: "route",
+                  type: "line",
+                  source: {
+                    type: "geojson",
+                    data: {
+                      type: "Feature",
+                      properties: {},
+                      geometry: {
+                        type: "LineString",
+                        // 把 coordinates 改成從 Direction API 拿回來的座標
+                        coordinates: routeGeometries.coordinates
+                      }
+                    }
+                  },
+                  layout: {
+                    "line-join": "round",
+                    "line-cap": "round"
+                  },
+                  paint: {
+                    "line-color": "#fff",
+                    "line-width": 10
+                  }
+                });
+              });
+            };
+            xhr.send();
+        }
+        getDirection();
+
+
+        //   var geocoder = new MapboxGeocoder({
+        //     accessToken: mapboxgl.accessToken,
+        //     mapboxgl: mapboxgl
+        //     });
+             
+        //     document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
+              
           
           
       

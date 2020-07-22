@@ -135,7 +135,7 @@ class TripID extends React.Component {
 
     addPlan(e){
         e.preventDefault();
-        console.log('badddddd')
+
         let pickedTripID = new URL(location.href).pathname.substr(1);
         firebase.firestore().collection('trips').doc(pickedTripID)
         .update({
@@ -160,12 +160,10 @@ class TripID extends React.Component {
 
     showAddPlanStep(e){
         e.preventDefault();
-        console.log('llllllll')
         document.getElementById(`add-plan-step`).style.display ='block';
     }    
     showAddTrackStep(e){
         e.preventDefault();
-        console.log('aaaaaaaaa')
         document.getElementById(`add-track-step`).style.display ='block';
     } 
 
