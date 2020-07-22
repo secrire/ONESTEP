@@ -10,13 +10,13 @@ import "firebase/storage";
 
 import mapboxgl from 'mapbox-gl';
 
+import Search from "./search";
 import Banner from "./banner";
 import Content from "./content";
 import MHeader from "./mem-header";
 import MContent from "./mem-content";
 import TripID from "./TripID";
-// import AddStep from "./AddStep";
-// import EditStep from "./EditStep";
+
 
 // -----  firebase set ----- //
 const firebaseConfig = {
@@ -40,10 +40,16 @@ let storage = firebase.storage();
 class Header extends React.Component{         
   constructor(props){
     super(props);
-    // this.state = {
-    //   isauthed: false
-    // };    
   }
+
+  componentDidMount(){
+    let user = firebase.auth().currentUser;
+    if(!user){
+      console.log(document.getElementById("header"))
+      document.getElementById("header").style.cssText += 'z-index: 1002;';
+    } 
+  }
+
 
   showSignupPage(e){
     e.preventDefault();
@@ -55,36 +61,21 @@ class Header extends React.Component{
     document.getElementById(`login-page`).style.display ='block';
   }
 
-  // checkEmailLogin(e){
-  //   e.preventDefault();
-  //   firebase.auth().onAuthStateChanged((user)=> {
-  //     if (user) {
-  //         db.collection('users').get().then(querySnapshot => {
-  //           querySnapshot.forEach(doc => {
-  //           console.log(doc.data().email);
-  //             if(user.email === doc.data().email.toLowerCase()){
-  //               console.log(`member：${doc.data().username}`)
-  //             };  
-  //           });  
-  //         }) 
-  //     }else {
-  //       console.log(`No user is signed in.`)
-  //     }
-  //   });
-  // }
-
   render(){
     return  <div id='header'>
        {/* <p><a href="mailto:">Send email</a></p> */}
               {/* <Link to='/' className='logo'></Link> */}
               <input className='search'placeholder='Search'/>
               <img className='search-icon' src='./imgs/search.svg'/>
+              {/* <Search/> */}
               <div onClick={this.showLoginPage.bind(this)} className='login'>Log in</div>
               <div onClick={this.showSignupPage.bind(this)} className='signup'>Register</div>
               <img className='log-icon' src='./imgs/q.png'/>
             </div>         
   }
 }
+
+/*          --------------   S I G N    U P       --------------      */
 
 class SignUp extends React.Component{
   constructor(props){
@@ -158,7 +149,7 @@ class SignUp extends React.Component{
                          onChange={this.props.updateInput} value={this.props.state.username}/>
                   <input type="email" className='signup-email' id='email' placeholder='Email' 
                          onChange={this.props.updateInput} value={this.props.state.email}/>
-                  <input type='text' className='signup-psw' id='password' placeholder='Password'
+                  <input type='password' className='signup-psw' id='password' placeholder='Password'
                          onChange={this.props.updateInput} value={this.props.state.password}/>
                   <div onClick={this.emailSignUp.bind(this)} className='signup-submit'>Create new account</div>
                   <div className='signup-to-login'>
@@ -169,6 +160,8 @@ class SignUp extends React.Component{
   }
 } 
 
+
+/*          --------------   L O G I N       --------------      */
 class Login extends React.Component{
   constructor(props){
     super(props);
@@ -234,8 +227,8 @@ class Login extends React.Component{
                   <div className='signup-fb-btn'  onClick={this.FBlogin.bind(this)}>Log in with Facebook</div>
                   <div className='signup-fb-note'>We'll never post to Facebook without your permission.</div>
                   <div className='signup-or'>or</div>
-                  <input onChange={this.props.updateInput} id='logEmail' className='login-username' placeholder='Email or username'/>
-                  <input onChange={this.props.updateInput} id='logPassword' className='login-psw' placeholder='Password'/>
+                  <input type='text' onChange={this.props.updateInput} id='logEmail' className='login-username' placeholder='Email or username'/>
+                  <input type='password' onChange={this.props.updateInput} id='logPassword' className='login-psw' placeholder='Password'/>
                   <div onClick={this.emailLogIn.bind(this)} className='login-submit'>Log in</div>
                   <div className='signup-to-login'>
                     <div>New to SURPRISE?<Link to='/signUp'> Create an account</Link></div>
@@ -244,6 +237,8 @@ class Login extends React.Component{
             </div>
   }
 } 
+
+/*          --------------   A P P       --------------      */
 
 class App extends React.Component {
     constructor(props) {
@@ -259,10 +254,11 @@ class App extends React.Component {
         islogin: null,
         userUid:'',
         totalUserUIDs:[]
-       };
+      };
     }
 
     componentDidMount(){
+
       firebase.firestore().collection('users')
       .get()
       .then(querySnapshot => {
@@ -310,24 +306,40 @@ class App extends React.Component {
             })
           }
 
-          firebase.firestore().collection('trips')
-          .orderBy('createTime','desc')
-          .onSnapshot(querySnapshot => {      
-            let tripID=[];
-            querySnapshot.forEach(doc => {
-              // if(user.uid === doc.data().authorUid){
-                tripID.push(doc.id);  
-              // }
-            })
-            this.setState({
-              tripIDs: tripID
-            });
-            console.log(this.state.tripIDs)
-          })
+          // firebase.firestore().collection('trips')
+          // .orderBy('createTime','desc')
+          // .onSnapshot(querySnapshot => {      
+          //   let tripID=[];
+          //   querySnapshot.forEach(doc => {
+          //     // if(user.uid === doc.data().authorUid){
+          //       tripID.push(doc.id);  
+          //     // }
+          //   })
+          //   this.setState({
+          //     tripIDs: tripID
+          //   });
+          //   console.log(this.state.tripIDs)
+          // })
         }else {
           console.log(`No user is signed in.`, user)
         }
       });
+
+      firebase.firestore().collection('trips')
+      .orderBy('createTime','desc')
+      .onSnapshot(querySnapshot => {      
+        let tripID=[];
+        querySnapshot.forEach(doc => {
+          // if(user.uid === doc.data().authorUid){
+            tripID.push(doc.id);  
+          // }
+        })
+        this.setState({
+          tripIDs: tripID
+        });
+        console.log(this.state.tripIDs)
+      })
+
       console.log(this.state.userUid)
     }
 
@@ -403,8 +415,6 @@ class App extends React.Component {
                 {tripRoute}
                 {totalUserUIDsRoute}
                 {/* <Route path='/tripID'><MHeader/><TripID state={this.state}/><AddStep/></Route> */}
-                {/* <Route path='/signUp'><Header/><Banner/><Content/><SignUp/></Route> */}
-                {/* <Route path='/login'><Header/><Banner/><Content/><Login/></Route> */}
                 {/* </Switch> */}
                 </div>
             </Router>

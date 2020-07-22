@@ -137,8 +137,8 @@ class MContent extends React.Component {
     addTrip(e){
         e.preventDefault();
     
-        if(document.getElementById(`tripName`).value &&
-           document.getElementById(`tripStart`).value){
+        if(document.getElementById(`add-tripName`).value &&
+           document.getElementById(`add-tripStart`).value){
           document.getElementById(`add-trip-submit`).disabled = false;
           document.getElementById(`add-trip-submit`).style.backgroundColor = '#CC3E55';
     
@@ -152,10 +152,10 @@ class MContent extends React.Component {
             planlike: 0,
             trackLike: 0,
             // surpriseLike: 0,
-            tripName: document.getElementById(`tripName`).value,
-            tripSum: document.getElementById(`add-sum-input`).value,
-            tripStart: document.getElementById(`tripStart`).value,
-            tripEnd: document.getElementById(`add-end-input`).value,
+            tripName: document.getElementById(`add-tripName`).value,
+            tripSum: document.getElementById(`add-tripSum`).value,
+            tripStart: document.getElementById(`add-tripStart`).value,
+            tripEnd: document.getElementById(`add-tripEnd`).value,
             createTime: new Date(),
             addPlan:null,
             addTrack:null, 
@@ -174,7 +174,7 @@ class MContent extends React.Component {
                             <div className='card-title'>{n.tripName}</div>
                             <div className='card-main'>
                                 <div className='card-time'>{n.tripStart}</div>
-                                <div className='card-days'>18 days</div>
+                                {/* <div className='card-days'>18 days</div> */}
                             </div>
                             <img className='card-img' src='./imgs/b.JPG'/>
                         </div></Link>
@@ -211,26 +211,6 @@ class MContent extends React.Component {
         
         return  <div className='MContent'>
                     <Map/>
-                    {/* -----   map   -----
-                    <div id="map"></div>
-                    <div id="menu">
-                        <input
-                            id="streets-v11"
-                            type="radio"
-                            name="rtoggle"
-                            value="streets"
-                            checked="checked"
-                        />
-                        <label for="streets-v11">streets</label>
-                        <input id="light-v10" type="radio" name="rtoggle" value="light" />
-                        <label for="light-v10">light</label>
-                        <input id="dark-v10" type="radio" name="rtoggle" value="dark" />
-                        <label for="dark-v10">dark</label>
-                        <input id="outdoors-v11" type="radio" name="rtoggle" value="outdoors" />
-                        <label for="outdoors-v11">outdoors</label>
-                        <input id="satellite-v9" type="radio" name="rtoggle" value="satellite" />
-                        <label for="satellite-v9">satellite</label>
-                    </div> */}
                     
                     <div className='user-total-trip'>
                         <div className='user-card'>
@@ -266,10 +246,10 @@ class MContent extends React.Component {
                         <div onClick={this.hideAddTrip.bind(this)} className='add-close'>x</div>
                         <div className='add-title'>New trip</div>
                         <div className='add-name'>Trip name</div>
-                        <input type='text' id='tripName' placeholder='e.g. Europe Train Tour'
+                        <input type='text' className='each-tripName' id='add-tripName' placeholder='e.g. Europe Train Tour'
                                 onChange={this.updateInput.bind(this)}/>
                         <div className='add-sum'>Trip summary</div>
-                        <input type='text' id='add-sum-input' placeholder='e.g. First Solo Trip With Luck'
+                        <input type='text' className='each-tripSum' id='add-tripSum' placeholder='e.g. First Solo Trip With Luck'
                                 onChange={this.updateInput.bind(this)}/>        
                         <div className='add-when'>When?</div>
                         {/* <form action="/action_page.php"> */}
@@ -278,10 +258,10 @@ class MContent extends React.Component {
                             <input type="submit"/> */}
                         {/* </form> */}
                         <div className='add-start'>Start date</div>
-                        <input type='date' id='tripStart' placeholder='5 July 2020'
+                        <input type='date' className='each-tripStart' id='add-tripStart' placeholder='5 July 2020'
                                 onChange={this.updateInput.bind(this)}/>   
                         <div className='add-end'>End date</div>
-                        <input type='date' id='add-end-input' placeholder='I have no idea'
+                        <input type='date' className='each-tripEnd' id='add-tripEnd' placeholder='I have no idea'
                                 onChange={this.updateInput.bind(this)}/>
                         {/* <div className='who-can-see'>Who can see my trip</div>                */}
                         <div onClick={this.addTrip.bind(this)} id='add-trip-submit' aria-disabled='true'>Add trip</div>

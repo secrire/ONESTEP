@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import {BrowserRouter as Router, Switch, Route, Link} from "react-router-dom";
-import './member.css';
+import './eachTrip.css';
 
 import firebase from 'firebase/app';
 import "firebase/auth";
@@ -236,12 +236,12 @@ class AddStep extends React.Component {
                         <input type='text' className='add-step-name' id='add-track-step-name' placeholder='e.g. Europe Train Tour'/>
                     </div>
                     <div className='add-step-list'>
-                        <div className='add-step-p'>Arrival Date & Time</div>
+                        <div className='add-step-p'>Arrival</div>
                         <input type='date' className='add-step-arrive-date' id='add-track-step-arrive-date' min={this.props.state.trip.tripStart} max={this.props.state.trip.tripEnd}/>
                         <input type='time' className='add-step-arrive-time' id='add-track-step-arrive-time'/>
                     </div>
                     <div className='add-step-list'>
-                        <div className='add-step-p'>Departure Date & Time</div>
+                        <div className='add-step-p'>Departure</div>
                         <input type='date' className='add-step-depart-date' id='add-track-step-depart-date' min={this.props.state.trip.tripStart} max={this.props.state.trip.tripEnd}/>
                         <input type='time' className='add-step-depart-time' id='add-track-step-depart-time'/>
                     </div>     

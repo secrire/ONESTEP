@@ -2,10 +2,13 @@ import React from "react";
 import ReactDOM from "react-dom";
 import {BrowserRouter as Router, Switch, Route, Link, Redirect} from "react-router-dom";
 import './member.css';
+import './style.css';
 
 import firebase from 'firebase/app';
 import "firebase/auth";
 import "firebase/firestore";
+
+import Search from "./search";
 
 class MHeader extends React.Component {
   constructor(props){
@@ -66,12 +69,14 @@ class MHeader extends React.Component {
             {/* <Link to='/addTrack'><div className='add-track'>+ Track</div></Link> */}
             {/* <div className='add-surprise'>+ Surprise</div> */}
 
-            <input className='mheader-search'placeholder='Search'/>
-            <img className='mheader-search-icon' src='./imgs/search.svg'/>
+            {/* <input className='mheader-search'placeholder='Search'/>
+            <img className='mheader-search-icon' src='./imgs/search.svg'/> */}
+            {/* <Search/> */}
+
             <Link to={"/m"+this.props.state.userUid}>
               <div className='mheader-userinfo'>
                 <img className='user-img' src='./imgs/b.JPG'/>
-                {/* <div className='user-displayname'>{this.state.currentUserName}</div> */}
+                <div className='user-displayname'>{this.state.currentUserName}</div>
               </div>
             </Link>
             <img onClick={this.showSideMenu.bind(this)} className='menu-icon' src='./imgs/menu.png'/>
@@ -85,7 +90,7 @@ class MHeader extends React.Component {
                     <div className='menu-user-setting'>Account settings</div>
                   <div className='menu-title'>Explore trips</div>
                     <Link to='/'><div className='menu-friend'>Popular trips</div></Link>
-                    <Link to='/'><div className='menu-fav'>Our favourite</div></Link>
+                    <Link to='/'><div className='menu-fav'>ANAME's favourite</div></Link>
                   <div className='menu-title'>Connect with us</div>
                   <div className='menu-social'>
                     <img  src="./imgs/fb.svg" />

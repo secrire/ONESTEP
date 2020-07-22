@@ -28,7 +28,7 @@ a{
     /* font-weight: bold;
     color:rgb(22, 22, 22); */
 }
-.search{
+.search-input{
     width: 200px;
     border: 1px rgb(219, 219, 219) solid;
     background-color: rgb(250, 250, 250);
@@ -36,15 +36,89 @@ a{
     padding: 7px 10px;
     outline: none;
     position: fixed;
+    top: 15px;
     left:30px;
     text-align: center;
 }
 .search-icon{
     position: fixed;
+    top: 24px;
     left:88px;
     width: 14px;
     height:14px;
 }
+#search-page{
+    height:100vh;
+    width: 100%;
+    position: fixed;
+    top: 60px;
+    background-color: rgba(2, 72, 95, 0.596);
+    z-index: 1010;
+}
+.search-pop{
+    z-index: 30;
+    position: fixed;
+    top: 70px;
+    left: 30px;
+    /* transform: translate(50%); */
+    width: 370px;
+    /* height: 580px; */
+    margin: auto;
+    background-color: #FDFDFE;
+    border: 1px rgb(219, 219, 219) solid;
+    background-color: rgb(250, 250, 250);
+    border-radius:5px;
+    outline: none;
+    /* border-radius: 15px; */
+    /* box-shadow: 1px 1px 1px 1px rgba(158, 158, 158, 0.836); */
+    text-align: center;
+}
+/* .search-close{
+    position: fixed;
+    top: 97px;
+    left: 350px;
+    width: 20px;
+    height: 20px;
+    color: white;
+    font-size: 14px;
+    line-height: 18px;
+    background-color: rgb(0, 46, 61);
+    border-radius: 10px;
+    text-align: center;
+} */
+.search-title{
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 0 25px 0;
+    padding: 20px 0px;
+    background-color: rgb(243, 245, 247);
+    color: rgb(0, 46, 61);
+    border-bottom: 1px rgb(228, 232, 236) solid;
+    border-bottom-right-radius: 15px;
+}
+.search-container{
+    width:370px;
+}
+.search-user-box,.search-trip-box{
+    width: 370px;
+    padding: 12px 0px;
+    display: flex;
+    align-items: center;
+}
+.search-user-img{
+    width: 44px;
+    margin-left: 30px;
+}
+.search-user-name{
+    color: rgb(0, 46, 61);
+    font-size: 16px;
+    font-weight: 800;
+    margin: 0 10px;
+}
+
+
+
+
 .login{
     color: #161616;
     position: fixed;
@@ -84,8 +158,8 @@ a{
     width: 50px;
     height: 50px;
     color: black; */
-    z-index: 1000;
-    transition-duration:2.5s;
+    z-index: 1003;
+    transition-duration:1.5s;
     position: fixed; 
     top: 90px;  
     right: 47%;
