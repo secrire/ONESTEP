@@ -52,15 +52,6 @@ class MHeader extends React.Component {
     document.getElementById(`side-menu`).style.display ='none';
   }
 
-  // logout(e){
-  //   e.preventDefault(); 
-  //   firebase.auth().signOut()
-  //   .then(() => {
-  //   })
-  //   .catch(function(error) {
-  //   });
-  // } 
-
 
   render() {
     if(this.props.state.islogin === false){

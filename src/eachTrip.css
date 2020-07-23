@@ -44,6 +44,8 @@ ul, li{
     background-color:rgb(243, 245, 247);
     height:100vh;
     overflow: auto;
+    transform: scale(1,1);
+    transition: all 0.5s ease-out;
 }
 .trip-header{
     display: flex;
@@ -70,25 +72,33 @@ ul, li{
     font-size: 14px;
     line-height: 16px;
     font-weight: bold;
+    text-align: center;
     border: 2px #CC3E55 solid;
     border-radius: 40px;
-    margin: 0 14px;
-    padding: 7px 15px;
-    letter-spacing: 2px;
+    padding: 10px 0px;
+    letter-spacing: 4px;
+    position: fixed;
+    top:360px;
+    left: 80px;
+    width: 200px;
 }
-#card-add-plan::before,
+#card-add-track{
+    position: fixed;
+    left: 470px;
+}
+/* #card-add-plan::before,
 #card-add-track::before{
     content: '+';
     color: #CC3E55;
-    font-weight: bold;
+    font-weight: bold; */
     /* border: 1px white solid;
     border-radius: 20px; */
-    border:none;
+    /* border:none;
     width: 20px;
     height: 20px;
     padding: 2px;
     margin: 5px;
-}
+} */
 #trip-header-set{
     display: none;
     /* width:100px; */
@@ -504,6 +514,32 @@ z-index: 0;
 .add-step-remove{
     width: 50px;
     height: 50px;
+}
+.search-plan-place-box{
+    padding: 3px 16px;
+}
+.search-plan-placeName{
+    font-size: 22px;
+    /* font-weight: bold; */
+    margin: 16px 0;
+    color: rgb(0, 46, 61);
+}
+
+#search-plan-place-pop{
+    z-index: 30;
+    position: fixed;
+    top: 240px;
+    left: 270px;
+    width: 360px;
+    /* height: 580px; */
+    background-color: #FDFDFE;
+    border: 1px rgb(219, 219, 219) solid;
+    background-color: rgb(250, 250, 250);
+    border-radius:5px;
+    outline: none;
+    /* border-radius: 15px; */
+    /* box-shadow: 1px 1px 1px 1px rgba(158, 158, 158, 0.836); */
+    text-align: left;
 }
 
 
