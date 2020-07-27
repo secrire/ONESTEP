@@ -9,12 +9,13 @@ import "firebase/auth";
 import "firebase/firestore";
 
 import Search from "./search";
+import Profile from "./profile";
 
 class MHeader extends React.Component {
   constructor(props){
     super(props);
     this.state ={
-      currentUserName: null
+
     };
   }
   componentDidMount() {
@@ -22,21 +23,19 @@ class MHeader extends React.Component {
 
     let user = firebase.auth().currentUser;
     if(user){
-
       firebase.firestore().collection('users')
       .where('email','==',user.email)
-      .get()
-      .then(querySnapshot => {
-          querySnapshot.forEach(doc => {
-              console.log(doc.data().username)
-              this.setState({
-                  currentUserName: doc.data().username
-              });   
-          }) 
+      .onSnapshot(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          this.setState({
+            currentUser: doc.data(),
+          }); 
+          console.log(this.state.currentUser)  
+        }) 
       });
     }else{
       console.log('not a member!!!')
-      document.getElementById("mheader-userinfo").style.cssText += 'display:none;';
+      // document.getElementById("mheader-userinfo").style.cssText += 'display:none;';
       document.getElementById("menu-icon").style.cssText += 'display:none;';
     } 
   }    
@@ -52,10 +51,28 @@ class MHeader extends React.Component {
     document.getElementById(`side-menu`).style.display ='none';
   }
 
+  showProfilePage(e){
+    e.preventDefault();
+    // this.setState({
+    //   showProfilePage: true
+    // });
+    document.getElementById(`side-menu`).style.display ='none';
+    document.getElementById('profile-page').style.display ='block';
+  }
+
 
   render() {
     if(this.props.state.islogin === false){
       return <Redirect exact to='/'/>
+    }
+    let mheaderUserinfo = null;
+    if(this.state.currentUser){
+      mheaderUserinfo = <Link to={"/m"+this.props.state.userUid} id='mheader-userinfo'>
+                          <div className='mheader-userinfo'>
+                            <img className='user-img' src={this.state.currentUser.profilePic}/>
+                            <div className='user-displayname'>{this.state.currentUser.username}</div>
+                          </div>
+                        </Link>
     }
 
     return<div className='MHeader'>
@@ -67,13 +84,8 @@ class MHeader extends React.Component {
             {/* <input className='mheader-search'placeholder='Search'/>
             <img className='mheader-search-icon' src='./imgs/search.svg'/> */}
             <Search/>
-
-            <Link to={"/m"+this.props.state.userUid} id='mheader-userinfo'>
-              <div className='mheader-userinfo'>
-                <img className='user-img' src='./imgs/b.JPG'/>
-                <div className='user-displayname'>{this.state.currentUserName}</div>
-              </div>
-            </Link>
+            {mheaderUserinfo}
+            
             <img onClick={this.showSideMenu.bind(this)} id='menu-icon' src='./imgs/menu.png'/>
 
 
@@ -82,7 +94,7 @@ class MHeader extends React.Component {
                 <div className='menu-pop'>
                   <div onClick={this.hideSideMenu.bind(this)} className='menu-close'>x</div>
                   <div className='menu-title'>My account</div>
-                    <div className='menu-user-setting'>Account settings</div>
+                    <div onClick={this.showProfilePage.bind(this)} className='menu-user-setting'>Profile settings</div>
                   <div className='menu-title'>Explore trips</div>
                     <Link to='/'><div className='menu-friend'>Popular trips</div></Link>
                     <Link to='/'><div className='menu-fav'>ANAME's favourite</div></Link>
@@ -98,6 +110,8 @@ class MHeader extends React.Component {
                   <div onClick={this.props.changeIslogin} className='menu-logout'>Logout</div>
                 </div>
             </div>
+
+            <Profile state={this.state}/>
           </div>
       }
    } 

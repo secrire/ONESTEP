@@ -18,14 +18,18 @@ class Map extends React.Component {
         //     container: 'map',
         //     style: 'mapbox://styles/mapbox/streets-v11',
         //     zoom: 7,
-        //     center: [122, 24.5]
+        //     center: [122, 24.5],
+        //     // transition: {
+        //     //     "duration": 300,
+        //     //     "delay": 0.5
+        //     //   }
         // });
         // map.setStyle('mapbox://styles/mapbox/satellite-v9')
 
-        // if(new URL(location.href).pathname.substr(0,2) !== '/m'){
-        //     console.log('got you')
-        //     document.getElementById("map").style.cssText += 'left: 750px;width:60%;';
-        // }
+        if(new URL(location.href).pathname.substr(0,2) !== '/m'){
+            console.log('got you')
+            document.getElementById("map").style.cssText += 'left: 600px;width:100%;';
+        }
 
         // function getDirection() {
         //     var xhr = new XMLHttpRequest();
@@ -256,6 +260,20 @@ class Map extends React.Component {
         //     inputs[i].onclick = switchLayer;
         // } 
         // console.log('mappppppp') 
+
+
+        //------------------------
+          //     var xhr = new XMLHttpRequest();
+  //     xhr.open(
+  //       "GET",
+  //       "https://api.mapbox.com/geocoding/v5/mapbox.places/big%20ben%20london.json?access_token=pk.eyJ1IjoidXNoaTczMSIsImEiOiJja2Mwa2llMmswdnk4MnJsbWF1YW8zMzN6In0._Re0cs24SGBi93Bwl_w0Ig&limit=10"
+  //     );
+  //     xhr.onload = function() {
+  //       var response = JSON.parse(this.responseText);
+  //       console.log(response)
+  //       // console.log(response.features[0].center[0],response.features[0].center[1]);      
+  //     };
+  //     xhr.send();
     }  
       
   render() {
@@ -263,7 +281,7 @@ class Map extends React.Component {
                 <div id="map"></div>
                 <div id="distance" class="distance-container"></div>
 
-                <div id="menu">
+                {/* <div id="menu">
                     <input
                         id="streets-v11"
                         type="radio"
@@ -280,7 +298,7 @@ class Map extends React.Component {
                     <label for="outdoors-v11">outdoors</label>
                     <input id="satellite-v9" type="radio" name="rtoggle" value="satellite" />
                     <label for="satellite-v9">satellite</label>
-                </div>
+                </div> */}
             </div>
       }
 } 

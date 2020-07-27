@@ -13,7 +13,9 @@ a{
 ul, li{
     list-style: none;
 }
-
+html{
+    scroll-behavior: smooth;
+} 
 
 /*       --------   member header   --------     */
 .MHeader{
@@ -195,11 +197,18 @@ ul, li{
     padding: 2px;
     margin: 5px;
 } */
-.card-img{
+.card-img, .card-no-img{
    width: 100%;
    height: 230px;
    transform: scale(1,1);
    transition: all 0.5s ease-out;
+   z-index: 99;
+}
+.card-no-img{
+    background-color: #3c4958ee;
+}
+.card-no-img:hover{
+    background-color: #55657a;
 }
 .card-img:hover{
     transform: scale(1.1, 1.1);
@@ -242,6 +251,10 @@ ul, li{
     border-radius: 10px;
     text-align: center;
 }
+.add-close:hover{
+    background-color: #4B626D;
+}
+
 .add-title,.add-when{
     font-size: 24px;
     font-weight: bold;
@@ -264,6 +277,7 @@ ul, li{
     padding: 16px;
     margin:  7px 0;
 }
+::-webkit-datetime-edit-fields-wrapper { background-color: rgb(194, 50, 50); }
 .each-tripSum{
     height: 80px;
 }
@@ -326,6 +340,9 @@ ul, li{
     background-color: rgb(0, 46, 61);
     border-radius: 15px;
     text-align: center;
+}
+.menu-close:hover{
+    background-color: #4B626D;
 }
 .menu-title{
     font-size: 16px;
@@ -436,6 +453,13 @@ ul, li{
     padding: 6px;
     font-weight: bold;
 }
+
+
+
+
+
+
+
 
 
 

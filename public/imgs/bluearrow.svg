@@ -1,0 +1,14 @@
+<svg width="53" height="14" xmlns="http://www.w3.org/2000/svg" style="user-select: auto;">
+
+ <title style="user-select: auto;"/>
+ <g>
+  <title>background</title>
+  <rect fill="none" id="canvas_background" height="16" width="55" y="-1" x="-1"/>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <line style="user-select: auto;" stroke="#4397c7" stroke-width="2px" stroke-linejoin="round" stroke-linecap="round" fill="none" id="svg_1" y2="7.055967" y1="7.055967" x2="2.458896" x1="49.745187" class="cls-1"/>
+  <line style="user-select: auto;" stroke-width="2px" stroke-linejoin="round" stroke-linecap="round" stroke="#4397c7" fill="none" id="svg_2" y2="12.055967" y1="7.055967" x2="45.825189" x1="49.825189" class="cls-1"/>
+  <line style="user-select: auto;" stroke-width="2px" stroke-linejoin="round" stroke-linecap="round" stroke="#4397c7" fill="none" id="svg_3" y2="2.055967" y1="7.055967" x2="45.825189" x1="49.825189" class="cls-1"/>
+ </g>
+</svg>

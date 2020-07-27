@@ -9,11 +9,14 @@ import "firebase/firestore";
 
 import Map from "./Map";
 
+
+let map;
+
 class MContent extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            userDisplayname:'',
+            // userDisplayname:'',
             userTrips:[],
             tripIDs:[],
           };    
@@ -22,18 +25,27 @@ class MContent extends React.Component {
         let urlUserUID = new URL(location.href).pathname.substr(2);
 
         let user = firebase.auth().currentUser;
+
+        // mapboxgl.accessToken = 'pk.eyJ1IjoidXNoaTczMSIsImEiOiJja2Mwa2llMmswdnk4MnJsbWF1YW8zMzN6In0._Re0cs24SGBi93Bwl_w0Ig';
+        // map = new mapboxgl.Map({
+        //     container: 'map',
+        //     style: 'mapbox://styles/mapbox/streets-v11',
+        //     zoom: 2,
+        //     center: [80, 30],
+        // });
+        // map.setStyle('mapbox://styles/mapbox/satellite-v9');
         
         firebase.firestore().collection('users')
-            // .where('email','==',user.email)
-            .get().then(querySnapshot =>{
-                querySnapshot.forEach(doc => {
-                    if(doc.id === urlUserUID){
-                        this.setState({
-                            userDisplayname: doc.data().username
-                        });
-                    }
-                })    
-            });
+        // .where('email','==',user.email)
+        .onSnapshot(querySnapshot =>{
+            querySnapshot.forEach(doc => {
+                if(doc.id === urlUserUID){
+                    this.setState({
+                        tripAuthor: doc.data()
+                    });
+                }
+            })    
+        });
 
             firebase.firestore().collection('trips')
             .orderBy('createTime','desc')
@@ -149,8 +161,8 @@ class MContent extends React.Component {
           .doc()
           .set({
             authorUid: user.uid,
-            planlike: 0,
-            trackLike: 0,
+            // planlike: 0,
+            // trackLike: 0,
             // surpriseLike: 0,
             tripName: document.getElementById(`add-tripName`).value,
             tripSum: document.getElementById(`add-tripSum`).value,
@@ -169,6 +181,13 @@ class MContent extends React.Component {
         // console.log(this.state.userTrips)
         let key=0;
         let renderUserTrips = this.state.userTrips.map((n, index)=>{
+
+            let cardImg;
+            if(n.coverPic){
+                cardImg = <img className='card-img' src={n.coverPic}/>
+            }else{
+                cardImg = <div className='card-no-img'/>
+            } 
             return  <li key={key++}>
                         <Link to={"/"+this.state.tripIDs[index]}><div className='card'>  
                             <div className='card-title'>{n.tripName}</div>
@@ -176,10 +195,19 @@ class MContent extends React.Component {
                                 <div className='card-time'>{n.tripStart}</div>
                                 {/* <div className='card-days'>18 days</div> */}
                             </div>
-                            <img className='card-img' src='./imgs/b.JPG'/>
+                            {cardImg}
                         </div></Link>
                     </li>
         })
+        let tripAuthorInfo = null;
+        if(this.state.tripAuthor){
+            tripAuthorInfo= <div className='trip-author-info'>
+                                <img className='user-card-img' src={this.state.tripAuthor.profilePic}/>
+                                <div id='user-card-name'>{this.state.tripAuthor.username}</div>
+                                <div id='user-card-city'></div>
+                                <div id='user-card-about'></div>
+                            </div>   
+    }
 
         //   let user = firebase.auth().currentUser;
         //   console.log(user.uid)
@@ -214,8 +242,7 @@ class MContent extends React.Component {
                     
                     <div className='user-total-trip'>
                         <div className='user-card'>
-                            <img className='user-card-img' src='./imgs/b.JPG'></img>
-                            <div id='user-card-name'>{this.state.userDisplayname}</div>
+                           {tripAuthorInfo}
                             <div className='user-card-statis'>
                                 <div className='user-card-like'>0 likes</div>
                                 <div className='user-card-trip'>{this.state.userTrips.length} trips</div>

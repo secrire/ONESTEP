@@ -8,6 +8,9 @@ import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
 
+// mapboxgl.accessToken = 'pk.eyJ1IjoidXNoaTczMSIsImEiOiJja2Mwa2llMmswdnk4MnJsbWF1YW8zMzN6In0._Re0cs24SGBi93Bwl_w0Ig';
+let map;
+
 class Step extends React.Component {
   constructor(props){
     super(props);
@@ -17,33 +20,102 @@ class Step extends React.Component {
   }
 
   componentDidMount(){
-  //   function getLong() {
-  //     var xhr = new XMLHttpRequest();
-  //     xhr.open(
-  //       "GET",
-  //       "https://api.mapbox.com/geocoding/v5/mapbox.places/big%20ben%20london.json?access_token=pk.eyJ1IjoidXNoaTczMSIsImEiOiJja2Mwa2llMmswdnk4MnJsbWF1YW8zMzN6In0._Re0cs24SGBi93Bwl_w0Ig&limit=10"
-  //     );
+    // mapboxgl.accessToken = 'pk.eyJ1IjoidXNoaTczMSIsImEiOiJja2Mwa2llMmswdnk4MnJsbWF1YW8zMzN6In0._Re0cs24SGBi93Bwl_w0Ig';
+    // map = new mapboxgl.Map({
+    //     container: 'map',
+    //     style: 'mapbox://styles/mapbox/streets-v11',
+    //     zoom: 4,
+    //     center: [30, 50],
+    // });
+    // map.setStyle('mapbox://styles/mapbox/satellite-v9');
 
-  //     xhr.onload = function() {
-  //       var response = JSON.parse(this.responseText);
-  //       console.log(response)
-  //       // console.log(response.features[0].center[0],response.features[0].center[1]);
+    //   let pickedTripID = new URL(location.href).pathname.substr(1);
+    //   let geojson = {
+    //     'type': 'FeatureCollection',
+    //     'features': []
+    //   };
+      
+    //   firebase.firestore().collection('trips')
+    //   .doc(pickedTripID).collection('plan')
+    //   .orderBy('stepArrDate','asc')
+    //   .onSnapshot(querySnapshot => {
+    //     let data=[]; 
+      
+    //     querySnapshot.forEach(doc => {
+    //         data.push(doc.data()); 
+    //     })
+
+    //     this.setState({
+    //       planSteps:data,
+    //     }, () => {
+    //       console.log("Steps", this.state.planSteps);
+    //       geojson.features=[];
+    //       let arr = this.state.planSteps;
+    //       for(let i = 0; i<arr.length; i++){
+    //         let item = {
+    //           'type': 'Feature',
+    //           'geometry': {
+    //           'type': 'Point',
+    //           'coordinates': [arr[i].longitude,arr[i].latitude]
+    //           }}
+    //       geojson.features.push(item);  
+    //       }
         
-  //     };
-  //     xhr.send();
-  // }
-  //   getLong();
+    //       console.log(geojson.features);
 
-  // mapboxgl.accessToken = 'pk.eyJ1IjoidXNoaTczMSIsImEiOiJja2Mwa2llMmswdnk4MnJsbWF1YW8zMzN6In0._Re0cs24SGBi93Bwl_w0Ig';
-  // var map = new mapboxgl.Map({
-  //     container: 'map',
-  //     style: 'mapbox://styles/mapbox/streets-v11',
-  //     zoom: 7,
-  //     center: [122, 24.5]
-  // });
+    //       geojson.features.forEach(function(marker){
+    //         var el = document.createElement('div');
+    //         el.className = 'marker';
+          
+    //         el.style.backgroundColor = '#CC3E55';
+    //         el.style.width = '24px';
+    //         el.style.height ='24px';
+    //         el.style.border ='3px white solid';
+    //         el.style.borderRadius ='50%';
+    //         console.log(marker.geometry.coordinates);
+    //         new mapboxgl.Marker(el)
+    //         .setLngLat(marker.geometry.coordinates)
+    //         .addTo(map);
+    //       });  
+    //     });
+    //   })
 
-    
-    
+    //   console.log(geojson.features);
+
+   
+
+
+  //   let geojson = {
+  //     'type': 'FeatureCollection',
+  //     'features': [
+  //       {
+  //       'type': 'Feature',
+  //       // 'properties': {
+  //       // 'message': 'Foo',
+  //       // 'iconSize': [60, 60]
+  //       // },
+  //       'geometry': {
+  //       'type': 'Point',
+  //       'coordinates': [e.target.getAttribute('longitude'),e.target.getAttribute('latitude')]
+  //       }
+  //       },
+  //       // {
+  //       // 'type': 'Feature',
+  //       // 'geometry': {
+  //       // 'type': 'Point',
+  //       // 'coordinates': [-61.2158203125, -15.97189158092897]
+  //       // }
+  //       // },
+  //       // {
+  //       // 'type': 'Feature',
+  //       // 'geometry': {
+  //       // 'type': 'Point',
+  //       // 'coordinates': [-63.29223632812499, -18.28151823530889]
+  //       // }
+  //       // }
+  //     ]
+  //   };
+
   }
 
   addPlanStep(e){
@@ -55,7 +127,15 @@ class Step extends React.Component {
     if(localStorage.getItem('pic')){
       stepPic= localStorage.getItem('pic');
     }
-    console.log(stepPic)
+    // console.log(stepPic)
+
+    let longitude ='';
+    let latitude = '';
+    if(localStorage.getItem('longitude')){
+      longitude= localStorage.getItem('longitude');
+      latitude= localStorage.getItem('latitude');
+    }
+
 
     if (document.getElementById(`add-plan-step-place`).value &&
         document.getElementById(`add-plan-step-arrive-date`).value 
@@ -76,10 +156,14 @@ class Step extends React.Component {
           stepDepTime: document.getElementById(`add-plan-step-depart-time`).value,
           stepStory: document.getElementById(`add-plan-step-story`).value,
           stepPic: stepPic,
-          stepLike:0
+          // stepLike:0,
+          longitude: longitude,
+          latitude: latitude,
         })
         console.log('db plan step ok');
-        localStorage.removeItem('pic')  
+        localStorage.removeItem('pic');  
+        localStorage.removeItem('longitude');  
+        localStorage.removeItem('latitude');  
         document.getElementById(`add-plan-step`).style.display ='none';
 
         document.getElementById(`add-plan-step-place`).value = '';
@@ -155,18 +239,73 @@ class Step extends React.Component {
         localStorage.setItem('pic',url);
 
         this.setState({
-          AddPlanStepPic: true,
+          AddStepPic: true,
         });
+
+        document.getElementById('step-pic').src = url;
+        // document.getElementById('set-cover-pic').backgroundColor = 'red';
   
         // firebase.firestore().collection('trips').doc(pickedTripID)
-        // .collection('plan').doc()
-        // .set({
-        //   stepPic: url
+        // .update({
+        //   coverPic: url
         // })
+
+        // console.log(this.props.state.trip.coverPic)
+
       }).catch((error) => {
         console.log('download fail'+error.message)
       });
     });
+  }
+
+  editPlanStepPic(e){
+    e.preventDefault();
+    let storage = firebase.storage();
+    let file = e.target.files[0];
+    let storageRef = storage.ref('pics/'+file.name);
+
+    let pickedTripID = new URL(location.href).pathname.substr(1);
+
+    storageRef.put(file).then((snapshot) => {
+      console.log('Uploaded', file.name);
+
+      storageRef.getDownloadURL().then(
+        (url) => {
+        console.log('download'+url);
+
+        localStorage.setItem('pic',url);
+
+        this.setState({
+          AddStepPic: true,
+        });
+
+        document.getElementById('step-pic').src = url;
+        // document.getElementById('set-cover-pic').backgroundColor = 'red';
+  
+        // firebase.firestore().collection('trips').doc(pickedTripID)
+        // .update({
+        //   coverPic: url
+        // })
+
+        // console.log(this.props.state.trip.coverPic)
+      }).catch((error) => {
+        console.log('download fail'+error.message)
+      });
+    });
+  }
+
+  setCoverPic(e){
+    e.preventDefault();
+    // let pickedTripID = new URL(location.href).pathname.substr(1);
+    
+    // let coverPic= localStorage.getItem('pic');
+
+    // firebase.firestore().collection('trips').doc(pickedTripID)
+    // .update({
+    //   coverPic: coverPic
+    // })
+
+    // console.log(this.props.state.trip.coverPic)
   }
 
   // AddTrackStepPic(e){
@@ -197,64 +336,15 @@ class Step extends React.Component {
   //   });
   // }
 
-//   showEditPlanStep(e){
-//     e.preventDefault();
-//     document.getElementById(`edit-plan-step`).style.display ='block';
-//     console.log(e.target.getAttribute('stepid'))
-
-//     this.setState({
-//         pickedStepID: e.target.getAttribute('stepid')
-//     },() =>console.log(this.state.pickedStepID))
-
-//     let pickedTripID = new URL(location.href).pathname.substr(1);
-
-//     firebase.firestore().collection('trips')
-//     .doc(pickedTripID).collection('plan').doc(e.target.getAttribute('stepid'))
-//     .get().then(
-//         doc => {
-//             console.log(doc.data());
-//             document.getElementById(`edit-plan-step-place`).value = doc.data().location;
-//             document.getElementById(`edit-plan-step-name`).value = doc.data().stepName;
-//             document.getElementById(`edit-plan-step-arrive-date`).value = doc.data().stepArrDate;
-//             document.getElementById(`edit-plan-step-arrive-time`).value = doc.data().stepArrTime;
-//             document.getElementById(`edit-plan-step-depart-date`).value = doc.data().stepDepDate;
-//             document.getElementById(`edit-plan-step-depart-time`).value = doc.data().stepDepTime;
-//             document.getElementById(`edit-plan-step-story`).value = doc.data().stepStory;
-//         })
-// }  
-
-// showEditTrackStep(e){
-//   e.preventDefault();
-//   document.getElementById(`edit-track-step`).style.display ='block';
-//   console.log(e.target.getAttribute('stepid'))
-
-//   this.setState({
-//       pickedStepID: e.target.getAttribute('stepid')
-//   },() =>console.log(this.state.pickedStepID)) 
-  
-  
-//   let pickedTripID = new URL(location.href).pathname.substr(1);
-
-//   firebase.firestore().collection('trips')
-//   .doc(pickedTripID).collection('track').doc(e.target.getAttribute('stepid'))
-//   .get().then(
-//       doc => {
-//           console.log(doc.data());
-//           document.getElementById(`edit-track-step-place`).value = doc.data().location;
-//           document.getElementById(`edit-track-step-name`).value = doc.data().stepName;
-//           document.getElementById(`edit-track-step-arrive-date`).value = doc.data().stepArrDate;
-//           document.getElementById(`edit-track-step-arrive-time`).value = doc.data().stepArrTime;
-//           document.getElementById(`edit-track-step-depart-date`).value = doc.data().stepDepDate;
-//           document.getElementById(`edit-track-step-depart-time`).value = doc.data().stepDepTime;
-//           document.getElementById(`edit-track-step-story`).value = doc.data().stepStory;
-//       })
-// }  
-
 
   editPlanStep(e){
     e.preventDefault();
 
     let pickedTripID = new URL(location.href).pathname.substr(1);
+    let stepPic='';
+    if(localStorage.getItem('pic')){
+      stepPic= localStorage.getItem('pic');
+    }
 
     if (document.getElementById(`edit-plan-step-place`).value &&
         document.getElementById(`edit-plan-step-arrive-date`).value 
@@ -273,9 +363,10 @@ class Step extends React.Component {
             stepDepDate: document.getElementById(`edit-plan-step-depart-date`).value,
             stepDepTime: document.getElementById(`edit-plan-step-depart-time`).value,
             stepStory: document.getElementById(`edit-plan-step-story`).value,
-            // stepPic: stepPic    
+            stepPic: stepPic    
         })
         console.log('db edit plan step ok');
+        localStorage.removeItem('pic'); 
         document.getElementById(`edit-plan-step`).style.display ='none';
 
         document.getElementById(`edit-plan-step-place`).value = '';
@@ -314,41 +405,6 @@ class Step extends React.Component {
   //   } 
   // }
 
-// deletePlanStep(e){
-//   e.preventDefault();
-  
-//   let pickedTripID = new URL(location.href).pathname.substr(1);
-//   this.setState({
-//       pickedStepID: e.target.getAttribute('stepid')
-//   },() =>console.log(this.state.pickedStepID))    
-
-//   firebase.firestore()
-//   .collection('trips').doc(pickedTripID)
-//   .collection('plan').doc(this.state.pickedStepID)
-//   .delete().then(() =>{
-//       console.log('delete plan step ok')
-//   }).catch((err) =>{
-//       console.log(err.message)
-//   })
-// } 
-// deleteTrackStep(e){
-//   e.preventDefault();
-  
-//   let pickedTripID = new URL(location.href).pathname.substr(1);
-
-//   this.setState({
-//       pickedStepID: e.target.getAttribute('stepid')
-//   },() =>console.log(this.state.pickedStepID))    
-
-//   firebase.firestore()
-//   .collection('trips').doc(pickedTripID)
-//   .collection('track').doc(this.state.pickedStepID)
-//   .delete().then(() =>{
-//       console.log('delete track step ok')
-//   }).catch((err) =>{
-//       console.log(err.message)
-//   })
-// } 
 
   hideEditPlanStep(e){
     e.preventDefault();
@@ -416,8 +472,6 @@ class Step extends React.Component {
   //   let storage = firebase.storage();
   //   var storageRef = storage.ref('pics/');
   //   storageRef.child('q.png').getDownloadURL().then((url) => {
-  //     console.log('download'+url);
-  //     document.getElementById('pic').src = url;
   //   }).catch((error) => {
   //   });
   // }
@@ -447,84 +501,106 @@ class Step extends React.Component {
     // }
 
 
-    // var xhr = new XMLHttpRequest();
-    // xhr.open(
-    //   "GET",
-    //   `https://api.mapbox.com/geocoding/v5/mapbox.places/${placeSearchText}.json?access_token=pk.eyJ1IjoidXNoaTczMSIsImEiOiJja2Mwa2llMmswdnk4MnJsbWF1YW8zMzN6In0._Re0cs24SGBi93Bwl_w0Ig&limit=5`
-    // );
+    // fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${placeSearchText}.json?access_token=pk.eyJ1IjoidXNoaTczMSIsImEiOiJja2Mwa2llMmswdnk4MnJsbWF1YW8zMzN6In0._Re0cs24SGBi93Bwl_w0Ig&limit=5`)
+    // .then(res => res.json())
+    // .then(
+    //   (result) => {
+    //     console.log(result)
+    //     let data=[];       
+    //     data.push(result);
+    //     console.log(data)
 
-    // xhr.onload = function() {
-    //   var response = JSON.parse(this.responseText);
-    //   console.log(response)
-    //   // console.log(response.features[0].center[0],response.features[0].center[1]);
-    //   let data=[];       
-    //   data.push(response);
-    //   console.log(data)
-
-    //   this.setState({
-    //     placeSearchResult: data
-    //   });
-    //   console.log(this.state.placeSearchResult)
-    // };
-    // xhr.send();
-
-  //   fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${placeSearchText}.json?access_token=pk.eyJ1IjoidXNoaTczMSIsImEiOiJja2Mwa2llMmswdnk4MnJsbWF1YW8zMzN6In0._Re0cs24SGBi93Bwl_w0Ig&limit=5`)
-  //   .then(res => res.json())
-  //   .then(
-  //     (result) => {
-  //       console.log(result)
-  //       let data=[];       
-  //       data.push(result);
-  //       console.log(data)
-
-  //       this.setState({
-  //         searchPlaceResult: data[0].features
-  //       });
-  //       console.log(this.state.searchPlaceResult)
-  //     },
+    //     this.setState({
+    //       searchPlaceResult: data[0].features
+    //     });
+    //     console.log(this.state.searchPlaceResult)
+    //   },
     
-  //     (error) => {
-  //       console.log(error.message)
-  //     }
-  //   )
+    //   (error) => {
+    //     console.log(error.message)
+    //   }
+    // )
   }
 
   pickStepPlace(e){
     e.preventDefault();
-    console.log(e.target.getAttribute('place'));
-    console.log(this.props.state.pickedEdit);
+    console.log(e.target.getAttribute('longitude'));
+    console.log(e.target.getAttribute('latitude'));
+
+    // mapboxgl.accessToken = 'pk.eyJ1IjoidXNoaTczMSIsImEiOiJja2Mwa2llMmswdnk4MnJsbWF1YW8zMzN6In0._Re0cs24SGBi93Bwl_w0Ig';
+    // var map = new mapboxgl.Map({
+    //     container: 'map',
+    //     style: 'mapbox://styles/mapbox/streets-v11',
+    //     zoom: 7,
+    //     center: [122, 24.5]
+    // });
+    // map.setStyle('mapbox://styles/mapbox/satellite-v9')
+
+    // map.flyTo({
+    //   center: [
+    //     e.target.getAttribute('longitude'),e.target.getAttribute('latitude')
+    //   ],
+    //   essential: true // this animation is considered essential with respect to prefers-reduced-motion
+    // });
+
+    // localStorage.setItem('longitude',e.target.getAttribute('longitude'));
+    // localStorage.setItem('latitude',e.target.getAttribute('latitude'));
+
+    // let geojson = {
+    //   'type': 'FeatureCollection',
+    //   'features': [
+    //     {
+    //     'type': 'Feature',
+    //     'geometry': {
+    //     'type': 'Point',
+    //     'coordinates': [e.target.getAttribute('longitude'),e.target.getAttribute('latitude')]
+    //     }
+    //     },
+    //   ]
+    // };
+
+    //   geojson.features.forEach(function(marker){
+    //     var el = document.createElement('div');
+    //     el.className = 'marker';
+       
+    //     el.style.backgroundColor = '#CC3E55';
+    //     el.style.width = '30px';
+    //     el.style.height ='30px';
+    //     el.style.borderRadius ='50%';
+         
+    //     new mapboxgl.Marker(el)
+    //     .setLngLat(marker.geometry.coordinates)
+    //     .addTo(map);
+    //   });
 
     if(this.props.state.pickedAdd === 'plan'){
       document.getElementById(`add-plan-step-place`).value = e.target.getAttribute('place');
       document.getElementById('add-plan-step-name').value = e.target.getAttribute('place');
     }
-    if(this.props.state.pickedAdd === 'track'){
-    document.getElementById(`add-track-step-place`).value = e.target.getAttribute('place');
-    document.getElementById('add-track-step-name').value = e.target.getAttribute('place');
-    }
-
+    // if(this.props.state.pickedAdd === 'track'){
+    // document.getElementById(`add-track-step-place`).value = e.target.getAttribute('place');
+    // document.getElementById('add-track-step-name').value = e.target.getAttribute('place');
+    // }
 
     if(this.props.state.pickedEdit === 'plan'){
       document.getElementById(`edit-plan-step-place`).value = e.target.getAttribute('place');
       document.getElementById('edit-plan-step-name').value = e.target.getAttribute('place');
     }
-    if(this.props.state.pickedEdit === 'track'){
-      document.getElementById(`edit-track-step-place`).value = e.target.getAttribute('place');
-      document.getElementById('edit-track-step-name').value = e.target.getAttribute('place');
-    }
+    // if(this.props.state.pickedEdit === 'track'){
+    //   document.getElementById(`edit-track-step-place`).value = e.target.getAttribute('place');
+    //   document.getElementById('edit-track-step-name').value = e.target.getAttribute('place');
+    // }
     
     this.setState({
       placeText: null,
     });
-  };
+  }
 
   // pickTrackPlace(e){
   //   e.preventDefault();
   //   console.log(e.target.getAttribute('place'))
-
   //   document.getElementById(`add-plan-track-place`).value = e.target.getAttribute('place');
   //   document.getElementById('add-plan-track-name').value = e.target.getAttribute('place');
-
   //   this.setState({
   //     placeText: null,
   //   });
@@ -538,7 +614,7 @@ class Step extends React.Component {
       if(this.state.searchPlaceResult){
         searchPlaceBox = this.state.searchPlaceResult.map((n)=>{
           return  <div key={key++} className='search-plan-place-box'>   
-                    <div onClick={this.pickStepPlace.bind(this)} className='search-plan-placeName' place={n.text}>{n.place_name}</div>
+                    <div onClick={this.pickStepPlace.bind(this)} className='search-plan-placeName' place={n.text} longitude={n.center[0]} latitude={n.center[1]}>{n.place_name}</div>
                     {/* <div className='card-time'>{n.}</div> */}
                   </div>
         })
@@ -554,23 +630,23 @@ class Step extends React.Component {
           searchPlacePage = null;
       }
 
-      let planStepPic = null;
-      if(this.state.AddPlanStepPic){
-        planStepPic = (
-          <div><img id='planStepPic'/>
+      let addStepPic = null;
+      if(this.state.AddStepPic){
+        addStepPic = (
+          <div><img id='step-pic'/>
           {/* <div id='setPlanCoverPic'>set to plan cover photo</div> */}
-          <div id='setTripCoverPic'>set to trip cover photo</div>
-          </div>
-          
+          {/* <div onClick={this.setCoverPic.bind(this)} id='set-cover-pic'>set to cover photo</div> */}
+          </div>  
         )  
       }
+  
 
     return(
         <div>
             <div id='add-plan-step'>
                 <div className='add-step-pop'>
                     <div onClick={this.hideAddPlanStep.bind(this)} className='add-step-close'>x</div>
-                    <div className='add-step-title'>New step of Plan</div>
+                    <div className='add-step-title'>New step</div>
                     <div className='add-step-list'>
                         <div className='add-step-p'>Location</div>
                         <input onChange={this.updatePlaceInput.bind(this)} type='text' className='add-step-place' id='add-plan-step-place'/>
@@ -600,7 +676,7 @@ class Step extends React.Component {
                         <img className='add-step-type-stay' src="public/imgs/menu.png" />
                     </div> */}
                     <div className='add-step-list'>
-                        <div className='add-step-p'>Your note</div>    
+                        <div className='add-step-p'>Your story</div>    
                         <textarea className='add-step-story' id='add-plan-step-story'></textarea>
                     </div>    
                     {/* <form action="/action_page.php"> */}
@@ -611,9 +687,12 @@ class Step extends React.Component {
                     <div className='add-step-list'>
                         <div className='add-step-p'>Add your photos</div>
                         <div className='add-step-pic-box'>
-                            <input onChange={this.AddPlanStepPic.bind(this)} id="uploadPicInput" type="file"></input>
+                            {addStepPic}
+                            <label className='step-pic-label'>
+                                <input onChange={this.AddPlanStepPic.bind(this)} className='trip-cover-change-pic' id="uploadPicInput" type="file"/>
+                                <img className='step-upload-pic-icon' src='./imgs/bluecamera.svg'/>
+                            </label>
                             {/* <img id='planStepPic'/> */}
-                            {planStepPic}
                         </div>
                     </div>    
                     <div className='add-step-list'> 
@@ -672,7 +751,7 @@ class Step extends React.Component {
             <div id='edit-plan-step'>
                 <div className='add-step-pop'>
                     <div onClick={this.hideEditPlanStep.bind(this)} className='add-step-close'>x</div>
-                    <div className='add-step-title'>Edit step of Plan</div>
+                    <div className='add-step-title'>Edit step</div>
                     <div className='add-step-list'>
                         <div className='add-step-p'>Location</div>
                         <input onChange={this.updatePlaceInput.bind(this)} type='text' className='add-step-place' id='edit-plan-step-place'/>
@@ -699,8 +778,11 @@ class Step extends React.Component {
                     <div className='add-step-list'>
                         <div className='add-step-p'>Add your photos</div>
                         <div className='add-step-pic-box'>
-                            {/* {planStepUploadPicInput} */}
-                            <input onChange={this.uploadPlanPic.bind(this)} className="uploadPicInput" type="file"/>
+                            {addStepPic}
+                            <label className='step-pic-label'>
+                                <input onChange={this.editPlanStepPic.bind(this)} className='trip-cover-change-pic' id="uploadPicInput" type="file"/>
+                                <img className='step-upload-pic-icon' src='./imgs/bluecamera.svg'/>
+                            </label>
                             {/* <img id='stepPic' src={this.state.stepPic}/> */}
                             {/* {renderPlanStepPics} */}
                         </div>

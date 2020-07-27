@@ -1,0 +1,14 @@
+<svg width="32" height="32" xmlns="http://www.w3.org/2000/svg" style="user-select: auto;">
+
+ <title style="user-select: auto;"/>
+ <g>
+  <title>background</title>
+  <rect fill="none" id="canvas_background" height="402" width="582" y="-1" x="-1"/>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <path style="user-select: auto;" fill="#4397c7" id="svg_1" d="m2.248447,30.937888a1,1 0 0 1 -1,-1.11l0.9,-8.17a1,1 0 0 1 0.29,-0.6l19.08,-19.07a3.56,3.56 0 0 1 5.05,0l3.68,3.63a3.56,3.56 0 0 1 0,5.05l-19.12,19.07a1,1 0 0 1 -0.6,0.29l-8.17,0.91l-0.11,0zm8.28,-1.91l0,0zm-6.42,-6.81l-0.73,6.59l6.59,-0.73l18.82,-18.83a1.58,1.58 0 0 0 0,-2.22l-3.63,-3.63a1.58,1.58 0 0 0 -2.22,0l-18.83,18.82z" class="cls-1"/>
+  <path fill="#4397c7" id="svg_2" d="m26.768447,13.677888a1,1 0 0 1 -0.7,-0.29l-7.27,-7.27a1,1 0 0 1 1.45,-1.41l7.23,7.23a1,1 0 0 1 0,1.41a1,1 0 0 1 -0.71,0.33z" class="cls-1"/>
+  <rect style="user-select: auto;" fill="#4397c7" id="svg_3" y="15.72516" x="9.013538" width="12.84" transform="rotate(-45 15.433538436889643,16.725160598754883) " height="2" class="cls-1"/>
+ </g>
+</svg>

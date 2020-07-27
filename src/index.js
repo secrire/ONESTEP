@@ -79,22 +79,24 @@ class Header extends React.Component{
       .then((result) => {
         var token = result.credential.accessToken;
         var user = result.user;
-        console.log(token, user)
-        console.log(`fb sign up`)
-        firebase.firestore().collection('users')
-        .doc(user.uid)
-        .set({
-          username: user.displayName,
-          email: user.email,
-          isauthed: true
-        })
+
+        console.log(user)
+        // console.log(`fb sign up`)
+
+        // firebase.firestore().collection('users')
+        // .doc(user.uid)
+        // .set({
+        //   username: user.displayName,
+        //   email: user.email,
+        //   isauthed: true
+        // })
 
         // this.setState({
         //   username: user.displayName,
         //   email: user.email,
         //   isauthed: true
         // })
-        console.log(`${user.displayName} fb sign up ok`)
+        // console.log(`${this.state.username}`)
       })
       .catch((error) => {
         var email = error.email;
@@ -136,16 +138,17 @@ class Header extends React.Component{
     .then((result) => {
       var token = result.credential.accessToken;
       var user = result.user;
-      console.log(token, user);
-      firebase.firestore().collection('users')
-        .doc(user.uid)
-        .set({
-          username: user.displayName,
-          email: user.email,
-          isauthed: true
-        })
+      console.log(user);
+
+      // firebase.firestore().collection('users')
+      //   .doc(user.uid)
+      //   .set({
+      //     username: user.displayName,
+      //     email: user.email,
+      //     // isauthed: true
+      //   })
       // this.setState({
-      //   isauthed: true
+      //   logEmail: user.email
       // });
       console.log(`fb login`)
     })
@@ -237,11 +240,11 @@ class Header extends React.Component{
 
     return  <div>
               <div id='header'>
-                {/* <p><a href="mailto:">Send email</a></p> */}
                 {/* <Link to='/' className='logo'></Link> */}
                 {/* <input className='search'placeholder='Search'/>
                 <img className='search-icon' src='./imgs/search.svg'/> */}
                 <Search/>
+                {/* <i className="fas fa-camera" style="user-select: auto;"></i> */}
                 <div onClick={this.showLoginPage.bind(this)} className='login'>Log in</div>
                 <div onClick={this.showSignupPage.bind(this)} className='signup'>Register</div>
                 {signupPage}
@@ -337,7 +340,6 @@ class SignUp extends React.Component{
   }
 } 
 
-
 /*          --------------   L O G I N       --------------      */
 class Login extends React.Component{
   constructor(props){
@@ -361,16 +363,10 @@ class Login extends React.Component{
           email: user.email,
           isauthed: true
         })
-      // this.setState({
-      //   isauthed: true
-      // });
+
       console.log(`fb login`)
     })
     .catch((error) => {
-      // The email of the user's account used.
-      var email = error.email;
-      // The firebase.auth.AuthCredential type that was used.
-      var credential = error.credential;
       console.log(error.message);
     });
   }  
@@ -437,8 +433,7 @@ class App extends React.Component {
     componentDidMount(){
 
       firebase.firestore().collection('users')
-      .get()
-      .then(querySnapshot => {
+      .onSnapshot(querySnapshot => {
         let totalUserUID=[];      
         querySnapshot.forEach(doc => {
         totalUserUID.push(doc.id);
@@ -447,7 +442,7 @@ class App extends React.Component {
         this.setState({
           totalUserUIDs: totalUserUID  
         });
-        console.log(this.state.totalUserUIDs)
+        // console.log(this.state.totalUserUIDs)
       })      
 
       firebase.auth().onAuthStateChanged((user)=> {
@@ -456,10 +451,12 @@ class App extends React.Component {
 
           this.setState({
             islogin: true,
-            userUid:user.uid
+            userUid:user.uid,
           });
 
           console.log(this.state.userUid)
+          console.log(user.photoURL)
+          // console.log(this.state.email)
 
           if(this.state.logEmail ==='' && this.state.email !==''){
             firebase.firestore().collection('users')
@@ -472,6 +469,14 @@ class App extends React.Component {
               // trackLike:[],
               // planSave:[],
               // trackSave:[],
+            })
+          }else if(user.photoURL){
+            firebase.firestore().collection('users')
+            .doc(firebase.auth().currentUser.uid)
+            .set({
+              username: user.displayName,
+              email: user.email,
+              logEmail: this.state.logEmail,
             })
           }else{
             firebase.firestore().collection('users')
@@ -546,17 +551,12 @@ class App extends React.Component {
     //     .then(res => res.json())
     //     .then(
     //       (result) => {
-    //         this.setState({
-    //           chapters: result.chapters
-    //         });
-    //       },
-        
+    //       },     
     //       (error) => {
     //       }
     //     )
     // }
-    // componentWillMount() {
-    // }
+    
     render() {
       // function borderHeader() {
       //   let header = document.getElementById("header");

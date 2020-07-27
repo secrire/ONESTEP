@@ -14,14 +14,14 @@ class Banner extends React.Component{
     render(){
       function myFunction() {
         var element = document.getElementById("elem");
-        var desiredPosition = 250;
+        var desiredPosition = 140;
         // var counter = document.getElementById("count");
         // counter.innerHTML = 'pageyOffset: ' + window.pageYOffset;
         if (window.pageYOffset > desiredPosition) {
-          element.style.cssText += "transform: matrix(1, 0, 0, 1, 0, 0); position: fixed; top: 20px;  right: 47%; " ;
+          element.style.cssText += "transform: matrix(1, 0, 0, 1, 0, 0); position: fixed; top: 20px; right: 47%; z-index: 5; " ;
           // document.getElementById("cover").style.cssText+='opacity:0.5'
         } else {
-          element.style.cssText += 'transform: matrix(5, 0, 0, 6, 0, 60); position: fixed; top: 90px;  right: 47%;';
+          element.style.cssText += 'transform: matrix(5, 0, 0, 6, 0, 60); position: fixed; top: 90px; right: 47%; z-index: 0';
           // document.getElementById("cover").style.cssText+='opacity:0'
         }
       }
@@ -29,16 +29,19 @@ class Banner extends React.Component{
       
       return  <div className='banner'>
                  {/* <div id="cover"></div> */}
-                <div className='banner-top'>
-                  <div className='banner-intro'>
-                    <div className='intro-line1'>explore. </div> 
+                <img className='banner-img' src='./imgs/b.JPG'></img>
+                {/* <div className='banner-top'> */}
+                  {/* <div className='banner-intro'> */}
+                    <div className='intro-line1'>wander</div>
+                    <div className='intro-line2'>explore</div> 
+                    <div className='intro-line3'>collect</div>  
                     {/* <div className='intro-line1'>collect</div>    */}
-                    <div className='intro-line2'>COLLECT</div>  
+                    {/* <div className='intro-line2'>collect</div>   */}
                     {/* <input className='search'placeholder='explore...'/> */}
-                  </div>
-                  <div className='banner-desc'>Plan, track and see the difference. Somewhere is called surprise. </div>                  
-                  <img className='banner-img' src='./imgs/b.JPG'></img>
-                </div>
+                  {/* </div> */}
+                  <div className='banner-desc'>Plan, track and see the difference. Somewhere is called surprise. Plan, track and see the difference. Somewhere is called surprise.</div>                  
+                  {/* <img className='banner-img' src='./imgs/b.JPG'></img> */}
+                {/* </div> */}
                 <div id="elem">A N A M E</div>
                 <div className='features'>
                   <div className='feature'>
