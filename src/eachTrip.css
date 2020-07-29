@@ -128,6 +128,9 @@ html{
     width: 16px;
     margin-right: 8px;
 }
+#trip-header-set:hover{
+    background-color:#00ACE6;
+}
 #trip-header-coedit{
     display: block;
     left:370px;
@@ -241,9 +244,26 @@ html{
     align-items: center;
     margin-left: 26px;
 }
+.trip-end{
+    margin-left: 20px;
+    margin-top: -10px;
+}
+.trip-end-box{
+    height: 96px;
+}
+.author-trip-end-box{
+    height: 96px;
+}
+.author-trip-end-box-line{
+    border-left: 1.5px dashed #b7c0cd;
+    z-index: 1;
+    height: 56px;
+    margin: -56px 0 4px 43px;
+}
 .trip-start-end-icon{
     width: 46px;
     height:48px;
+    z-index:2;
 }
 .trip-start-end-p{
     color:rgb(10, 49, 63);
@@ -251,7 +271,7 @@ html{
     margin: 0 10px;
 }
 .trip-start-end-date{
-    color: lightgrey;
+    color: #AAB5C3;
     font-size: 10px;
 }
 .trip-step{
@@ -347,7 +367,7 @@ html{
     height:18px;
     /* border: 1px rgb(185, 194, 206) solid ; */
     border-radius: 18px;
-    margin-left: 24px;
+    margin-left: 22px;
     font-size: 12px;
     color:white;
     text-align: center;
@@ -359,12 +379,18 @@ html{
     margin: -9px 0 -4px 0;
 }
 .trip-step-add-btn-box::before,
-.trip-step-add-btn-box::after{
+.trip-step-add-btn-box::after,
+.trip-end-box::before{
     content: '|';
     color: #b7c0cd;
     font-size: 10px;
     font-weight: bold;
     margin-left: 30px;
+}
+.trip-end-box::before{
+    font-size: 30px;
+    font-weight: 100;
+    margin-left: 41px;
 }
 /* .trip-step-add-btn-box::before{
     position: absolute;
@@ -407,14 +433,14 @@ z-index: 0;
     display:flex;
     padding: 20px 0 20px 16px;
     text-align: left;
-    margin-left: 26px;
+    margin-left: 20px;
 }
 .trip-step-add-last-line:before{
     position: absolute;
     content: '';
     display: block;
-    border-left: 1px solid #b7c0cd;
-    top: 13px;
+    border-left: 1.5px solid #b7c0cd;
+    top: 0px;
     bottom: 50%;
     left: 20px;
     z-index: 1;
@@ -433,16 +459,16 @@ z-index: 0;
     margin-left: 5px; 
 } */
 .trip-step-add-last-btn{
-    background-color:#CC3E55;
-    width:34px;
-    height:34px;
-    /* border: 1px rgb(185, 194, 206) solid ; */
+    background-color: #CC3E55;
+    width: 40px;
+    height: 40px;
+    /* border: 1px rgb(185, 194, 206) solid; */
     border-radius: 50%;
-    margin: 40px 26px 0 -38px;
-    font-size: 20px;
-    color:white;
+    margin: 40px 20px 0 -35px;
+    font-size: 30px;
+    color: white;
     text-align: center;
-    line-height: 30px;
+    line-height: 34px;
     z-index: 2;
 }
 .trip-step-add-last-p{
@@ -458,6 +484,13 @@ z-index: 0;
     line-height: 70px;
     color: rgb(0, 46, 61);
     box-shadow: 0 0 9px 0px #cc3e5570;
+}
+.trip-plan-step-no-add-btn{
+    height: 9px;
+    width: 9px;
+    margin-left: 27px;
+    border-radius: 50%;
+    border: 1.5px solid #b7c0cd;
 }
 
 
@@ -515,6 +548,7 @@ z-index: 0;
     transform: translate(50%); */
     left:40px;
     width: 520px;
+    height: 700px;
     background: #FDFDFE;
     border-radius: 15px;
     /* box-shadow: 1px 1px 1px 1px rgba(158, 158, 158, 0.836); */
@@ -548,39 +582,55 @@ z-index: 0;
     border-bottom: 1px rgb(228, 232, 236) solid;
     border-bottom-right-radius: 15px;
 }
-.add-step-p{
+.add-step-container{
+    display: flex;
+}
+.add-step-p-box{
+    width: 140px;
+    margin-left: 20px;
+}
+.add-step-input-box{
+    width: 360px;
+}
+.add-step-p,.add-step-p-photo{
     font-size: 15px;
     font-weight: bold;
     color:rgb(0, 46, 61);
     text-align: left;
-    margin-right:15px;
+    margin: 20px 0px 40px 15px;
+}
+.add-step-p-photo{
+    margin: 160px 0px 40px 15px;
 }
 .add-step-place,.add-step-name,
 .add-step-arrive-date,.add-step-arrive-time,
 .add-step-depart-date,.add-step-depart-time,
 .add-step-story,
 .add-step-pic-box{
-    width: 70%;
+    width: 300px;
     border: 1px rgb(185, 194, 206) solid ;
     border-radius: 3px;
-    padding: 16px;
-    margin:  9px;
-    align-self: flex-end;
+    padding: 14px;
+    margin:  8px 0;
+}
+.add-step-story{
+    height: 160px;
 }
 .add-step-arrive-date,.add-step-depart-date{
-    width: 40%;
-    margin: 9px 5% 9px 0;
-    padding: 12px;
+    width: 155px;
+    margin: 8px 20px 8px 0;
+    padding: 10px;
 }
 .add-step-arrive-time,.add-step-depart-time{
-    width: 25%;
+    width: 125px;
     margin-right: 0;
-    padding: 12px;
+    padding: 10px;
 }
 .add-step-pic-box{
     display: flex;
-    width:70%;
+    width: 300px;
     margin: 7px auto;
+    padding: 8px;
     align-items: center;
 }
 .step-pic-label{
@@ -596,9 +646,6 @@ z-index: 0;
     width: 24px;
     height: 24px;
 }
-.add-step-story{
-    height: 220px;
-}
 #step-pic{
     width: 70px;
     height: 70px;
@@ -611,10 +658,13 @@ z-index: 0;
     background-color: rgb(185, 192, 204);
     width:150px;
     border-radius: 30px;
-    margin-top: 20px;
+    margin: 18px auto 0 auto;
     padding: 13px 5px;
     font-size: 16px;
     color: white;
+}
+#add-plan-step-submit-approve,#edit-plan-step-submit-approve{
+    background-color:#CC3E55 ;
 }
 .add-step-cancel{
     border: 1px rgb(185, 192, 204) solid;
@@ -717,6 +767,38 @@ z-index: 0;
     width: 340px;
     margin: 40px 0 20px 0;
     display: flex;
+    align-items: center;
+}
+#profile-pic{
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+}
+.profile-pic-icon{
+    width: 40px;
+    margin: 15px 2px;
+}
+.profile-nopic{
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    /* border: 1px rgb(22, 22, 22) solid; */
+    /* padding: 4px; */
+    background-color: #8A99AD;
+}
+.profile-pic-label{
+    border: 2px rgb(67, 151, 199) solid;
+    border-radius: 30px;
+    padding: 6px 16px;
+    margin-left: 22px;
+    color: rgb(67, 151, 199);
+    font-size: 12px;
+    font-weight: bold;
+    height: 36px;
+}
+.profile-pic-label:hover{
+    background-color: rgb(67, 151, 199) ;
+    color: white;
 }
 .profile-input,.profile-about{
     width: 340px;
@@ -737,6 +819,9 @@ z-index: 0;
     padding: 13px 5px;
     font-size: 16px;
     color: white;
+}
+.profile-set-submit:hover{
+    background-color: #CC3E55;
 }
 
 

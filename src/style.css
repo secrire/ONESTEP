@@ -31,7 +31,7 @@ a{
     color:rgb(22, 22, 22); */
 }
 .search-input{
-    width: 200px;
+    /* width: 200px;
     border: 1px rgb(219, 219, 219) solid;
     background-color: rgb(250, 250, 250);
     border-radius:5px;
@@ -39,16 +39,27 @@ a{
     outline: none;
     position: fixed;
     top: 15px;
-    left:30px;
+    right: 230px;
     text-align: center;
+    z-index: 7; */
+    width: 160px;
+    border: none;
+    border-bottom: 1px #161616 solid;
+    padding: 7px 10px;
+    outline: none;
+    position: fixed;
+    top: 22px;
+    right: 210px;
+    text-align: left;
     z-index: 7;
 }
 .search-icon{
     position: fixed;
-    top: 24px;
-    left:88px;
-    width: 14px;
-    height:14px;
+    top: 22px;
+    right: 207px;
+    width: 22px;
+    height: 22px;
+    z-index: 7;
 }
 #search-page{
     height:100vh;
@@ -62,7 +73,7 @@ a{
     z-index: 7;
     position: fixed;
     top: 70px;
-    left: 30px;
+    right: 26px;
     /* transform: translate(50%); */
     width: 370px;
     /* height: 580px; */
@@ -121,21 +132,37 @@ a{
 
 
 
-
-.login{
+.login-signup-box{
+    display: flex;
+    align-items: center;
+    border: 1px #161616 solid;
+    padding: 5px 14px;
+    position: fixed;
+    top: 12px;
+    right: 26px;
     color: #161616;
+    font-size: 14px;
+}
+.login{
+    /* color: #161616;
     position: fixed;
     top: 20px;
-    right: 170px;
+    right: 170px; */
+}
+.login-signup-line{
+    font-size: 20px;
+    margin: 0 14px 0 5px;
 }
 .signup{
+    font-weight: bold;
+    font-size: 15px;
     /* border-radius: 20px; */
-    padding: 6px 24px;
-    border: 1px #161616 solid;
-    color: #161616;
-    position: fixed;
+    /* padding: 6px 24px; */
+    /* border: 1px #161616 solid; */
+    /* color: #161616; */
+    /* position: fixed;
     top: 14px;
-    right: 28px;
+    right: 28px; */
     /* background-color: #161616; */
     /* color: white; */
 }
@@ -587,22 +614,42 @@ a{
     background-color: rgb(183, 192, 205);
     color: #E5E8ED;
 }
+.signup-submit-approve{
+    background-color: #CC3E55;
+    width:350px;
+    border-radius: 30px;
+    margin: 22px auto 8px auto;
+    padding: 13px 5px;
+    font-size: 16px;
+    color: white;
+}
+#login-fail-msg{
+    display: none;
+    color:#CC3E55;
+    font-size: 8px;
+}
 .login-submit{
     background-color: #CC3E55;
     color: white;
 }
 .signup-to-login{
     background-color: #F3F5F7;
-    color: rgb(185, 194, 206);
     font-size: 13px;
     line-height: 65px;
     margin-top: 24px;
+    padding: 0 73px;
     border-top: 1px rgb(228, 232, 236) solid ;
     height:65px;
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
+    display: flex;
+    align-items: center;
 }
-.signup-to-login a{
+.signup-to-login p{
+    color: rgb(185, 194, 206);
+    margin-right: 20px;
+}
+.signup-to-login div{
     color: #12A0CF;
     font-weight: bold;
 }

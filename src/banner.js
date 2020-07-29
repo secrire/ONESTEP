@@ -14,7 +14,7 @@ class Banner extends React.Component{
     render(){
       function myFunction() {
         var element = document.getElementById("elem");
-        var desiredPosition = 140;
+        var desiredPosition = 240;
         // var counter = document.getElementById("count");
         // counter.innerHTML = 'pageyOffset: ' + window.pageYOffset;
         if (window.pageYOffset > desiredPosition) {

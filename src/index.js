@@ -69,6 +69,24 @@ class Header extends React.Component{
     });
   }
 
+  loginToSignup(e){
+    e.preventDefault();
+    console.log(this.state)
+    this.setState({
+      showSignupPage: true,
+      showLoginPage: false,
+    });
+  }
+
+  signupToLogin(e){
+    e.preventDefault();
+    console.log(this.state)
+    this.setState({
+      showSignupPage: false,
+      showLoginPage: true,
+    });
+  }
+
 /*          --------------   S I G N    U P       --------------      */
   // ----- facebook sign up -----
   FBsignUp(e){
@@ -170,7 +188,7 @@ class Header extends React.Component{
     })
     .catch(err => {
     console.log(err.message);
-    // alert('email / password is not correct')
+    document.getElementById('login-fail-msg').style.display = 'block';
     });
   }
 
@@ -191,7 +209,12 @@ class Header extends React.Component{
     }
 
     let signupPage =null;
+    let signupSubmit=  <div onClick={this.emailSignUp.bind(this)} className='signup-submit'>Create new account</div>;
+
     if(this.state.showSignupPage === true){
+      if(this.props.state.username && this.props.state.email && this.props.state.password){
+        signupSubmit=  <div onClick={this.emailSignUp.bind(this)} className='signup-submit-approve'>Create new account</div>;
+      }
       signupPage = (
         <div id='signup-page'>
           <div className='signup-pop'>
@@ -204,11 +227,13 @@ class Header extends React.Component{
                   onChange={this.props.updateInput} value={this.props.state.username}/>
             <input type="email" className='signup-email' id='email' placeholder='Email' 
                   onChange={this.props.updateInput} value={this.props.state.email}/>
-            <input type='password' className='signup-psw' id='password' placeholder='Password'
+            <input type='password' className='signup-psw' id='password' placeholder='Password: at least 6 characters'
                   onChange={this.props.updateInput} value={this.props.state.password}/>
-            <div onClick={this.emailSignUp.bind(this)} className='signup-submit'>Create new account</div>
+            {/* <div className='signup-fb-note'>Password should be at least 6 characters</div> */}
+            {signupSubmit}
             <div className='signup-to-login'>
-              <div>Already have an account? Log in</div>
+              <p>Already have an account?</p>
+              <div onClick={this.signupToLogin.bind(this)}>Log in</div>
             </div>
           </div>
         </div>    
@@ -227,9 +252,11 @@ class Header extends React.Component{
                   <div className='signup-or'>or</div>
                   <input type='text' onChange={this.props.updateInput} id='logEmail' className='login-username' placeholder='Email or username'/>
                   <input type='password' onChange={this.props.updateInput} id='logPassword' className='login-psw' placeholder='Password'/>
+                  <div id='login-fail-msg'>Sorry, your username or password is wrong.</div>
                   <div onClick={this.emailLogIn.bind(this)} className='login-submit'>Log in</div>
                   <div className='signup-to-login'>
-                    <div>New to SURPRISE?<Link to='/signUp'> Create an account</Link></div>
+                    <p>New to SURPRISE?</p>
+                    <div onClick={this.loginToSignup.bind(this)}>Create an account</div>
                   </div>
                 </div>
               </div>
@@ -245,8 +272,12 @@ class Header extends React.Component{
                 <img className='search-icon' src='./imgs/search.svg'/> */}
                 <Search/>
                 {/* <i className="fas fa-camera" style="user-select: auto;"></i> */}
-                <div onClick={this.showLoginPage.bind(this)} className='login'>Log in</div>
-                <div onClick={this.showSignupPage.bind(this)} className='signup'>Register</div>
+                <div className='login-signup-box'>
+                  <div onClick={this.showLoginPage.bind(this)} className='login'>Login</div>
+                  <div className='login-signup-line'>/</div>
+                  <div onClick={this.showSignupPage.bind(this)} className='signup'>Register</div>
+                </div>
+                
                 {signupPage}
                 {loginPage}
                 <img className='log-icon' src='./imgs/q.png'/>
@@ -546,17 +577,6 @@ class App extends React.Component {
       });
     }
   
-    // componentDidMount() {
-    //   fetch("https://cwpeng.github.io/live-records-samples/data/content.json")
-    //     .then(res => res.json())
-    //     .then(
-    //       (result) => {
-    //       },     
-    //       (error) => {
-    //       }
-    //     )
-    // }
-    
     render() {
       // function borderHeader() {
       //   let header = document.getElementById("header");
@@ -570,6 +590,7 @@ class App extends React.Component {
       // window.onscroll = borderHeader;
 
       let tripRoute =[];
+      console.log(this.state.tripIDs)
       if(this.state.tripIDs!==[]){
         for( let i=0; i<this.state.tripIDs.length; i++){
           tripRoute.push(<Route exact path={'/'+this.state.tripIDs[i]}><MHeader changeIslogin={this.changeIslogin.bind(this)}  state={this.state}/><TripID state={this.state}/></Route>)

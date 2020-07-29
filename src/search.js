@@ -67,9 +67,10 @@ class Search extends React.Component{
     search(e){
         e.preventDefault();
        
-        console.log(document.getElementById(`search-input`).value)
-       
-
+        // console.log(document.getElementById(`search-input`).value)
+        this.setState({
+            showSearchInput: true,
+        });
     }
 
     render(){
@@ -116,13 +117,21 @@ class Search extends React.Component{
             searchPage = null;
         }
 
+        let searchInput = null;
+        if(this.state.showSearchInput){
+            searchInput =(
+                <input onChange={this.updateSearchInput.bind(this)} className='search-input' id= 'search-input' placeholder='Search'/>
+            )
+        }
+        // if(!this.state.showSearchInput && !this.state.searchText){
+        //     searchInput = null;
+        // }
+
       
       
         return  <div className='search-component'>
-                    <input onChange={this.updateSearchInput.bind(this)} className='search-input' id= 'search-input' placeholder='Search'/>
+                {searchInput}
                     <img onClick={this.search.bind(this)} className='search-icon' src='./imgs/search.svg'/>
-                
-
                 {searchPage}
                 
                 </div>

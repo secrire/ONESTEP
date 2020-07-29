@@ -14,7 +14,7 @@ class Content extends React.Component{
     this.state = {
       // userDisplayname:'',
       userTrips:[],
-      tripIDs:[],
+      favTripIDs:[],
     };    
   }
   componentDidMount() {
@@ -22,17 +22,17 @@ class Content extends React.Component{
     .orderBy('planLike','desc').limit(4)
     .onSnapshot(querySnapshot => {
       let data=[];       
-      let tripID=[];
+      let favTripID=[];
       let authorUid=[];
       querySnapshot.forEach(doc => {
           data.push(doc.data());
           // console.log(doc.id,doc.data().tripName)
-          tripID.push(doc.id);  
+          favTripID.push(doc.id);  
           authorUid.push(doc.data().authorUid)
       })
       this.setState({
           userTrips: data,
-          tripIDs: tripID,
+          favTripIDs: favTripID,
           authorUids: authorUid,
       }, () => {
         let authorName=[];       
@@ -47,7 +47,7 @@ class Content extends React.Component{
                   authorPic.push(doc.data().profilePic)
                 } 
               })
-              console.log(authorName);
+              // console.log(authorName);
               this.setState({
                 authorNames: authorName,
                 authorPics: authorPic
@@ -58,36 +58,46 @@ class Content extends React.Component{
       
       );
       console.log(this.state.authorNames)
-      // console.log(this.state.userTrips)
+      console.log(this.state.favTripIDs)
     })
 
     
     
   }    
     render(){
-      console.log(this.state.authorNames);
+      // console.log(this.state.authorNames);
 
       let renderPopTrips;
+      let favUserImg;
+
       if(this.state.authorPics){
         renderPopTrips = this.state.userTrips.map((n, index)=>{
-          return  <li key={this.state.tripIDs[index]} className='fav'>
+          if(this.state.authorPics[index]){
+            favUserImg = (<img className='fav-user-pic' src={this.state.authorPics[index]}/>)
+          }else{
+            favUserImg = (<div className='user-noimg'>
+                            <img className='user-img-icon' src='./imgs/whiteprofile.svg'/>
+                          </div>
+            )      
+          }
+          return  <li key={this.state.favTripIDs[index]} className='fav'>
                     <figure className='fav-main'>
-                      <Link to={"/"+this.state.tripIDs[index]}>
+                      <Link to={"/"+this.state.favTripIDs[index]}>
                           <div className='fav-hover-layer'>   
                             <p>SEE TRIP</p>
                             <img src='./imgs/bluearrow.svg'/>
                           </div>
                       </Link>
-                      <Link to={"/"+this.state.tripIDs[index]}>
+                      <Link to={"/"+this.state.favTripIDs[index]}>
                           {/* <div className='fav-main'>    */} 
-                            <img className='fav-img' src={n.coverPic}></img>
+                            {/* <img className='fav-img' src={n.coverPic}></img> */}
                           {/* </div> */}
                       </Link>
                     </figure>
                           <div className='fav-info'>
                             <div className='fav-info-decoration'/>
                             <div className='fav-who'>
-                              <img className='fav-user-pic' src={this.state.authorPics[index]}></img>
+                              {favUserImg}
                               <div className='fav-name'>{this.state.authorNames[index]}</div>
                             </div>
                             <div className='fav-trip-name'>{n.tripName}</div> 

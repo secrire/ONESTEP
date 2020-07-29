@@ -68,11 +68,14 @@ class Profile extends React.Component {
           storageRef.getDownloadURL().then(
             (url) => {
             console.log('download'+url);
+
+            localStorage.setItem('profilePic',url);
     
-            firebase.firestore().collection('users').doc(this.state.currentUserUid)
-            .update({
-              profilePic: url
-            })
+            // this.setState({
+            //   AddStepPic: true,
+            // });
+    
+            document.getElementById('profile-pic').src = url;
           }).catch((error) => {
             console.log('download fail'+error.message)
           });
@@ -82,6 +85,19 @@ class Profile extends React.Component {
     editProfile(e){
         e.preventDefault();
         console.log('ok')
+
+        let profilePic='';
+        if(localStorage.getItem('profilePic')){
+            profilePic = localStorage.getItem('profilePic');
+        }
+
+        firebase.firestore().collection('users').doc(this.state.currentUserUid)
+        .update({
+            profilePic: profilePic
+        })
+
+        localStorage.removeItem('profilePic');  
+        document.getElementById(`profile-page`).style.display ='none';
     }
 
 
@@ -89,6 +105,19 @@ class Profile extends React.Component {
         
         console.log(this.props.state)
         console.log(this.state.showProfilePage)
+
+        let profilePic;
+        if(this.props.state.currentUser){
+            if(this.props.state.currentUser.profilePic){
+                profilePic = (<img id='profile-pic' src={this.props.state.currentUser.profilePic}/>)
+            }else{
+                profilePic = ( <div className='profile-nopic'>
+                                  <img className='profile-pic-icon' src='./imgs/whiteprofile.svg'/>
+                               </div>
+                )      
+            }
+        }
+       
 
         return(  <div id='profile-page'>
                     <div className='profile-pop'>
@@ -103,9 +132,10 @@ class Profile extends React.Component {
                             </div>
                             <div className='profile-input-box'>
                                 <div className='profile-pic-box'>
-                                    <label className='step-pic-label'>
+                                    {profilePic}
+                                    <label className='profile-pic-label'> Upload a photo
                                         <input onChange={this.uploadProfilePic.bind(this)} className='trip-cover-change-pic' id="uploadPicInput" type="file"/>
-                                        <img className='step-upload-pic-icon' src='./imgs/bluecamera.svg'/>
+                                        {/* <img className='step-upload-pic-icon' src='./imgs/bluecamera.svg'/> */}
                                     </label>
                                 </div>
                                 <input onChange={this.updateInput.bind(this)} type='text' className='profile-input' id='profile-username'/>

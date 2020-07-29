@@ -11,6 +11,8 @@ import "firebase/firestore";
 import Search from "./search";
 import Profile from "./profile";
 
+
+
 class MHeader extends React.Component {
   constructor(props){
     super(props);
@@ -36,7 +38,7 @@ class MHeader extends React.Component {
     }else{
       console.log('not a member!!!')
       // document.getElementById("mheader-userinfo").style.cssText += 'display:none;';
-      document.getElementById("menu-icon").style.cssText += 'display:none;';
+      // document.getElementById("menu-icon").style.cssText += 'display:none;';
     } 
   }    
 
@@ -66,14 +68,27 @@ class MHeader extends React.Component {
       return <Redirect exact to='/'/>
     }
     let mheaderUserinfo = null;
+    let menuIcon = null;
+    let userImg = null;
     if(this.state.currentUser){
-      mheaderUserinfo = <Link to={"/m"+this.props.state.userUid} id='mheader-userinfo'>
+      if(this.state.currentUser.profilePic){
+        userImg = (<img className='user-img' src={this.state.currentUser.profilePic}/>)
+      }else{
+        userImg = ( <div className='user-noimg'>
+                      <img className='user-img-icon' src='./imgs/whiteprofile.svg'/>
+                    </div>
+        )      
+      }
+      mheaderUserinfo =(<Link to={"/m"+this.props.state.userUid} id='mheader-userinfo'>
                           <div className='mheader-userinfo'>
-                            <img className='user-img' src={this.state.currentUser.profilePic}/>
+                            {userImg}
                             <div className='user-displayname'>{this.state.currentUser.username}</div>
                           </div>
-                        </Link>
+                        </Link>)
+      menuIcon = <img onClick={this.showSideMenu.bind(this)} id='menu-icon' src='./imgs/menu.png'/>
     }
+
+    
 
     return<div className='MHeader'>
             <div className='mheader-logo'><Link className='mheader-logo' exact to='/'>A N A M E</Link></div>
@@ -85,8 +100,8 @@ class MHeader extends React.Component {
             <img className='mheader-search-icon' src='./imgs/search.svg'/> */}
             <Search/>
             {mheaderUserinfo}
-            
-            <img onClick={this.showSideMenu.bind(this)} id='menu-icon' src='./imgs/menu.png'/>
+            {menuIcon}
+            {/* <img onClick={this.showSideMenu.bind(this)} id='menu-icon' src='./imgs/menu.png'/> */}
 
 
             {/*  ------ side menu -----  */}

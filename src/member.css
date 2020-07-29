@@ -70,6 +70,19 @@ html{
     border: 1px rgb(22, 22, 22) solid;
     padding: 2px;
 }
+.user-img-icon{
+    width: 21px;
+    height: 21px;
+    margin: 1px 2px;
+}
+.user-noimg{
+    width: 33px;
+    height: 33px;
+    border-radius: 50%;
+    /* border: 1px rgb(22, 22, 22) solid; */
+    padding: 4px;
+    background-color: #8A99AD;
+}
 .user-displayname{
     font-size: 16px;
     font-weight: bold;
@@ -103,9 +116,17 @@ html{
     border-radius: 30px;
     margin: 20px auto 10px auto;
 }
+.user-card-noimg{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin: 20px auto 10px auto;
+    background-color: #8A99AD;
+}
 #user-card-name{
     color:white;
     font-weight: bold;
+    font-size: 24px;
 }
 .user-card-statis{
     display: flex;
@@ -130,7 +151,7 @@ html{
     text-align: center;
 }
 #add-trip-btn,.add-track,.add-surprise{
-    display: none;
+    /* display: none; */
     width: 340px;
     border: 2px #CC3E55 solid;
     border-radius: 25px;
@@ -140,6 +161,42 @@ html{
     line-height:26px;
     text-align: center;
     color:#CC3E55;
+}
+#add-trip-btn:hover{
+    background-color:#CC3E55 ;
+    color: white;
+}
+.add-first-trip-box{
+    width: 440px;
+    border: 1px #B7C0CD dashed;
+    border-radius: 5px;
+    margin: 30px auto 0 auto;
+    padding: 30px 50px;
+    /* height: 40px; */
+    background-color: #E7EAEE;
+}
+.add-first-trip-p{
+    text-align: center;
+    color:#a2aab4;
+    width: 280px;
+    line-height: 26px;
+    margin: 0 auto;
+}
+#add-first-trip-btn{
+    width: 160px;
+    border-radius: 35px;
+    margin: 30px auto 0px auto;
+    padding: 14px 10px;
+    /* height: 40px; */
+    /* line-height: 26px; */
+    text-align: center;
+    background-color: #CC3E55;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+}
+#add-first-trip-btn:hover{
+    background-color: #DE2B52;
 }
 .cards{
     margin: 30px auto;
@@ -277,7 +334,7 @@ html{
     padding: 16px;
     margin:  7px 0;
 }
-::-webkit-datetime-edit-fields-wrapper { background-color: rgb(194, 50, 50); }
+/* ::-webkit-datetime-edit-fields-wrapper { background-color: rgb(194, 50, 50); } */
 .each-tripSum{
     height: 80px;
 }
@@ -286,7 +343,7 @@ html{
     margin: 25px 0 16px 0;
     padding-bottom: 12px;
 }
-#add-trip-submit,#delete-trip-submit{
+#add-trip-submit,#delete-trip-submit,#add-trip-submit-approve{
     background-color: rgb(185, 192, 204);
     width:330px;
     border-radius: 30px;
@@ -294,6 +351,9 @@ html{
     padding: 13px 5px;
     font-size: 16px;
     color: white;
+}
+#add-trip-submit-approve{
+    background-color:#CC3E55 ;
 }
 #delete-trip-submit{
     background-color: white;
