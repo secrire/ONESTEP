@@ -71,11 +71,12 @@ class Profile extends React.Component {
 
             localStorage.setItem('profilePic',url);
     
-            // this.setState({
-            //   AddStepPic: true,
-            // });
+            this.setState({
+              AddProfilePic: true,
+            },() =>{
+                document.getElementById('profile-pic').src = url;
+            });
     
-            document.getElementById('profile-pic').src = url;
           }).catch((error) => {
             console.log('download fail'+error.message)
           });
@@ -108,7 +109,7 @@ class Profile extends React.Component {
 
         let profilePic;
         if(this.props.state.currentUser){
-            if(this.props.state.currentUser.profilePic){
+            if(this.props.state.currentUser.profilePic || this.state.AddProfilePic){
                 profilePic = (<img id='profile-pic' src={this.props.state.currentUser.profilePic}/>)
             }else{
                 profilePic = ( <div className='profile-nopic'>
@@ -116,6 +117,11 @@ class Profile extends React.Component {
                                </div>
                 )      
             }
+        }
+
+        let profileSetSubmit = <div className='profile-set-submit'>Save changes</div>
+        if(this.state.AddProfilePic || this.state.profileUsername || this.state.profileCity || this.state.profileAbout){
+            profileSetSubmit = <div onClick={this.editProfile.bind(this)} className='profile-set-submit-approve'>Save changes</div>
         }
        
 
@@ -138,12 +144,13 @@ class Profile extends React.Component {
                                         {/* <img className='step-upload-pic-icon' src='./imgs/bluecamera.svg'/> */}
                                     </label>
                                 </div>
-                                <input onChange={this.updateInput.bind(this)} type='text' className='profile-input' id='profile-username'/>
-                                <input onChange={this.updateInput.bind(this)} type='text' className='profile-input' id='profile-city'/>
-                                <textarea onChange={this.updateInput.bind(this)} type='text' className='profile-about' id='profile-about' placeholder='Description of yourself'/>
+                                <input onChange={this.updateInput.bind(this)} type='text' className='profile-input' id='profileUsername'/>
+                                <input onChange={this.updateInput.bind(this)} type='text' className='profile-input' id='profileCity'/>
+                                <textarea onChange={this.updateInput.bind(this)} type='text' className='profile-about' id='profileAbout' placeholder='Description of yourself'/>
                             </div>
-                        </div>         
-                        <div onClick={this.editProfile.bind(this)} className='profile-set-submit' aria-disabled='true'>Save changes</div>
+                        </div>  
+                        {profileSetSubmit}       
+                        {/* <div onClick={this.editProfile.bind(this)} className='profile-set-submit' aria-disabled='true'>Save changes</div> */}
                     </div>
                 </div>
         )

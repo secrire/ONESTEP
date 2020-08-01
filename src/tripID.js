@@ -11,6 +11,7 @@ import "firebase/storage";
 import Step from "./AddStep";
 import Map from "./Map";
 
+let map;
 let today = new Date().toJSON().slice(0,10);
 
 class TripID extends React.Component {
@@ -222,17 +223,34 @@ class TripID extends React.Component {
 
         firebase.firestore().collection('trips')
         .doc(pickedTripID).collection('plan').doc(e.target.getAttribute('stepid'))
-        .get().then(
+        .onSnapshot(
             doc => {
                 console.log(doc.data());
                 document.getElementById(`editPlanStepPlace`).value = doc.data().location;
                 document.getElementById(`editPlanStepName`).value = doc.data().stepName;
                 document.getElementById(`editPlanStepArriveDate`).value = doc.data().stepArrDate;
-                document.getElementById(`edit-plan-step-arrive-time`).value = doc.data().stepArrTime;
+                document.getElementById(`editPlanStepArriveTime`).value = doc.data().stepArrTime;
                 document.getElementById(`editPlanStepDepartDate`).value = doc.data().stepDepDate;
-                document.getElementById(`edit-plan-step-depart-time`).value = doc.data().stepDepTime;
+                document.getElementById(`editPlanStepDepartTime`).value = doc.data().stepDepTime;
                 document.getElementById(`edit-plan-step-story`).value = doc.data().stepStory;
+                if(doc.data().stepPic){
+                    this.setState({
+                        withStepPic: true
+                    })
+                    document.getElementById(`edit-step-pic`).src = doc.data().stepPic;
+                }
+
+                localStorage.setItem('longitude',doc.data().longitude)
+                localStorage.setItem('latitude',doc.data().latitude)
             })
+
+            if(document.getElementById('newestTag')){
+                let node = document.getElementById('newestTag');
+                if(node.parentNode){
+                    node.parentNode.removeChild(node);
+                }
+            }
+          
     }  
 
     // showEditTrackStep(e){
@@ -307,8 +325,8 @@ class TripID extends React.Component {
           .doc(pickedTripID)
           .update({
             authorUid: user.uid,
-            planlike: 0,
-            trackLike: 0,
+            // planlike: 0,
+            // trackLike: 0,
             tripName: document.getElementById(`editTripName`).value,
             tripSum: document.getElementById(`edit-tripSum`).value,
             tripStart: document.getElementById(`editTripStart`).value,
@@ -372,15 +390,32 @@ class TripID extends React.Component {
     deletePlanStep(e){
         e.preventDefault();
         let pickedTripID = new URL(location.href).pathname.substr(1);
+        let pickedStepID = e.target.getAttribute('stepid');
 
         firebase.firestore()
         .collection('trips').doc(pickedTripID)
-        .collection('plan').doc(e.target.getAttribute('stepid'))
-        .delete().then(() =>{
-            console.log('delete plan step ok')
-        }).catch((err) =>{
-            console.log(err.message)
+        .collection('plan').doc(pickedStepID)
+        .onSnapshot(doc =>{
+            console.log(doc.data().latitude);
+          
+            let node1 = document.getElementById(doc.data().latitude);
+            if(node1.parentNode){
+                node1.parentNode.removeChild(node1);
+            }
+            console.log(pickedStepID)
+            firebase.firestore()
+            .collection('trips').doc(pickedTripID)
+            .collection('plan').doc(pickedStepID)
+            .delete().then(() =>{
+                console.log('delete plan step ok')
+                // location.reload();
+            }).catch((err) =>{
+                console.log(err.message)
+            })
         })
+
+        document.getElementById(`addPlanStepPlace`).value = '';
+        document.getElementById('addPlanStepName').value = '';
     } 
     // deleteTrackStep(e){
     //     e.preventDefault();
@@ -517,6 +552,7 @@ class TripID extends React.Component {
     
     render() {
         console.log(this.state)
+        
         if(this.state.deletePickedTrip === true){
             return <Redirect to={"/m"+this.props.state.userUid}/>
         }
@@ -621,7 +657,7 @@ class TripID extends React.Component {
                         <ul className='trip-steps-box'>
                             <li>
                                 <div className='trip-start'>
-                                    <img className='trip-start-end-icon' src='./imgs/home.png'></img> 
+                                    <img className='trip-start-icon' src='./imgs/home.svg'></img> 
                                     <div className='trip-start-end-p'>Trip Start</div>  
                                     <div className='trip-start-end-date'>{this.state.trip.tripStart}</div> 
                                 </div>
@@ -718,7 +754,7 @@ class TripID extends React.Component {
                         <ul className='trip-steps-box'>
                             <li>
                                 <div className='trip-start'>
-                                    <img className='trip-start-end-icon' src='./imgs/home.png'></img> 
+                                    <img className='trip-start-icon' src='./imgs/home.svg'></img> 
                                     <div className='trip-start-end-p'>Trip Start</div>  
                                     <div className='trip-start-end-date'>{this.state.trip.tripStart}</div> 
                                 </div>
@@ -882,12 +918,19 @@ class TripID extends React.Component {
             </form>     
         }
 
+        let tripHeaderImg = (<div className='user-noimg'>
+                                <img className='user-img-icon' src='./imgs/whiteprofile.svg'/>
+                            </div>)
+        if(this.state.authorPic){
+            tripHeaderImg = <img className='trip-header-img' src={this.state.authorPic}/>
+        }
+
         return  <div className='plan-track-page'>
                     <Map/>
 
                     <div className='trip-header'>
-                        <img className='trip-header-img' src={this.state.authorPic}></img>
-                        <div className='trip-header-name'>{this.state.authorName}</div>
+                        {tripHeaderImg }
+                        <Link to={"/m"+this.state.trip.authorUid}><div className='trip-header-name'>{this.state.authorName}</div></Link>
                        
                         {/* <div onClick={this.addPlan.bind(this)} id='card-add-plan'>Plan</div> */}
                         {/* {cardAddPlan} */}

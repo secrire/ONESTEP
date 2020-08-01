@@ -129,6 +129,9 @@ class Header extends React.Component{
     firebase.auth().createUserWithEmailAndPassword(this.props.state.email, this.props.state.password)
       .then(() => { 
         console.log('email create member ok')
+        document.getElementById(`username`).value = '';
+        document.getElementById('email').value = '';
+        document.getElementById('password').value = '';
       })
       .catch(err => {
         console.log(err.message);
@@ -246,16 +249,16 @@ class Header extends React.Component{
               <div id='login-page'>
                 <div className='login-pop'>
                   <div onClick={this.hideLoginPage.bind(this)} className='signup-close'>x</div>
-                  <div className='signup-title'>Log in to SURPRISE</div>
+                  <div className='signup-title'>Log in to ONESTEP</div>
                   <div className='signup-fb-btn'  onClick={this.FBlogin.bind(this)}>Log in with Facebook</div>
                   <div className='signup-fb-note'>We'll never post to Facebook without your permission.</div>
                   <div className='signup-or'>or</div>
-                  <input type='text' onChange={this.props.updateInput} id='logEmail' className='login-username' placeholder='Email or username'/>
+                  <input type='text' onChange={this.props.updateInput} id='logEmail' className='login-username' placeholder='Email'/>
                   <input type='password' onChange={this.props.updateInput} id='logPassword' className='login-psw' placeholder='Password'/>
                   <div id='login-fail-msg'>Sorry, your username or password is wrong.</div>
                   <div onClick={this.emailLogIn.bind(this)} className='login-submit'>Log in</div>
                   <div className='signup-to-login'>
-                    <p>New to SURPRISE?</p>
+                    <p>New to ONESTEP?</p>
                     <div onClick={this.loginToSignup.bind(this)}>Create an account</div>
                   </div>
                 </div>

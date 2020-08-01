@@ -75,8 +75,8 @@ class Content extends React.Component{
           if(this.state.authorPics[index]){
             favUserImg = (<img className='fav-user-pic' src={this.state.authorPics[index]}/>)
           }else{
-            favUserImg = (<div className='user-noimg'>
-                            <img className='user-img-icon' src='./imgs/whiteprofile.svg'/>
+            favUserImg = (<div className='fav-user-noimg'>
+                            <img className='fav-user-img-icon' src='./imgs/whiteprofile.svg'/>
                           </div>
             )      
           }
@@ -89,9 +89,9 @@ class Content extends React.Component{
                           </div>
                       </Link>
                       <Link to={"/"+this.state.favTripIDs[index]}>
-                          {/* <div className='fav-main'>    */} 
-                            {/* <img className='fav-img' src={n.coverPic}></img> */}
-                          {/* </div> */}
+                          <div className='fav-main'>    
+                            <img className='fav-img' src={n.coverPic}></img>
+                          </div>
                       </Link>
                     </figure>
                           <div className='fav-info'>
@@ -185,13 +185,13 @@ class Content extends React.Component{
                     </div>
                     <div className='footer-feed'>
                       <p className='footer-title'>We love feedback</p>
-                      <div className='footer-feed-p'>EACHSTEP is developed in Taiwan by passionate traveler. We always want to make it better. Please <a className='footer-feed-a' href="mailto:allie.shwu@gmail.com">drop us some feedback</a> if you like :)</div>
+                      <div className='footer-feed-p'>ONESTEP is developed in Taiwan by passionate traveler. We always want to make it better. Please <a className='footer-feed-a' href="mailto:allie.shwu@gmail.com">drop us some feedback</a> if you like :)</div>
                     </div>
                     <div className='footer-social'>
                         <img src="./imgs/fb.svg" />
                         <img src="./imgs/ig.svg" />
                     </div>
-                    <p className='copyright'>&copy; EACHSTEP 2020 </p> 
+                    <p className='copyright'>&copy; ONESTEP 2020 </p> 
   
                     {/* <div className='footer-box'>
                       <p>Connect with us</p>

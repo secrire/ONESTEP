@@ -33,7 +33,7 @@ class Search extends React.Component{
             // let searchUserPic=[];
             querySnapshot.forEach(doc => {
                 // planLikeStep.push(doc.data().planLike);
-                if(document.getElementById(`search-input`).value === doc.data().username){
+                if(document.getElementById(`search-input`).value == doc.data().username){
                 console.log(doc.id);
 
                 this.setState({
@@ -51,7 +51,7 @@ class Search extends React.Component{
             // let searchUserPic=[];
             querySnapshot.forEach(doc => {
                 // planLikeStep.push(doc.data().planLike);
-                if(document.getElementById(`search-input`).value === doc.data().tripName){
+                if(document.getElementById(`search-input`).value == doc.data().tripName){
                 console.log(doc.data());
 
                 this.setState({

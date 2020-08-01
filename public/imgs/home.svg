@@ -1,0 +1,12 @@
+<svg width="91" height="91" xmlns="http://www.w3.org/2000/svg" stroke="null" style="user-select: auto; vector-effect: non-scaling-stroke;">
+
+ <g stroke="null">
+  <title stroke="null">background</title>
+  <rect stroke="null" fill="none" id="canvas_background" height="93" width="93" y="-1" x="-1"/>
+ </g>
+ <g stroke="null">
+  <title stroke="null">Layer 1</title>
+  <path style="user-select: auto;" stroke="null" id="svg_2" fill="#b9c0cc" d="m26.159125,38.185067l0,21.900517l-4.953442,0l0,3.045844l49.229681,0l0,-3.045844l-5.59629,0l0,-21.902309l4.564849,2.934761l1.666174,-2.557613l-24.734754,-15.901099c-0.507606,-0.325189 -1.158568,-0.325189 -1.666174,0l-24.739262,15.901099l1.666174,2.557613l4.563046,-2.932969zm22.950469,21.899621l-6.337413,0l0,-14.776824l6.337413,0l0,14.776824zm-3.608241,-34.332937l16.271346,10.460684l0,23.872253l-9.597633,0l0,-16.299747c0,-0.841191 -0.687026,-1.522922 -1.531835,-1.522922l-9.404688,0c-0.84571,0 -1.531835,0.681732 -1.531835,1.522922l0,16.299747l-10.482112,0l0,-23.870462l16.276756,-10.462475z"/>
+  <ellipse style="user-select: auto;" stroke="#b9c0cc" ry="37.047741" rx="38.491161" id="svg_4" cy="45.499996" cx="45.5" stroke-width="4" fill="none"/>
+ </g>
+</svg>

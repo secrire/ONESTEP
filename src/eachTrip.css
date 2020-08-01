@@ -3,6 +3,7 @@
     background: transparent;
     margin:0; 
     padding:0;
+    font-family: 'Noto Sans TC', sans-serif;
 }
 a{
     text-decoration: none;
@@ -60,16 +61,18 @@ html{
     left:0;
     width: 600px;
     height: 50px;
-    padding: 10px 0px;
+    padding: 10px 0px 10px 30px;
     z-index: 10;
 }
 .trip-header-img{
     width: 30px;
-    margin-left: 30px;
+    height: 30px;
+    margin-left: 20px;
+    border-radius: 50%;
 }
 .trip-header-name{
     color: rgb(0, 46, 61);
-    margin: 0 10px;
+    margin: 0 16px;
 }
 #card-add-plan,#card-add-track{
     color: #CC3E55;
@@ -141,13 +144,13 @@ html{
     left:480px;
 }
 .trip-cover{
-    /* background:url('surprise/public/imgs/b.JPG') top right/100% 100% no-repeat; */
     background-color: rgba(0, 46, 61, 0.774);
     width: 600px;
     height: 300px;
     /* padding: 180px 0 140px 0; */
     position: relative;
     text-align: center;
+    z-index: 1;
 }
 /* .trip-category{
     color: white;
@@ -181,6 +184,7 @@ html{
     top: 100px;
     right: 50%;
     transform: translate(50%);
+    text-shadow: 0 0 16px black;
 }
 .trip-summary{
     color: white;
@@ -191,6 +195,7 @@ html{
     top: 140px;
     right: 50%;
     transform: translate(50%);
+    text-shadow: 0 0 16px black;
 }
 .trip-cover-change-pic{
     color: transparent;
@@ -264,6 +269,12 @@ html{
     width: 46px;
     height:48px;
     z-index:2;
+}
+.trip-start-icon{
+    width: 38px;
+    height: 40px;
+    z-index: 2;
+    margin-left: 1px;
 }
 .trip-start-end-p{
     color:rgb(10, 49, 63);
@@ -383,7 +394,7 @@ html{
 .trip-end-box::before{
     content: '|';
     color: #b7c0cd;
-    font-size: 10px;
+    font-size: 13px;
     font-weight: bold;
     margin-left: 30px;
 }
@@ -406,7 +417,7 @@ z-index: 0;
 .trip-step-add-last-box{
     position: relative;
     margin-left: 24px;
-    /* margin-bottom:30px; */
+    margin-top: -9px;
 }
 .trip-step-add-last-decoration{
     position: absolute;
@@ -483,7 +494,7 @@ z-index: 0;
     font-weight: bold;
     line-height: 70px;
     color: rgb(0, 46, 61);
-    box-shadow: 0 0 9px 0px #cc3e5570;
+    box-shadow: 0 0 20px 6px #cc3e5570;
 }
 .trip-plan-step-no-add-btn{
     height: 9px;
@@ -491,6 +502,19 @@ z-index: 0;
     margin-left: 27px;
     border-radius: 50%;
     border: 1.5px solid #b7c0cd;
+}
+
+
+@keyframes glow {
+    0% {
+        box-shadow: 0 0 5px white;
+    }
+    100% {
+        box-shadow: 0 0 16px 10px rgb(204 62 85 / 92%);
+    }
+}
+.stepPoint {
+animation: glow 500ms ease-out infinite alternate; 
 }
 
 
@@ -626,6 +650,21 @@ z-index: 0;
     margin-right: 0;
     padding: 10px;
 }
+/* .add-step-arrive-date::-webkit-datetime-edit  {
+    content: '2020/07/28';
+} */
+/* .add-step-arrive-time:-webkit-datetime-edit-ampm-field {
+    display: none;
+}
+input[type=time]::-webkit-clear-button {
+-webkit-appearance: none;
+-moz-appearance: none;
+-o-appearance: none;
+-ms-appearance:none;
+appearance: none;
+margin: -10px; 
+} */
+
 .add-step-pic-box{
     display: flex;
     width: 300px;
@@ -646,7 +685,7 @@ z-index: 0;
     width: 24px;
     height: 24px;
 }
-#step-pic{
+#step-pic, #edit-step-pic{
     width: 70px;
     height: 70px;
     border: 2px rgb(175, 183, 196) dashed;
@@ -682,19 +721,26 @@ z-index: 0;
 .search-plan-place-box{
     padding: 3px 16px;
 }
+.search-plan-place-box:hover{
+    background-color: rgb(67, 151, 199);
+    color:white;
+}
+.search-plan-place-box:hover .search-plan-placeName{
+    color:white;
+}
 .search-plan-placeName{
-    font-size: 22px;
+    font-size: 17px;
     /* font-weight: bold; */
-    margin: 16px 0;
-    color: rgb(0, 46, 61);
+    margin: 8px 0;
+    color: rgb(67, 151, 199);
 }
 
 #search-plan-place-pop{
     z-index: 30;
     position: fixed;
-    top: 240px;
-    left: 270px;
-    width: 360px;
+    top: 223px;
+    left: 223px;
+    width: 302px;
     /* height: 580px; */
     background-color: #FDFDFE;
     border: 1px rgb(219, 219, 219) solid;
@@ -811,7 +857,7 @@ z-index: 0;
 .profile-about{
     height: 160px;
 }
-.profile-set-submit{
+.profile-set-submit, .profile-set-submit-approve{
     background-color: rgb(185, 192, 204);
     width:150px;
     border-radius: 30px;
@@ -820,7 +866,7 @@ z-index: 0;
     font-size: 16px;
     color: white;
 }
-.profile-set-submit:hover{
+.profile-set-submit-approve{
     background-color: #CC3E55;
 }
 

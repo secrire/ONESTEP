@@ -18,10 +18,10 @@ class Banner extends React.Component{
         // var counter = document.getElementById("count");
         // counter.innerHTML = 'pageyOffset: ' + window.pageYOffset;
         if (window.pageYOffset > desiredPosition) {
-          element.style.cssText += "transform: matrix(1, 0, 0, 1, 0, 0); position: fixed; top: 20px; right: 47%; z-index: 5; " ;
+          element.style.cssText += "transform: matrix(1.4, 0, 0, 1.7, 0, 0); position: fixed; top: 28px; right: 47%; z-index: 5; " ;
           // document.getElementById("cover").style.cssText+='opacity:0.5'
         } else {
-          element.style.cssText += 'transform: matrix(5, 0, 0, 6, 0, 60); position: fixed; top: 90px; right: 47%; z-index: 0';
+          element.style.cssText += 'transform: matrix(8, 0, 0, 7, 0, 70); position: fixed; top: 90px; right: 47%; z-index: 0';
           // document.getElementById("cover").style.cssText+='opacity:0'
         }
       }
@@ -42,7 +42,7 @@ class Banner extends React.Component{
                   <div className='banner-desc'>Plan, track and see the difference. Somewhere is called surprise. Plan, track and see the difference. Somewhere is called surprise.</div>                  
                   {/* <img className='banner-img' src='./imgs/b.JPG'></img> */}
                 {/* </div> */}
-                <div id="elem">A N A M E</div>
+                <div id="elem">O N E S T E P</div>
                 <div className='features'>
                   <div className='feature'>
                     <div className='feature-title1'>plan or track</div>

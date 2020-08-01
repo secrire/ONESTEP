@@ -34,21 +34,15 @@ class MContent extends React.Component {
             container: 'map',
             style: 'mapbox://styles/mapbox/streets-v11',
             zoom: 2,
-            center: [80, 30],
+            center: [10, 30],
         });
         map.setStyle('mapbox://styles/mapbox/satellite-v9');
+
         
-        firebase.firestore().collection('users')
-        // .where('email','==',user.email)
-        .onSnapshot(querySnapshot =>{
-            querySnapshot.forEach(doc => {
-                if(doc.id === urlUserUID){
-                    this.setState({
-                        tripAuthor: doc.data()
-                    });
-                }
-            })    
-        });
+        let geojson = {
+            'type': 'FeatureCollection',
+            'features': []
+        };
 
         firebase.firestore().collection('trips')
         .orderBy('createTime','desc')
@@ -65,19 +59,96 @@ class MContent extends React.Component {
             this.setState({
                 userTrips: data,
                 tripIDs: tripID
+            },() =>{
+                console.log('test',this.state.tripIDs)
+                let currentUserTotalSteps=[];
+                for(let k= 0; k<this.state.tripIDs.length; k++){
+                    firebase.firestore().collection('trips')
+                    .doc(this.state.tripIDs[k]).collection('plan')
+                    // .orderBy('stepArrDate','asc')
+                    .onSnapshot(querySnapshot => {
+                        // let currentUserTotalSteps=[];
+                          querySnapshot.forEach(doc => {
+                                console.log(doc.data().stepName);
+                                currentUserTotalSteps.push(doc.data());        
+                                console.log(currentUserTotalSteps)
+                         })
+
+                         this.setState({
+                            currentUserTotalSteps: currentUserTotalSteps,
+                          }, () => {
+                            console.log("Steps", this.state.currentUserTotalSteps);
+                            geojson.features=[];
+                            let arr = this.state.currentUserTotalSteps;
+                            for(let i = 0; i<arr.length; i++){
+                              let item = {
+                                'type': 'Feature',
+                                'geometry': {
+                                'type': 'Point',
+                                'coordinates': [arr[i].longitude,arr[i].latitude]
+                                }}
+                            geojson.features.push(item);   
+                            }
+                          
+                            // console.log(geojson.features);
+                  
+                            geojson.features.forEach(function(marker){
+                              var el = document.createElement('img');
+                              el.className = 'totalStepPoint';
+
+                              el.src = './imgs/redbgpin.svg';
+                            //   el.style.backgroundColor = '#CC3E55';
+                              el.style.width = '24px';
+                              el.style.height ='24px';
+                            //   el.style.border ='3px white solid';
+                              el.style.boxShadow = 'rgb(253, 253, 254) 0px 0px 3px 1px';
+                              el.style.borderRadius ='50%';
+                              console.log(marker.geometry.coordinates);
+                  
+                              if(marker.geometry.coordinates[0]){
+                                new mapboxgl.Marker(el)
+                                .setLngLat(marker.geometry.coordinates)
+                                .addTo(map);
+                              }
+                              
+                            });  
+                          });
+                   
+                    })
+                }
+
             });
-            //console.log(this.state.userTrips)
-            //console.log(this.state.tripIDs)
+            // console.log(this.state.userTrips)
+            // console.log(this.state.tripIDs)
         })
+        
+
+        console.log(geojson.features);
+        
+
+
+        firebase.firestore().collection('users')
+        // .where('email','==',user.email)
+        .onSnapshot(querySnapshot =>{
+            querySnapshot.forEach(doc => {
+                if(doc.id === urlUserUID){
+                    this.setState({
+                        tripAuthor: doc.data()
+                    });
+                }
+            })    
+        });
+
+        
         // console.log(user)
         // if(user){
-            if(this.props.state.userUid === urlUserUID ){
-                console.log('authour is here') 
-                // document.getElementById(`add-trip-btn`).style.display ='block';
-                this.setState({
-                    isAuthor: true
-                });
-            }
+        if(this.props.state.userUid === urlUserUID ){
+            console.log('authour is here') 
+            // document.getElementById(`add-trip-btn`).style.display ='block';
+            this.setState({
+                isAuthor: true
+            });
+        }
         // }
    
         document.getElementById(`addTripStart`).value = today;
@@ -196,20 +267,20 @@ class MContent extends React.Component {
               this.setState({
                 newTripID: newTripID
               });
-              console.log(this.state.newTripID)
+            //   console.log(this.state.newTripID)
             })
         });
     }
      
     render() {
         // console.log(this.props.state.tripIDs)
-        console.log(this.state.newTripID)
+        // console.log(this.state.newTripID)
         if(this.state.addNewTrip && this.state.newTripID){
             // console.log('pppppppppppp')
             return <Redirect to={'/'+this.state.newTripID}/>
         }
 
-        // console.log(this.state)
+        console.log(this.state)
         if(this.state.addTripStart !== today){
             document.getElementById(`addTripEnd`).value = this.state.addTripStart;
         }
@@ -266,18 +337,20 @@ class MContent extends React.Component {
                 )      
             }
             
-            tripAuthorInfo= <div className='trip-author-info'>
-                                {userCardImg}
-                                <div id='user-card-name'>{this.state.tripAuthor.username}</div>
-                                <div id='user-card-city'></div>
-                                <div id='user-card-about'></div>
-                            </div>   
+            tripAuthorInfo=(
+                                <div className='trip-author-info'>
+                                    {userCardImg}
+                                    <div id='user-card-name'>{this.state.tripAuthor.username}</div>
+                                    <div id='user-card-city'></div>
+                                    <div id='user-card-about'></div>
+                                </div>
+                            ) 
         }
         
         let addTripSubmit = <div id='add-trip-submit' aria-disabled='true'>Add trip</div>
         if(this.state.addTripName && this.state.addTripStart){
             addTripSubmit = <div onClick={this.addTrip.bind(this)} id='add-trip-submit-approve'>Add trip</div>
-          }
+        }
 
         
 

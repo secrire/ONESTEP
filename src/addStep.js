@@ -8,7 +8,7 @@ import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
 
-// mapboxgl.accessToken = 'pk.eyJ1IjoidXNoaTczMSIsImEiOiJja2Mwa2llMmswdnk4MnJsbWF1YW8zMzN6In0._Re0cs24SGBi93Bwl_w0Ig';
+
 let map;
 let today = new Date().toJSON().slice(0,10);
 
@@ -25,10 +25,10 @@ class Step extends React.Component {
     map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/mapbox/streets-v11',
-        zoom: 4,
+        zoom: 1,
         center: [30, 50],
     });
-    map.setStyle('mapbox://styles/mapbox/satellite-v9');
+    map.setStyle('mapbox://styles/mapbox/outdoors-v11');
 
       let pickedTripID = new URL(location.href).pathname.substr(1);
       let geojson = {
@@ -44,9 +44,16 @@ class Step extends React.Component {
       .onSnapshot(querySnapshot => {
         let data=[]; 
       
-        querySnapshot.forEach(doc => {
-            data.push(doc.data()); 
+        querySnapshot.docChanges().forEach(doc =>{
+          if(doc.type === 'added'){
+          console.log('ppppppp',doc.doc.data())
+          data.push(doc.doc.data())
+          }
+
         })
+        // querySnapshot.forEach(doc => {
+        //     data.push(doc.data()); 
+        // })
 
         this.setState({
           planSteps:data,
@@ -61,19 +68,21 @@ class Step extends React.Component {
               'type': 'Point',
               'coordinates': [arr[i].longitude,arr[i].latitude]
               }}
-          geojson.features.push(item);  
+            geojson.features.push(item);  
           }
         
-          console.log(geojson.features);
+          console.log('rrrrrrrr',geojson.features);
 
           geojson.features.forEach(function(marker){
             var el = document.createElement('div');
-            el.className = 'marker';
+            el.className = 'stepPoint';
+            el.id= marker.geometry.coordinates[1];
+ 
           
-            el.style.backgroundColor = '#CC3E55';
-            el.style.width = '24px';
-            el.style.height ='24px';
-            el.style.border ='3px white solid';
+            el.style.backgroundColor = 'white';
+            el.style.width = '16px';
+            el.style.height ='16px';
+            el.style.border ='5px #CC3E55 solid';
             el.style.borderRadius ='50%';
             console.log(marker.geometry.coordinates);
 
@@ -88,6 +97,9 @@ class Step extends React.Component {
       })
 
     console.log(geojson.features);
+
+    // document.getElementById(`addPlanStepArriveDate`).value = today;
+    // document.getElementById(`addPlanStepDepartDate`).value = today;
     // console.log(this.props.state.trip.tripStart)
 
     // if(this.props.state.trip.tripStart){
@@ -155,7 +167,6 @@ class Step extends React.Component {
       latitude= localStorage.getItem('latitude');
     }
 
-
     // if (document.getElementById(`addPlanStepPlace`).value &&
     //     document.getElementById(`addPlanStepArriveDate`).value 
         // &&document.getElementById(`add-plan-step-arrive-time`).value 
@@ -187,6 +198,16 @@ class Step extends React.Component {
 
         document.getElementById(`addPlanStepPlace`).value = '';
         document.getElementById('addPlanStepName').value = '';
+        document.getElementById(`add-plan-step-story`).value='';
+        
+        if( document.getElementById(`step-pic`)){
+          document.getElementById(`step-pic`).src='';
+        }
+
+        let node = document.getElementById('newestTag');
+        if(node.parentNode){
+            node.parentNode.removeChild(node);
+        }
     // } 
   }
 
@@ -298,7 +319,7 @@ class Step extends React.Component {
           AddStepPic: true,
         });
 
-        document.getElementById('step-pic').src = url;
+        document.getElementById('edit-step-pic').src = url;
         // document.getElementById('set-cover-pic').backgroundColor = 'red';
   
         // firebase.firestore().collection('trips').doc(pickedTripID)
@@ -363,13 +384,30 @@ class Step extends React.Component {
       stepPic= localStorage.getItem('pic');
     }
 
-    // if (document.getElementById(`editPlanStepPlace`).value &&
-    //     document.getElementById(`editPlanStepArriveDate`).value 
-    //     // &&document.getElementById(`edit-plan-step-arrive-time`).value 
-    //   ){
-        // document.getElementById(`edit-plan-step-submit`).style.backgroundColor = '#CC3E55';
-        // document.getElementById(`edit-plan-step-submit`).disabled = false;
-      
+    let longitude;
+    let latitude;
+
+    firebase.firestore().collection('trips').doc(pickedTripID)
+    .collection('plan').doc(this.props.state.pickedStepID)
+    .get().then(querySnapshot =>{
+            
+        console.log('old',querySnapshot.data().latitude);
+        longitude= querySnapshot.data().longitude;
+        latitude= querySnapshot.data().latitude;
+
+        if(document.getElementById(querySnapshot.data().latitude)){
+          let node = document.getElementById(querySnapshot.data().latitude);
+          if(node.parentNode){
+              node.parentNode.removeChild(node);
+          }
+        } 
+        console.log('old4',latitude);
+
+        if(localStorage.getItem('longitude')){
+          longitude= localStorage.getItem('longitude');
+          latitude= localStorage.getItem('latitude');
+        }
+
         firebase.firestore().collection('trips').doc(pickedTripID)
         .collection('plan').doc(this.props.state.pickedStepID)
         .update({
@@ -380,15 +418,68 @@ class Step extends React.Component {
             stepDepDate: document.getElementById(`editPlanStepDepartDate`).value,
             stepDepTime: document.getElementById(`editPlanStepDepartTime`).value,
             stepStory: document.getElementById(`edit-plan-step-story`).value,
-            stepPic: stepPic    
+            stepPic: stepPic,
+            longitude: longitude,
+            latitude: latitude,    
         })
         console.log('db edit plan step ok');
+
+        // geojson.features.forEach(function(marker){
+          var el = document.createElement('div');
+          el.className = 'marker';
+          el.id= latitude;
+
+          el.style.backgroundColor = '#CC3E55';
+          el.style.width = '24px';
+          el.style.height ='24px';
+          el.style.border ='3px white solid';
+          el.style.borderRadius ='50%';
+          // console.log(marker.geometry.coordinates);
+
+          // if(marker.geometry.coordinates[0]){
+            new mapboxgl.Marker(el)
+            .setLngLat([longitude,latitude])
+            .addTo(map);
+          // }
+          
+        // }); 
+
+
         localStorage.removeItem('pic'); 
+        localStorage.removeItem('longitude');  
+        localStorage.removeItem('latitude');  
         document.getElementById(`edit-plan-step`).style.display ='none';
 
         document.getElementById(`editPlanStepPlace`).value = '';
         document.getElementById('editPlanStepName').value = '';
+        document.getElementById(`addPlanStepPlace`).value = '';
+        document.getElementById('addPlanStepName').value = '';
+        // if(document.getElementById('edit-step-pic')){
+          this.setState({
+            AddStepPic: null,
+          });
+          console.log(this.state.AddStepPic);
+        // }
         // } 
+        if(document.getElementById('newestTag')){
+          let node = document.getElementById('newestTag');
+          if(node.parentNode){
+              node.parentNode.removeChild(node);
+          }
+        } 
+
+    });
+
+
+ 
+  
+    // if (document.getElementById(`editPlanStepPlace`).value &&
+    //     document.getElementById(`editPlanStepArriveDate`).value 
+    //     // &&document.getElementById(`edit-plan-step-arrive-time`).value 
+    //   ){
+        // document.getElementById(`edit-plan-step-submit`).style.backgroundColor = '#CC3E55';
+        // document.getElementById(`edit-plan-step-submit`).disabled = false;
+           
   }
   // editTrackStep(e){
   //   e.preventDefault();
@@ -494,6 +585,13 @@ class Step extends React.Component {
   // }
 
   updatePlaceInput(e){
+    if(document.getElementById('newestTag')){
+      let node = document.getElementById('newestTag');
+      if(node.parentNode){
+          node.parentNode.removeChild(node);
+      }
+    } 
+
     this.setState({
       placeText: e.target.value,
     });
@@ -519,7 +617,7 @@ class Step extends React.Component {
     // }
 
 
-    fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${placeSearchText}.json?access_token=pk.eyJ1IjoidXNoaTczMSIsImEiOiJja2Mwa2llMmswdnk4MnJsbWF1YW8zMzN6In0._Re0cs24SGBi93Bwl_w0Ig&limit=5`)
+    fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${placeSearchText}.json?access_token=pk.eyJ1IjoidXNoaTczMSIsImEiOiJja2Mwa2llMmswdnk4MnJsbWF1YW8zMzN6In0._Re0cs24SGBi93Bwl_w0Ig&limit=8`)
     .then(res => res.json())
     .then(
       (result) => {
@@ -558,6 +656,7 @@ class Step extends React.Component {
       center: [
         e.target.getAttribute('longitude'),e.target.getAttribute('latitude')
       ],
+      zoom: 10,
       essential: true // this animation is considered essential with respect to prefers-reduced-motion
     });
 
@@ -578,13 +677,17 @@ class Step extends React.Component {
     };
 
       geojson.features.forEach(function(marker){
-        var el = document.createElement('div');
+        var el = document.createElement('img');
         el.className = 'marker';
+        el.id = 'newestTag'
        
-        el.style.backgroundColor = '#CC3E55';
-        el.style.width = '30px';
-        el.style.height ='30px';
+        el.src = './imgs/redbgmaptag.svg';
+        el.style.zIndex='2';
+        // el.style.backgroundColor = '#CC3E55';
+        el.style.width = '70px';
+        el.style.height ='70px';
         el.style.borderRadius ='50%';
+        // el.style.border ='3px white solid';
         
         if(marker.geometry.coordinates[0]){
           new mapboxgl.Marker(el)
@@ -630,7 +733,7 @@ class Step extends React.Component {
   // }  
 
   render() {
-    console.log(this.props.state.trip)
+    console.log(this.props.state)
     console.log(this.state)
 
     let searchPlaceBox = null;
@@ -665,9 +768,17 @@ class Step extends React.Component {
         </div>  
       )  
     }
-
+    let editStepPic = null;
+    if(this.state.AddStepPic || this.props.state.withStepPic){
+      editStepPic = (
+        <div><img id='edit-step-pic'/>
+        {/* <div id='setPlanCoverPic'>set to plan cover photo</div> */}
+        {/* <div onClick={this.setCoverPic.bind(this)} id='set-cover-pic'>set to cover photo</div> */}
+        </div>  
+      )  
+    }
       
-   console.log(this.state.addplanStepArriveDate);
+  //  console.log(this.state.addplanStepArriveDate);
   //  console.log(this.props.state.trip.tripStart)
   //  if(this.props.state.trip.tripStart && document.getElementById(`addPlanStepArriveDate`)){
   //   console.log('kkkkkkk')
@@ -804,7 +915,7 @@ class Step extends React.Component {
                                 <div className='add-step-p'>Arrival</div>
                                 <div className='add-step-p'>Departure</div>
                                 <div className='add-step-p'>Your story</div> 
-                                <div className='add-step-p-photo'>Add photo</div>
+                                <div className='add-step-p-photo'>Change photo</div>
                             </div>
                             <div className='add-step-input-box'>
                                 <input onChange={this.updatePlaceInput.bind(this)} type='text' className='add-step-place' id='editPlanStepPlace'/> 
@@ -818,7 +929,7 @@ class Step extends React.Component {
                                 <input type='time' className='add-step-depart-time' id='editPlanStepDepartTime'  onChange={this.updateInput.bind(this)}/>
                                 <textarea className='add-step-story' id='edit-plan-step-story'></textarea>
                                 <div className='add-step-pic-box'>
-                                  {addStepPic}
+                                  {editStepPic}
                                   <label className='step-pic-label'>
                                       <input onChange={this.editPlanStepPic.bind(this)} className='trip-cover-change-pic' id="uploadPicInput" type="file"/>
                                       <img className='step-upload-pic-icon' src='./imgs/bluecamera.svg'/>

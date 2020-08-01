@@ -91,7 +91,7 @@ class MHeader extends React.Component {
     
 
     return<div className='MHeader'>
-            <div className='mheader-logo'><Link className='mheader-logo' exact to='/'>A N A M E</Link></div>
+            <div className='mheader-logo'><Link className='mheader-logo' exact to='/'>O N E S T E P</Link></div>
             {/* <div onClick={this.showAddTrip.bind(this)} className='add-trip'>+ Trip</div> */}
             {/* <Link to='/addTrack'><div className='add-track'>+ Track</div></Link> */}
             {/* <div className='add-surprise'>+ Surprise</div> */}
@@ -112,14 +112,14 @@ class MHeader extends React.Component {
                     <div onClick={this.showProfilePage.bind(this)} className='menu-user-setting'>Profile settings</div>
                   <div className='menu-title'>Explore trips</div>
                     <Link to='/'><div className='menu-friend'>Popular trips</div></Link>
-                    <Link to='/'><div className='menu-fav'>ANAME's favourite</div></Link>
+                    <Link to='/'><div className='menu-fav'>ONESTEP's favourite</div></Link>
                   <div className='menu-title'>Connect with us</div>
                   <div className='menu-social'>
                     <img  src="./imgs/fb.svg" />
                     <img  src="./imgs/ig.svg" />
                     {/* <img  src="public/imgs/menu.png" /> */}
                   </div>  
-                  <div className='menu-title'>About ANAME</div>
+                  <div className='menu-title'>About ONESTEP</div>
                     <Link to='/'><div className='menu-story'>Our story</div></Link>
                     <Link to='/'><div className='menu-cookie'>Cookie policy</div></Link>
                   <div onClick={this.props.changeIslogin} className='menu-logout'>Logout</div>

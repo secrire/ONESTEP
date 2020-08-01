@@ -279,7 +279,7 @@ class Map extends React.Component {
   render() {
     return  <div className='map-page'>
                 <div id="map"></div>
-                <div id="distance" class="distance-container"></div>
+                <div id="distance" className="distance-container"></div>
 
                 {/* <div id="menu">
                     <input
