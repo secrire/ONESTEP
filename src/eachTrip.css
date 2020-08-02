@@ -17,6 +17,9 @@ html{
 
 
 /*       --------   each trip   --------     */
+#newestTag{
+    box-shadow: 0 0 14px 13px rgb(204 62 85 / 92%);
+}
 .plan-track-page{
 
 }
@@ -61,13 +64,13 @@ html{
     left:0;
     width: 600px;
     height: 50px;
-    padding: 10px 0px 10px 30px;
+    padding: 10px 0px 10px 26px;
     z-index: 10;
 }
 .trip-header-img{
     width: 30px;
     height: 30px;
-    margin-left: 20px;
+    margin-left: 10px;
     border-radius: 50%;
 }
 .trip-header-name{
@@ -132,7 +135,11 @@ html{
     margin-right: 8px;
 }
 #trip-header-set:hover{
-    background-color:#00ACE6;
+    background-color: rgb(1, 77, 102);
+    border: 1px rgb(1, 77, 102) solid;
+}
+#trip-header-set:hover p{
+    color: rgb(232, 234, 238);
 }
 #trip-header-coedit{
     display: block;
@@ -144,7 +151,7 @@ html{
     left:480px;
 }
 .trip-cover{
-    background-color: rgba(0, 46, 61, 0.774);
+    background-color: rgb(0 46 61 / 75%);
     width: 600px;
     height: 300px;
     /* padding: 180px 0 140px 0; */
@@ -232,13 +239,49 @@ html{
 .trip-details{
     display: flex;
     align-items: center;
-    justify-content: space-around;
-    padding: 10px 50px;
-    /* margin-top: -20px; */
+    justify-content: space-between;
+    padding: 0 50px;
+    /* margin-top: -2px; */
     width: 600px;
-    height: 50px;
+    height: 110px;
     color: white;
-    background-color: rgb(0, 46, 61);
+    background-color: rgb(0 46 61 / 94%);
+}
+.trip-detail-box{
+    width: 105px;
+    height: 110px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.trip-detail-like{
+    width: 26px;
+    height:26px;
+    margin: 13px 0 2.2px 0;
+}
+.trip-detail-calendar{
+    width: 27px;
+    margin: 11px 0 2.5px 0;
+}
+.trip-detail-earth{
+    width: 39px;
+    margin:5px 0 -2.5px 0;
+}
+.trip-detail-photo{
+    width: 21px;
+    margin: 14px 0 4px 0;
+}
+.trip-detail-marker{
+    width: 35px;
+    margin-top: 6px;
+}
+.trip-detail-number{
+    font-size: 21px;
+    margin: 4px 0;
+}
+.trip-detail-p{
+    font-size: 13px;
+    letter-spacing: 0.5px;
 }
 .trip-steps-box{
     padding: 20px 7px;
@@ -263,12 +306,13 @@ html{
     border-left: 1.5px dashed #b7c0cd;
     z-index: 1;
     height: 56px;
-    margin: -56px 0 4px 43px;
+    margin: -56px 0 4px 45px;
 }
 .trip-start-end-icon{
     width: 46px;
     height:48px;
     z-index:2;
+    margin-left: 2px;
 }
 .trip-start-icon{
     width: 38px;
@@ -300,19 +344,25 @@ html{
     font-weight: bold;
     color:rgb(rgb(10, 49, 63));
     letter-spacing: 1px;
+    margin-bottom: 3px;
 }
 .trip-step-date,.trip-step-time{
-    font-size: 10px;
+    font-size: 14px;
     color: lightgray;
     margin-bottom: 16px;
 }
 .trip-step-story{
-    font-size: 12px;
-    color: darkgrey;
+    font-size: 14px;
+    color: #969696;
+    width: 510px;
+    word-wrap: break-word; word-break: normal;
 }
+/* .trip-step-story text{
+    width: 500px;
+} */
 .trip-step-pic{
     width: 512px;
-    /* margin-bottom: 5px; */
+    margin-top: 14px;
 }
 .trip-step-btn{
     display: flex;
@@ -378,8 +428,9 @@ html{
     height:18px;
     /* border: 1px rgb(185, 194, 206) solid ; */
     border-radius: 18px;
-    margin-left: 22px;
-    font-size: 12px;
+    margin:0px 0px -7px 22.5px;
+    padding: 0 6px;
+    font-size: 13px;
     color:white;
     text-align: center;
     line-height: 18px;
@@ -416,8 +467,8 @@ z-index: 0;
 } */
 .trip-step-add-last-box{
     position: relative;
-    margin-left: 24px;
-    margin-top: -9px;
+    margin-left: 25px;
+    margin-top: -6px;
 }
 .trip-step-add-last-decoration{
     position: absolute;
@@ -450,7 +501,7 @@ z-index: 0;
     position: absolute;
     content: '';
     display: block;
-    border-left: 1.5px solid #b7c0cd;
+    border-left:1.5px solid #c2ccda;
     top: 0px;
     bottom: 50%;
     left: 20px;
@@ -479,7 +530,7 @@ z-index: 0;
     font-size: 30px;
     color: white;
     text-align: center;
-    line-height: 34px;
+    line-height: 37px;
     z-index: 2;
 }
 .trip-step-add-last-p{
@@ -514,7 +565,7 @@ z-index: 0;
     }
 }
 .stepPoint {
-animation: glow 500ms ease-out infinite alternate; 
+animation: glow 1.5s ease-out infinite alternate; 
 }
 
 
@@ -572,7 +623,7 @@ animation: glow 500ms ease-out infinite alternate;
     transform: translate(50%); */
     left:40px;
     width: 520px;
-    height: 700px;
+    height: 680px;
     background: #FDFDFE;
     border-radius: 15px;
     /* box-shadow: 1px 1px 1px 1px rgba(158, 158, 158, 0.836); */
@@ -597,10 +648,13 @@ animation: glow 500ms ease-out infinite alternate;
     border-radius: 10px;
     text-align: center;
 }
+.add-step-close:hover{
+    background-color: #40626E;
+}
 .add-step-title{
     font-size: 24px;
     font-weight: bold;
-    margin: 16px 0;
+    margin: 12px 0;
     padding-bottom: 18px;
     color: rgb(0, 46, 61);
     border-bottom: 1px rgb(228, 232, 236) solid;
@@ -638,7 +692,7 @@ animation: glow 500ms ease-out infinite alternate;
     margin:  8px 0;
 }
 .add-step-story{
-    height: 160px;
+    height: 150px;
 }
 .add-step-arrive-date,.add-step-depart-date{
     width: 155px;
@@ -650,9 +704,13 @@ animation: glow 500ms ease-out infinite alternate;
     margin-right: 0;
     padding: 10px;
 }
-/* .add-step-arrive-date::-webkit-datetime-edit  {
-    content: '2020/07/28';
-} */
+.add-step-arrive-date::-webkit-datetime-edit-fields-wrapper,
+.add-step-depart-date::-webkit-datetime-edit-fields-wrapper,
+.add-step-arrive-time::-webkit-datetime-edit-fields-wrapper,
+.add-step-depart-time::-webkit-datetime-edit-fields-wrapper
+{
+    color: #9A9A9A;
+}
 /* .add-step-arrive-time:-webkit-datetime-edit-ampm-field {
     display: none;
 }
@@ -697,8 +755,8 @@ margin: -10px;
     background-color: rgb(185, 192, 204);
     width:150px;
     border-radius: 30px;
-    margin: 18px auto 0 auto;
-    padding: 13px 5px;
+    margin: 12px auto 6px auto;
+    padding: 11px 5px;
     font-size: 16px;
     color: white;
 }

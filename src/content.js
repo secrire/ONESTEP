@@ -106,9 +106,23 @@ class Content extends React.Component{
                   </li>
         })
       }
+
+      // function myFunction() {
+      //   var firstImg = document.getElementById('index-first-step-img');
+      //   var desiredHeight = 1600;
+      //   if (window.pageYOffset > desiredHeight) {
+      //     let imgMove =  80-((window.pageYOffset -1000)/10);
+      //     firstImg.style.cssText += ` transform: translate3d(0px, ${imgMove}px, 0px);`;
+      //   } else {
+      //     firstImg.style.cssText += ' transform: translate3d(0px, 80px, 0px);';
+      //   }
+      // }
+      // window.onscroll = myFunction;
       
       return <div className='content'>
               <div className='favs-title'>POPULAR TRIPS</div>
+              <div className='favs-title-des'>Selected by the number of likes</div>
+              <div className='favs-title-line'></div>
                 <div className='favs'>
                   {renderPopTrips}  
                     
@@ -174,6 +188,12 @@ class Content extends React.Component{
                       <div className='pop-content'>everything so quiet</div>
                     </a>
                 </div> */}
+                <div className='index-first-step-box'>
+                  <img id='index-first-step-img' src="./imgs/a.jpg" />
+                  <div className='index-first-step-layer'/>
+                  <div className='index-first-step-p'>TAKE YOUR FIRST ONE STEP</div>
+                  {/* <div onClick={this.props.showSignupPage}  className='index-first-step-btn'>Register to create an account</div>  */}
+                </div>
   
                 <div className='footer'>
                   <div className='footer-content'>
@@ -185,7 +205,7 @@ class Content extends React.Component{
                     </div>
                     <div className='footer-feed'>
                       <p className='footer-title'>We love feedback</p>
-                      <div className='footer-feed-p'>ONESTEP is developed in Taiwan by passionate traveler. We always want to make it better. Please <a className='footer-feed-a' href="mailto:allie.shwu@gmail.com">drop us some feedback</a> if you like :)</div>
+                      <div className='footer-feed-p'>ONESTEP is developed in Taiwan by passionate traveler. We always want to make it better. Please <a className='footer-feed-a' href="mailto:allie.shwu@gmail.com?subject=hey amazing ONESTEP team">drop us some feedback</a> if you like :)</div>
                     </div>
                     <div className='footer-social'>
                         <img src="./imgs/fb.svg" />

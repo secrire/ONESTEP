@@ -122,6 +122,11 @@ class Search extends React.Component{
             searchInput =(
                 <input onChange={this.updateSearchInput.bind(this)} className='search-input' id= 'search-input' placeholder='Search'/>
             )
+            // let user = firebase.auth().currentUser;
+            // if(!user){
+            //     document.getElementById('search-input').style.cssText += "right: 33px; ";
+            // }
+      
         }
         // if(!this.state.showSearchInput && !this.state.searchText){
         //     searchInput = null;
@@ -131,7 +136,7 @@ class Search extends React.Component{
       
         return  <div className='search-component'>
                 {searchInput}
-                    <img onClick={this.search.bind(this)} className='search-icon' src='./imgs/search.svg'/>
+                    <img onClick={this.search.bind(this)} className='search-icon' id='search-icon' src='./imgs/search.svg'/>
                 {searchPage}
                 
                 </div>

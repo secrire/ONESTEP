@@ -1,0 +1,16 @@
+<svg width="32" height="32" xmlns="http://www.w3.org/2000/svg" style="user-select: auto;">
+
+ <title style="user-select: auto;"/>
+ <g>
+  <title>background</title>
+  <rect fill="none" id="canvas_background" height="402" width="582" y="-1" x="-1"/>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <path style="user-select: auto;" fill="#ffffff" id="svg_1" d="m24,29l-16,0a5,5 0 0 1 -5,-5l0,-14a5,5 0 0 1 5,-5l16,0a5,5 0 0 1 5,5l0,14a5,5 0 0 1 -5,5zm-16,-22a3,3 0 0 0 -3,3l0,14a3,3 0 0 0 3,3l16,0a3,3 0 0 0 3,-3l0,-14a3,3 0 0 0 -3,-3l-16,0z"/>
+  <path fill="#ffffff" id="svg_2" d="m24,25l-4,0a1,1 0 0 1 -1,-1l0,-4a1,1 0 0 1 1,-1l4,0a1,1 0 0 1 1,1l0,4a1,1 0 0 1 -1,1zm-3,-2l2,0l0,-2l-2,0l0,2z"/>
+  <path fill="#ffffff" style="user-select: auto;" id="svg_3" d="m28,13l-24,0a1,1 0 0 1 0,-2l24,0a1,1 0 0 1 0,2z"/>
+  <path fill="#ffffff" style="user-select: auto;" id="svg_4" d="m11,9a1,1 0 0 1 -1,-1l0,-4a1,1 0 0 1 2,0l0,4a1,1 0 0 1 -1,1z"/>
+  <path fill="#ffffff" style="user-select: auto;" id="svg_5" d="m21,9a1,1 0 0 1 -1,-1l0,-4a1,1 0 0 1 2,0l0,4a1,1 0 0 1 -1,1z"/>
+ </g>
+</svg>

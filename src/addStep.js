@@ -28,7 +28,7 @@ class Step extends React.Component {
         zoom: 1,
         center: [30, 50],
     });
-    map.setStyle('mapbox://styles/mapbox/outdoors-v11');
+    map.setStyle('mapbox://styles/mapbox/satellite-v9');
 
       let pickedTripID = new URL(location.href).pathname.substr(1);
       let geojson = {
@@ -154,7 +154,7 @@ class Step extends React.Component {
 
     let pickedTripID = new URL(location.href).pathname.substr(1);
 
-    let stepPic='';
+    let stepPic= null;
     if(localStorage.getItem('pic')){
       stepPic= localStorage.getItem('pic');
     }
@@ -621,7 +621,7 @@ class Step extends React.Component {
     .then(res => res.json())
     .then(
       (result) => {
-        console.log(result)
+        // console.log(result)
         let data=[];       
         data.push(result);
         console.log(data)
@@ -629,7 +629,11 @@ class Step extends React.Component {
         this.setState({
           searchPlaceResult: data[0].features
         });
-        console.log(this.state.searchPlaceResult)
+        console.log(data[0].features)
+
+        // for( let i=0; i< data[0].features.length; i++){
+        //   console.log(data[0].features[i].context)
+        // }
       },
     
       (error) => {
@@ -656,7 +660,7 @@ class Step extends React.Component {
       center: [
         e.target.getAttribute('longitude'),e.target.getAttribute('latitude')
       ],
-      zoom: 10,
+      zoom: 16,
       essential: true // this animation is considered essential with respect to prefers-reduced-motion
     });
 
@@ -797,7 +801,7 @@ class Step extends React.Component {
         addStepSubmit = <div className='add-step-submit' onClick={this.addPlanStep.bind(this)} id='add-plan-step-submit-approve'>Add step</div>
     }
 
-    let editStepSubmit = <div className='add-step-submit' id='edit-plan-step-submit'>Save changes</div>
+    let editStepSubmit = <div className='add-step-submit' onClick={this.editPlanStep.bind(this)} id='edit-plan-step-submit-approve'>Save changes</div>
     if(this.state.editPlanStepPlace || this.state.editPlanStepArriveDate){
         editStepSubmit = <div className='add-step-submit' onClick={this.editPlanStep.bind(this)} id='edit-plan-step-submit-approve'>Save changes</div>
     }
@@ -920,14 +924,14 @@ class Step extends React.Component {
                             <div className='add-step-input-box'>
                                 <input onChange={this.updatePlaceInput.bind(this)} type='text' className='add-step-place' id='editPlanStepPlace'/> 
                                 {searchPlacePage}
-                                <input type='text' className='add-step-name' id='editPlanStepName' placeholder='e.g. Europe Train Tour'/>
+                                <input type='text' onChange={this.updateInput.bind(this)} className='add-step-name' id='editPlanStepName' placeholder='e.g. Europe Train Tour'/>
                                 <input type='date' className='add-step-arrive-date' id='editPlanStepArriveDate' 
                                         onChange={this.updateInput.bind(this)} min={this.props.state.trip.tripStart} max={this.props.state.trip.tripEnd}/>
                                 <input type='time' className='add-step-arrive-time' id='editPlanStepArriveTime'  onChange={this.updateInput.bind(this)}/>
                                 <input type='date' className='add-step-depart-date' id='editPlanStepDepartDate' 
                                         onChange={this.updateInput.bind(this)} min={this.state.editPlanStepArriveDate} max={this.props.state.trip.tripEnd}/>
                                 <input type='time' className='add-step-depart-time' id='editPlanStepDepartTime'  onChange={this.updateInput.bind(this)}/>
-                                <textarea className='add-step-story' id='edit-plan-step-story'></textarea>
+                                <textarea onChange={this.updateInput.bind(this)} className='add-step-story' id='edit-plan-step-story'></textarea>
                                 <div className='add-step-pic-box'>
                                   {editStepPic}
                                   <label className='step-pic-label'>

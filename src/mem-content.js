@@ -60,7 +60,7 @@ class MContent extends React.Component {
                 userTrips: data,
                 tripIDs: tripID
             },() =>{
-                console.log('test',this.state.tripIDs)
+                console.log('test',this.state.userTrips)
                 let currentUserTotalSteps=[];
                 for(let k= 0; k<this.state.tripIDs.length; k++){
                     firebase.firestore().collection('trips')
@@ -239,7 +239,7 @@ class MContent extends React.Component {
           .doc()
           .set({
             authorUid: user.uid,
-            // planlike: 0,
+            planLike: 0,
             // trackLike: 0,
             // surpriseLike: 0,
             tripName: document.getElementById(`addTripName`).value,
@@ -273,8 +273,12 @@ class MContent extends React.Component {
     }
      
     render() {
-        // console.log(this.props.state.tripIDs)
-        // console.log(this.state.newTripID)
+        // console.log('tffffff',this.state.userTrips)
+        // if(this.state.userTrips){
+            let test= new Date('2020-08-07');
+            console.log(test)
+        // }
+        
         if(this.state.addNewTrip && this.state.newTripID){
             // console.log('pppppppppppp')
             return <Redirect to={'/'+this.state.newTripID}/>
@@ -314,15 +318,37 @@ class MContent extends React.Component {
             }else{
                 cardImg = <div className='card-no-img'/>
             } 
+
+            let calTripStart= new Date(n.tripStart);
+            let calTripEnd = new Date(n.tripEnd);
+            let tripDays = parseInt(Math.abs(calTripStart - calTripEnd) / 1000 / 60 / 60 / 24);
+            
+            let tripMonth = calTripStart.toString().substring(4,7);
+            let tripYear = calTripStart.toString().substring(11,15);
+
+            // console.log(calTripStart, 'date')
+            // console.log(tripMonth)
+            // console.log(tripYear)
+            // console.log(tripDays, 'days-state')
+
             return  <li key={key++}>
-                        <Link to={"/"+this.state.tripIDs[index]}><div className='card'>  
-                            <div className='card-title'>{n.tripName}</div>
-                            <div className='card-main'>
-                                <div className='card-time'>{n.tripStart}</div>
-                                {/* <div className='card-days'>18 days</div> */}
+                        <Link to={"/"+this.state.tripIDs[index]}>
+                            <div className='card'> 
+                                <div className='card-title'>{n.tripName}</div>
+                                <div className='card-title-arrow'>></div>
+                                <div className='card-main-container'>
+                                    <div className='card-main'>
+                                        <div className='card-main-line1'>{tripYear}</div>
+                                        <div className='card-main-line2'>{tripMonth}</div>
+                                    </div>
+                                    <div className='card-main'>
+                                        <div className='card-main-line1'>{tripDays}</div>
+                                        <div className='card-main-line2'>days</div>
+                                    </div>
+                                </div>
+                                {cardImg}
                             </div>
-                            {cardImg}
-                        </div></Link>
+                        </Link>
                     </li>
         })
         let tripAuthorInfo = null;

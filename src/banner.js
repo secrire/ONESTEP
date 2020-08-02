@@ -14,7 +14,7 @@ class Banner extends React.Component{
     render(){
       function myFunction() {
         var element = document.getElementById("elem");
-        var desiredPosition = 240;
+        var desiredPosition = 700;
         // var counter = document.getElementById("count");
         // counter.innerHTML = 'pageyOffset: ' + window.pageYOffset;
         if (window.pageYOffset > desiredPosition) {
@@ -32,22 +32,21 @@ class Banner extends React.Component{
                 <img className='banner-img' src='./imgs/b.JPG'></img>
                 {/* <div className='banner-top'> */}
                   {/* <div className='banner-intro'> */}
-                    <div className='intro-line1'>wander</div>
-                    <div className='intro-line2'>explore</div> 
-                    <div className='intro-line3'>collect</div>  
+                    <div className='intro-line1'>EXPLORE</div>
+                    <div className='intro-line2'>WANDER</div> 
+                    <div className='intro-line3'>COLLECT</div>  
                     {/* <div className='intro-line1'>collect</div>    */}
                     {/* <div className='intro-line2'>collect</div>   */}
                     {/* <input className='search'placeholder='explore...'/> */}
                   {/* </div> */}
-                  <div className='banner-desc'>Plan, track and see the difference. Somewhere is called surprise. Plan, track and see the difference. Somewhere is called surprise.</div>                  
+                  <div className='banner-desc'>Every journey starts from the first one step, and each one writes the future. Make your way to see the world.</div>                  
                   {/* <img className='banner-img' src='./imgs/b.JPG'></img> */}
                 {/* </div> */}
                 <div id="elem">O N E S T E P</div>
                 <div className='features'>
                   <div className='feature'>
-                    <div className='feature-title1'>plan or track</div>
-                    <div className='feature-content'>keep track of your route and places you’ve visited.keep track of your route and places you’ve visited.
-                    keep track of your route and places you’ve </div>
+                    <div className='feature-title'>PLAN or TRACK</div>
+                    <div className='feature-content'>Start a trip in seconds. Add your ideas into the itinerary and check the location in the built-in map view to turn travel moments into lifetime memories. </div>
                   </div>
                   {/* <div className='feature'>
                     <div className='feature-title'>surprise</div>
@@ -55,9 +54,8 @@ class Banner extends React.Component{
                   </div> */}
                   <div className='feature-sep'></div>
                   <div className='feature'>
-                    <div className='feature-title2'>sharing is caring</div>
-                    <div className='feature-content'>keep track of your route and places you’ve visited.keep track of your route and places you’ve visited.
-                    keep track of your</div>
+                    <div className='feature-title'>INSPIRE or BE INSPIRED</div>
+                    <div className='feature-content'>Bring the adventure to life to inspire other travel lovers. Or check out other travel addiction to get brilliant ideas for your next trip. </div>
                   </div>
                </div>
                <p id = "count">pageYOffset: 0</p>

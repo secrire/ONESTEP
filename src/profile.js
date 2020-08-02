@@ -20,20 +20,19 @@ class Profile extends React.Component {
         let urlUserUID = new URL(location.href).pathname.substr(2);
 
         let user = firebase.auth().currentUser;
-        console.log(this.props.state.currentUser)
+        console.log('ffffffffff',user)
         if(user){
             firebase.firestore().collection('users')
             .where('email','==',user.email)
             .onSnapshot(querySnapshot => {
                 querySnapshot.forEach(doc => {
-                    console.log(doc.data())
+                    // console.log(doc.data())
                     this.setState({
                         currentUser: doc.data(),
                         currentUserUid: doc.id
                     });   
                 })
-                document.getElementById('profile-username').value = this.state.currentUser.username; 
-                console.log(this.state.currentUserUid);
+                document.getElementById('profileUsername').value = this.state.currentUser.username; 
             });
         }else{
             console.log('not a member!!!')
@@ -104,7 +103,7 @@ class Profile extends React.Component {
 
     render() {
         
-        console.log(this.props.state)
+        console.log(this.props.state.currentUser)
         console.log(this.state.showProfilePage)
 
         let profilePic;
@@ -123,7 +122,11 @@ class Profile extends React.Component {
         if(this.state.AddProfilePic || this.state.profileUsername || this.state.profileCity || this.state.profileAbout){
             profileSetSubmit = <div onClick={this.editProfile.bind(this)} className='profile-set-submit-approve'>Save changes</div>
         }
-       
+
+        // let profileUsername = <input onChange={this.updateInput.bind(this)} type='text' className='profile-input' id='profileUsername'/>
+        // if(this.props.state.currentUser){
+        //     profileUsername = <input onChange={this.updateInput.bind(this)} type='text' className='profile-input' id='profileUsername' value={this.props.state.currentUser.username}/>
+        // }
 
         return(  <div id='profile-page'>
                     <div className='profile-pop'>

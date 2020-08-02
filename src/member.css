@@ -33,10 +33,11 @@ html{
 }
 .mheader-logo{
     /* margin-left: 15px; */
-    font-weight: bold;
-    color:rgb(22, 22, 22);
     margin: 0 auto; 
     font-size: 32px;
+    color:rgb(22,22,22);
+    font-weight: 500;
+    font-family: 'Neucha', cursive;
 }
 .mheader-search{
     width: 200px;
@@ -63,6 +64,10 @@ html{
     position: fixed;
     right:70px;
     top:14px;
+}
+.mheader-userinfo:hover{
+    border-bottom: 4px #CC3E55 solid;
+    padding-bottom: 2px;
 }
 .user-img{
     width: 33px;
@@ -214,30 +219,50 @@ html{
 }
 .card-title{
     position: absolute;
-    left: 25px;
+    left: 30px;
     top: 40%;
     color:rgb(255, 255, 255); 
     font-size: 28px;
-    font-weight:bold;
+    font-weight: 500;
     z-index: 100;
     text-shadow: 0 0 13px black;
 }
-.card-main{
+.card-title-arrow{
     position: absolute;
-    left: 25px;
-    top: 70%;
-    margin: 20px 0;
+    right: 28px;
+    top: 112px;
+    border: 1px #bfc9d6 solid;
+    border-radius: 50%;
+    color: rgb(255, 255, 255);
+    /* padding: 4px; */
+    font-size: 16px;
+    font-weight: 300;
+    z-index: 100;
+    width: 26px;
+    height: 26px;
+    text-align: center;
+    line-height: 22px;
+}
+.card-main-container{
+    position: absolute;
+    left: 30px;
+    top: 188px;
     display: flex;
     align-items: center;
     z-index: 100;
 }
-.card-time,.card-days{
+.card-main{
     color: white;
-    font-size: 18px;
-    font-weight: 700;
-    margin-right: 25px;
+    margin-right: 45px;
     text-shadow: 0px 0px 2px #303030ed;
     text-shadow: 0 0 13px black;
+}
+.card-main-line1{
+    font-size: 16px;
+    font-weight: 500;
+}
+.card-main-line2{
+    font-size: 12px;
 }
 /* #card-add-plan,#card-add-track{
     color: #CC3E55;
@@ -261,14 +286,15 @@ html{
    width: 100%;
    height: 250px;
    transform: scale(1,1);
-   transition: all 0.5s ease-out;
+   transition: all 0.15s ease-out;
    z-index: 99;
+   -webkit-filter: contrast(0.8);
 }
 .card-no-img{
-    background-color: #3D4652;
+    background-color: #00283bc7;
 }
 .card-no-img:hover{
-    background-color: #55657a;
+    background-color: #014768c7;
 }
 .card-img:hover{
     transform: scale(1.1, 1.1);
@@ -360,7 +386,7 @@ animation: glow 500ms ease-out infinite alternate;
     margin: 25px 0 16px 0;
     padding-bottom: 12px;
 }
-#add-trip-submit,#delete-trip-submit,#add-trip-submit-approve{
+#add-trip-submit,#edit-trip-submit,#delete-trip-submit,#add-trip-submit-approve,#edit-trip-submit-approve{
     background-color: rgb(185, 192, 204);
     width:330px;
     border-radius: 30px;
@@ -369,15 +395,20 @@ animation: glow 500ms ease-out infinite alternate;
     font-size: 16px;
     color: white;
 }
-#add-trip-submit-approve{
+#add-trip-submit-approve,#edit-trip-submit-approve{
     background-color:#CC3E55 ;
 }
 #delete-trip-submit{
     background-color: white;
-    border: 1px #CC3E55 solid;
+    border: 1px rgb(68, 153, 199) solid;
     width:130px;
-    color: #CC3E55;
-    padding: 6px 5px;
+    color: rgb(68, 153, 199);
+    padding: 7px 4px;
+}
+#delete-trip-submit:hover{
+    background-color: #CC3E55;
+    border: 1px #CC3E55 solid;
+    color: white;
 }
 
 

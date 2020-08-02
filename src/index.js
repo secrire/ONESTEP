@@ -339,7 +339,7 @@ class SignUp extends React.Component{
       })
       .catch(err => {
         console.log(err.message);
-        alert(`${this.state.username} sign up noooooooo`)
+        alert(`Sign up has failed, Please ensure your details are correct.`)
       })
   }
 

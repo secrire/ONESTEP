@@ -26,17 +26,23 @@ class MHeader extends React.Component {
     let user = firebase.auth().currentUser;
     if(user){
       firebase.firestore().collection('users')
-      .where('email','==',user.email)
+      // .where('email','==',user.email)
       .onSnapshot(querySnapshot => {
         querySnapshot.forEach(doc => {
-          this.setState({
-            currentUser: doc.data(),
-          }); 
-          console.log(this.state.currentUser)  
+          if(doc.data().email.toLowerCase() === user.email){
+            this.setState({
+              currentUser: doc.data(),
+            }); 
+            console.log(this.state.currentUser) 
+          }
         }) 
       });
     }else{
-      console.log('not a member!!!')
+      console.log('not a member!!!');
+      let noUserSearchIcon = document.getElementById('search-icon');
+        
+      noUserSearchIcon.style.cssText += "right: 30px; " ;
+
       // document.getElementById("mheader-userinfo").style.cssText += 'display:none;';
       // document.getElementById("menu-icon").style.cssText += 'display:none;';
     } 
@@ -112,7 +118,7 @@ class MHeader extends React.Component {
                     <div onClick={this.showProfilePage.bind(this)} className='menu-user-setting'>Profile settings</div>
                   <div className='menu-title'>Explore trips</div>
                     <Link to='/'><div className='menu-friend'>Popular trips</div></Link>
-                    <Link to='/'><div className='menu-fav'>ONESTEP's favourite</div></Link>
+                    <Link to='/'><div className='menu-fav'>Our favourite</div></Link>
                   <div className='menu-title'>Connect with us</div>
                   <div className='menu-social'>
                     <img  src="./imgs/fb.svg" />
