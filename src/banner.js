@@ -29,7 +29,7 @@ class Banner extends React.Component{
       
       return  <div className='banner'>
                  {/* <div id="cover"></div> */}
-                <img className='banner-img' src='./imgs/b.JPG'></img>
+                <img className='banner-img' src='./imgs/b.jpg'></img>
                 {/* <div className='banner-top'> */}
                   {/* <div className='banner-intro'> */}
                     <div className='intro-line1'>EXPLORE</div>
