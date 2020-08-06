@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import {BrowserRouter as Router, Switch, Route, Link, Redirect} from "react-router-dom";
-import './style.css';
-import './member.css';
+import './css/style.css';
+import './css/member.css';
 
 import firebase from 'firebase/app';
 import "firebase/auth";

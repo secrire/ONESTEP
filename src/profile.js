@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import {BrowserRouter as Router, Switch, Route, Link, Redirect} from "react-router-dom";
-import './eachTrip.css';
+import './css/eachTrip.css';
 // import './style.css';
 
 import firebase from 'firebase/app';
@@ -83,7 +83,6 @@ class Profile extends React.Component {
 
     pickStepPlace(e){
         e.preventDefault();
-        // document.getElementById(`profileCity`).value = e.target.getAttribute('place');
 
         this.setState({
             showSearchProfilePlaceResult: null,
@@ -99,7 +98,6 @@ class Profile extends React.Component {
     
         let pickedTripID = new URL(location.href).pathname.substr(1);
 
-    
         storageRef.put(file).then((snapshot) => {
           console.log('Uploaded', file.name);
     
@@ -154,8 +152,9 @@ class Profile extends React.Component {
                 about: this.state.profileAbout
             })
         }
-
-        document.getElementById(`profile-page`).style.display ='none';
+        // this.props.hideProfilePage
+        console.log('ok')
+        // document.getElementById(`profile-page`).style.display ='none';
     }
 
 
@@ -240,7 +239,6 @@ class Profile extends React.Component {
                             </div>
                         </div>  
                         {profileSetSubmit}       
-                        {/* <div onClick={this.editProfile.bind(this)} className='profile-set-submit' aria-disabled='true'>Save changes</div> */}
                     </div>
                 </div>
             )

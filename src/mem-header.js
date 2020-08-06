@@ -7,8 +7,8 @@ import {
   Link,
   Redirect,
 } from "react-router-dom";
-import "./member.css";
-import "./style.css";
+import "./css/member.css";
+import "./css/style.css";
 
 import firebase from "firebase/app";
 import "firebase/auth";

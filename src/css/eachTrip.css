@@ -110,7 +110,7 @@ html{
     margin: 5px;
 } */
 #trip-header-set,#trip-header-coedit{
-    display: none;
+    display: flex;
     /* width:100px; */
     border-radius: 25px;
     /* margin-left: 540px; */
@@ -605,7 +605,6 @@ animation: glow 1.5s ease-out infinite alternate;
 
 /*       --------   add + edit step page   --------     */
 #add-plan-step,#add-track-step,#edit-plan-step,#edit-track-step{
-    display: none;
     margin-top:60px;
     height:100vh;
     overflow: auto;
@@ -743,7 +742,7 @@ margin: -10px;
     width: 24px;
     height: 24px;
 }
-#step-pic, #edit-step-pic{
+#step-pic, #editStepPic{
     width: 70px;
     height: 70px;
     border: 2px rgb(175, 183, 196) dashed;

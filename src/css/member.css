@@ -323,9 +323,8 @@ animation: glow 500ms ease-out infinite alternate;
 } */
 
 
-/*       --------   add trip page   --------     */
-#add-trip,#edit-trip{
-    display: none;
+/*       --------   add & edit trip page   --------     */
+#add-trip,#edit-trip{ 
     height:100vh;
     width: 100%;
     position: fixed;
