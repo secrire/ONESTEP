@@ -8,47 +8,87 @@ import firebase from 'firebase/app';
 import "firebase/auth";
 import "firebase/firestore";
 
+let urlUserUID = new URL(location.href).pathname.substr(2);
 
 class Profile extends React.Component {
     constructor(props){
         super(props);
         this.state ={
-        
         };
     }
     componentDidMount() {
-        let urlUserUID = new URL(location.href).pathname.substr(2);
-
         let user = firebase.auth().currentUser;
-        console.log('ffffffffff',user)
         if(user){
             firebase.firestore().collection('users')
-            .where('email','==',user.email)
             .onSnapshot(querySnapshot => {
                 querySnapshot.forEach(doc => {
-                    // console.log(doc.data())
-                    this.setState({
-                        currentUser: doc.data(),
-                        currentUserUid: doc.id
-                    });   
+                    if(doc.data().email.toLowerCase() === user.email){
+                        this.setState({
+                            currentUser: doc.data(),
+                            currentUserUid: doc.id,
+                            profileUsername: doc.data().username
+                        }); 
+                        if(doc.data().place){
+                            this.setState({
+                                profilePlace: doc.data().place
+                            }); 
+                        };
+                        if(doc.data().about){
+                            this.setState({
+                                profileAbout: doc.data().about
+                            }); 
+                        }      
+                    }   
                 })
-                document.getElementById('profileUsername').value = this.state.currentUser.username; 
             });
         }else{
             console.log('not a member!!!')
         } 
-
     }
     
     updateInput(e){
         this.setState({
             [e.target.id]: e.target.value
         });
-      }
+    }
 
-    hidePage(e){
+    updateProfilePlaceInput(e){  
+        this.setState({
+            profilePlace: e.target.value,
+            showSearchProfilePlaceResult: true
+        });
+    
+        fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${this.state.profilePlace}.json?access_token=pk.eyJ1IjoidXNoaTczMSIsImEiOiJja2Mwa2llMmswdnk4MnJsbWF1YW8zMzN6In0._Re0cs24SGBi93Bwl_w0Ig&limit=8`)
+        .then(res => res.json())
+        .then(
+        (result) => {
+            let data = [];       
+            data.push(result);
+
+            let searchProfilePlace = [];
+            for( let i=0; i< data[0].features.length; i++ ){
+                if(data[0].features[i].place_type[0]=== 'region' || data[0].features[i].place_type[0]=== 'country' || data[0].features[i].place_type[0]=== 'place'){
+                    searchProfilePlace.push(data[0].features[i]);
+                    this.setState({
+                        searchProfilePlace: searchProfilePlace
+                    });
+                }
+            }
+        },
+        (error) => {
+            console.log(error.message)
+        }
+        )
+    }
+
+    pickStepPlace(e){
         e.preventDefault();
-        document.getElementById('profile-page').style.display ='none';
+        // document.getElementById(`profileCity`).value = e.target.getAttribute('place');
+
+        this.setState({
+            showSearchProfilePlaceResult: null,
+            profilePlace: e.target.getAttribute('place'),
+        });
     }
 
     uploadProfilePic(e){
@@ -58,7 +98,6 @@ class Profile extends React.Component {
         let storageRef = storage.ref('pics/'+file.name);
     
         let pickedTripID = new URL(location.href).pathname.substr(1);
-        console.log(this.state.currentUserUid);
 
     
         storageRef.put(file).then((snapshot) => {
@@ -84,27 +123,45 @@ class Profile extends React.Component {
     
     editProfile(e){
         e.preventDefault();
-        console.log('ok')
 
         let profilePic='';
         if(localStorage.getItem('profilePic')){
             profilePic = localStorage.getItem('profilePic');
+            firebase.firestore().collection('users').doc(this.state.currentUserUid)
+            .update({
+                profilePic: profilePic
+            })
+            localStorage.removeItem('profilePic'); 
         }
 
-        firebase.firestore().collection('users').doc(this.state.currentUserUid)
-        .update({
-            profilePic: profilePic
-        })
+        if(this.state.profileUsername){
+            firebase.firestore().collection('users').doc(this.state.currentUserUid)
+            .update({
+                username: this.state.profileUsername
+            })
+        }
 
-        localStorage.removeItem('profilePic');  
+        if(this.state.profilePlace){
+            firebase.firestore().collection('users').doc(this.state.currentUserUid)
+            .update({
+                place: this.state.profilePlace
+            })
+        }
+
+        if(this.state.profileAbout){
+            firebase.firestore().collection('users').doc(this.state.currentUserUid)
+            .update({
+                about: this.state.profileAbout
+            })
+        }
+
         document.getElementById(`profile-page`).style.display ='none';
     }
 
 
     render() {
-        
-        console.log(this.props.state.currentUser)
-        console.log(this.state.showProfilePage)
+        console.log(this.props.state);
+        console.log(this.state);
 
         let profilePic;
         if(this.props.state.currentUser){
@@ -119,7 +176,7 @@ class Profile extends React.Component {
         }
 
         let profileSetSubmit = <div className='profile-set-submit'>Save changes</div>
-        if(this.state.AddProfilePic || this.state.profileUsername || this.state.profileCity || this.state.profileAbout){
+        if(this.state.AddProfilePic || this.state.profileUsername || this.state.profilePlace || this.state.profileAbout){
             profileSetSubmit = <div onClick={this.editProfile.bind(this)} className='profile-set-submit-approve'>Save changes</div>
         }
 
@@ -128,9 +185,38 @@ class Profile extends React.Component {
         //     profileUsername = <input onChange={this.updateInput.bind(this)} type='text' className='profile-input' id='profileUsername' value={this.props.state.currentUser.username}/>
         // }
 
-        return(  <div id='profile-page'>
+        let searchPlaceBox = null;
+        let searchPlacePage =null;
+        let key=0;
+
+        if(this.state.searchProfilePlace){
+        searchPlaceBox = this.state.searchProfilePlace.map((n)=>{
+            return  <div key={key++} className='search-plan-place-box'>   
+                        <div onClick={this.pickStepPlace.bind(this)} className='search-plan-placeName' place={n.place_name} longitude={n.center[0]}     latitude={n.center[1]}>{n.place_name}
+                        </div>
+                    </div>
+        })
+        }
+
+        if(this.state.showSearchProfilePlaceResult){
+        searchPlacePage = (
+            <div id='profile-search-place-pop'>
+                    {searchPlaceBox} 
+            </div>
+        )
+        }else{
+            searchPlacePage = null;
+        }
+
+        let profilePage = null;
+        // if(this.state.showProfilePage === false){
+        //     profilePage = null;
+        // }
+        if(this.props.state.showProfilePage){
+            profilePage =(
+                    <div id='profile-page'>
                     <div className='profile-pop'>
-                        <div onClick={this.hidePage.bind(this)} className='profile-close'>x</div>
+                        <div onClick={this.props.hideProfilePage} className='profile-close'>x</div>
                         <div className='add-step-title'>Profile settings</div>
                         <div className='profile-container'>
                             <div className='profile-title-box'>
@@ -147,15 +233,23 @@ class Profile extends React.Component {
                                         {/* <img className='step-upload-pic-icon' src='./imgs/bluecamera.svg'/> */}
                                     </label>
                                 </div>
-                                <input onChange={this.updateInput.bind(this)} type='text' className='profile-input' id='profileUsername'/>
-                                <input onChange={this.updateInput.bind(this)} type='text' className='profile-input' id='profileCity'/>
-                                <textarea onChange={this.updateInput.bind(this)} type='text' className='profile-about' id='profileAbout' placeholder='Description of yourself'/>
+                                <input onChange={this.updateInput.bind(this)} type='text' className='profile-input' id='profileUsername' value={this.state.profileUsername}/>
+                                <input onChange={this.updateProfilePlaceInput.bind(this)} type='text' className='profile-input' id='profilePlace' value={this.state.profilePlace}/>
+                                {searchPlacePage}
+                                <textarea onChange={this.updateInput.bind(this)} type='text' className='profile-about' id='profileAbout' placeholder='Description of yourself' value={this.state.profileAbout}/>
                             </div>
                         </div>  
                         {profileSetSubmit}       
                         {/* <div onClick={this.editProfile.bind(this)} className='profile-set-submit' aria-disabled='true'>Save changes</div> */}
                     </div>
                 </div>
+            )
+        }
+
+        return(  
+        <div>
+            {profilePage}
+        </div>
         )
     }
 } 

@@ -793,7 +793,7 @@ margin: -10px;
     color: rgb(67, 151, 199);
 }
 
-#search-plan-place-pop{
+#search-plan-place-pop, #profile-search-place-pop{
     z-index: 30;
     position: fixed;
     top: 223px;
@@ -812,9 +812,7 @@ margin: -10px;
 
 
 /*  -------  PROFILE PAGE  --------    */
-
 #profile-page{
-    display: none;
     height:100vh;
     width: 100%;
     position: fixed;
@@ -914,6 +912,11 @@ margin: -10px;
 }
 .profile-about{
     height: 160px;
+}
+#profile-search-place-pop{
+    top: 352px;
+    left: 220px;
+    width: 340px;
 }
 .profile-set-submit, .profile-set-submit-approve{
     background-color: rgb(185, 192, 204);

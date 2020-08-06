@@ -273,18 +273,12 @@ class MContent extends React.Component {
     }
      
     render() {
-        // console.log('tffffff',this.state.userTrips)
-        // if(this.state.userTrips){
-            let test= new Date('2020-08-07');
-            console.log(test)
-        // }
         
         if(this.state.addNewTrip && this.state.newTripID){
-            // console.log('pppppppppppp')
             return <Redirect to={'/'+this.state.newTripID}/>
         }
 
-        console.log(this.state)
+        console.log(this.state);
         if(this.state.addTripStart !== today){
             document.getElementById(`addTripEnd`).value = this.state.addTripStart;
         }
@@ -322,14 +316,8 @@ class MContent extends React.Component {
             let calTripStart= new Date(n.tripStart);
             let calTripEnd = new Date(n.tripEnd);
             let tripDays = parseInt(Math.abs(calTripStart - calTripEnd) / 1000 / 60 / 60 / 24);
-            
             let tripMonth = calTripStart.toString().substring(4,7);
             let tripYear = calTripStart.toString().substring(11,15);
-
-            // console.log(calTripStart, 'date')
-            // console.log(tripMonth)
-            // console.log(tripYear)
-            // console.log(tripDays, 'days-state')
 
             return  <li key={key++}>
                         <Link to={"/"+this.state.tripIDs[index]}>
@@ -353,6 +341,8 @@ class MContent extends React.Component {
         })
         let tripAuthorInfo = null;
         let userCardImg = null;
+        let userCardCity = null;
+        let userCardAbout = null;
         if(this.state.tripAuthor){
             if(this.state.tripAuthor.profilePic){
                 userCardImg = (<img className='user-card-img' src={this.state.tripAuthor.profilePic}/>)
@@ -362,13 +352,21 @@ class MContent extends React.Component {
                                 </div>
                 )      
             }
+
+            if(this.state.tripAuthor.place){
+                userCardCity =  <div id='user-card-city'>{this.state.tripAuthor.place}</div>
+            }
+
+            if(this.state.tripAuthor.about){
+                userCardAbout =  <div id='user-card-about'>{this.state.tripAuthor.about}</div>
+            }
             
             tripAuthorInfo=(
                                 <div className='trip-author-info'>
                                     {userCardImg}
                                     <div id='user-card-name'>{this.state.tripAuthor.username}</div>
-                                    <div id='user-card-city'></div>
-                                    <div id='user-card-about'></div>
+                                    {userCardCity}
+                                    {userCardAbout}
                                 </div>
                             ) 
         }

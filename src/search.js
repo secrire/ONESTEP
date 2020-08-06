@@ -21,27 +21,28 @@ class Search extends React.Component{
     updateSearchInput(e){
         this.setState({
             searchText: e.target.value,
-            // display: true,
         });
-        console.log(this.state.searchText)
-
-        console.log(document.getElementById(`search-input`).value)
         
+        let searchUserName= [];
+        let searchUserUID= [];
+
         firebase.firestore().collection('users')
         .onSnapshot(querySnapshot => {
-            // let searchUserName=[];
-            // let searchUserPic=[];
             querySnapshot.forEach(doc => {
-                // planLikeStep.push(doc.data().planLike);
-                if(document.getElementById(`search-input`).value == doc.data().username){
-                console.log(doc.id);
+                for(let value of doc.data().username){
+                    if(this.state.searchText.toLowerCase() === value.toLowerCase()){
+                        console.log(doc.data().username);
 
-                this.setState({
-                    searchUserName: doc.data().username,
-                    // searchUserPic: 
-                    searchUserUID: doc.id
-                }); 
-                }    
+                        searchUserName.push(doc.data().username);
+                        searchUserUID.push(doc.id);
+        
+                        this.setState({
+                            searchUserName: searchUserName,
+                            searchUserUID: searchUserUID
+                        }); 
+                    }   
+                }
+          
             }) 
         });
 
@@ -52,7 +53,7 @@ class Search extends React.Component{
             querySnapshot.forEach(doc => {
                 // planLikeStep.push(doc.data().planLike);
                 if(document.getElementById(`search-input`).value == doc.data().tripName){
-                console.log(doc.data());
+                // console.log(doc.data());
 
                 this.setState({
                     searchTripName: doc.data().tripName,
@@ -78,16 +79,21 @@ class Search extends React.Component{
         let searchUserBox = null;
         let searchTripBox = null;
 
+        // console.log(this.state.searchUserName)
+        // console.log(this.state.searchUserUID)
+
         if(this.state.searchUserName){
-            searchUserBox = (
-                <Link to={"/m"+this.state.searchUserUID}>
+            searchUserBox = this.state.searchUserName.map((n, index)=>{
+                <Link to={"/m"+this.state.searchUserUID[index]} key={this.state.searchUserUID[index]}>
                     <div className='search-user-box'>
                         <img className='search-user-img' src='./imgs/q.png'></img>
-                        <div className='search-user-name'>{this.state.searchUserName}</div>
+                        <div className='search-user-name'>{n}</div>
                     </div>
                 </Link>
-            )
+            })
         }
+
+
         if(this.state.searchTripName){
             searchTripBox = (
                 <Link to={"/"+this.state.searchTripID}>
@@ -104,7 +110,6 @@ class Search extends React.Component{
             searchPage = (
                 <div id='search-page'>
                     <div className='search-pop'>
-                        {/* <div className='search-close'>x</div> */}
                         <div className='search-title'>Results</div>
                         <div className='search-container'>
                             {searchUserBox}
@@ -122,23 +127,11 @@ class Search extends React.Component{
             searchInput =(
                 <input onChange={this.updateSearchInput.bind(this)} className='search-input' id= 'search-input' placeholder='Search'/>
             )
-            // let user = firebase.auth().currentUser;
-            // if(!user){
-            //     document.getElementById('search-input').style.cssText += "right: 33px; ";
-            // }
-      
         }
-        // if(!this.state.showSearchInput && !this.state.searchText){
-        //     searchInput = null;
-        // }
-
-      
-      
         return  <div className='search-component'>
                 {searchInput}
                     <img onClick={this.search.bind(this)} className='search-icon' id='search-icon' src='./imgs/search.svg'/>
                 {searchPage}
-                
                 </div>
     }
 }
