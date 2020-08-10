@@ -1,13 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import {BrowserRouter as Router, Switch, Route, Link, Redirect} from "react-router-dom";
-import './css/member.css';
+import '../css/member.css';
 
 import firebase from 'firebase/app';
 import "firebase/auth";
 import "firebase/firestore";
 
-import Map from "./Map";
+import Map from "./map";
 
 
 let map;
@@ -180,8 +180,8 @@ class MContent extends React.Component {
             tripStart: this.state.addTripStart,
             tripEnd: this.state.addTripEnd,
             createTime: new Date(),
-            addPlan:null,
-            addTrack:null, 
+            // addPlan:null,
+            // addTrack:null, 
         })
         this.setState({
             showAddTripPage: null

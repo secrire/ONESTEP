@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import {BrowserRouter as Router, Switch, Route, Link} from "react-router-dom";
-import './css/style.css';
+import "../../css/style.css";
 
-import firebase from 'firebase/app';
+import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 

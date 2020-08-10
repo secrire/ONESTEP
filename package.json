@@ -1,13 +1,15 @@
 {
-  "name": "surprise",
+  "name": "onestep",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"webpack-dev-server --open",
+    "test": "jest",
+    "test-update-snapshot": "jest --updateSnapshot",
+    "start": "webpack-dev-server --open",
     "build": "webpack"
   },
+  "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
@@ -15,11 +17,14 @@
     "@babel/preset-env": "^7.10.3",
     "@babel/preset-react": "^7.10.1",
     "babel-loader": "^8.1.0",
+    "jest": "^25.5.4",
+    "react-test-renderer": "^16.13.1",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
+    "axios": "^0.19.2",
     "firebase": "^7.15.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -29,14 +34,14 @@
   },
   "browserslist": {
     "production": [
-    ">0.2%",
-    "not dead",
-    "not op_mini all"
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
     ],
     "development": [
-    "last 1 chrome version",
-    "last 1 firefox version",
-    "last 1 safari version"
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
     ]
   }
 }

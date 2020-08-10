@@ -1,8 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import {BrowserRouter as Router, Switch, Route, Link, Redirect} from "react-router-dom";
-import './css/eachTrip.css';
-// import './style.css';
+import '../css/eachTrip.css';
 
 import firebase from 'firebase/app';
 import "firebase/auth";
@@ -32,7 +31,7 @@ class Profile extends React.Component {
                             this.setState({
                                 profilePlace: doc.data().place
                             }); 
-                        };
+                        }
                         if(doc.data().about){
                             this.setState({
                                 profileAbout: doc.data().about
@@ -159,8 +158,8 @@ class Profile extends React.Component {
 
 
     render() {
-        console.log(this.props.state);
-        console.log(this.state);
+        // console.log(this.props.state);
+        // console.log(this.state);
 
         let profilePic;
         if(this.props.state.currentUser){
@@ -191,7 +190,7 @@ class Profile extends React.Component {
         if(this.state.searchProfilePlace){
         searchPlaceBox = this.state.searchProfilePlace.map((n)=>{
             return  <div key={key++} className='search-plan-place-box'>   
-                        <div onClick={this.pickStepPlace.bind(this)} className='search-plan-placeName' place={n.place_name} longitude={n.center[0]}     latitude={n.center[1]}>{n.place_name}
+                        <div onClick={this.pickStepPlace.bind(this)} className='search-plan-placeName' place={n.place_name} longitude={n.center[0]} latitude={n.center[1]}>{n.place_name}
                         </div>
                     </div>
         })
@@ -245,9 +244,9 @@ class Profile extends React.Component {
         }
 
         return(  
-        <div>
-            {profilePage}
-        </div>
+            <>
+                {profilePage}
+            </>
         )
     }
 } 

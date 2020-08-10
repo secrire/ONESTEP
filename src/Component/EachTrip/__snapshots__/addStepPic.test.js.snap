@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`react render 1`] = `
+<label
+  className="step-pic-label"
+>
+  <input
+    className="trip-cover-change-pic"
+    id="uploadPicInput"
+    onChange={[Function]}
+    type="file"
+  />
+  <img
+    className="step-upload-pic-icon"
+    src="./imgs/bluecamera.svg"
+  />
+</label>
+`;

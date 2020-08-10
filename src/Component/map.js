@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import {BrowserRouter as Router, Switch, Route, Link, Redirect} from "react-router-dom";
-import './css/member.css';
+import '../css/member.css';
 
 import firebase from 'firebase/app';
 import "firebase/auth";
@@ -30,95 +30,6 @@ class Map extends React.Component {
             console.log('got you')
             document.getElementById("map").style.cssText += 'left: 600px;width:100%;';
         }
-
-        // function getDirection() {
-        //     var xhr = new XMLHttpRequest();
-        //     xhr.open(
-        //       "GET",
-        //       "https://api.mapbox.com/directions/v5/mapbox/driving/122%2C23.5%3B122%2C24?alternatives=false&geometries=geojson&steps=false&access_token=pk.eyJ1IjoidXNoaTczMSIsImEiOiJja2Mwa2llMmswdnk4MnJsbWF1YW8zMzN6In0._Re0cs24SGBi93Bwl_w0Ig"
-        //     );
-            
-            
-        //     xhr.onload = function() {
-        //       var response = JSON.parse(this.responseText);
-        //       console.log(response);
-
-        //       var routeGeometries = response.routes[0].geometry;
-              
-        //       //這邊的 code 改自 add a line with GeoJSON 的範例
-        //       map.on("load", function() {
-        //         map.addLayer({
-        //           id: "route",
-        //           type: "line",
-        //           source: {
-        //             type: "geojson",
-        //             data: {
-        //               type: "Feature",
-        //               properties: {},
-        //               geometry: {
-        //                 type: "LineString",
-        //                 // 把 coordinates 改成從 Direction API 拿回來的座標
-        //                 coordinates: routeGeometries.coordinates
-        //               }
-        //             }
-        //           },
-        //           layout: {
-        //             "line-join": "round",
-        //             "line-cap": "round"
-        //           },
-        //           paint: {
-        //             "line-color": "#fff",
-        //             "line-width": 10
-        //           }
-        //         });
-        //       });
-        //     };
-        //     xhr.send();
-        // }
-        // getDirection();
-
-
-
-
-        //   var geocoder = new MapboxGeocoder({
-        //     accessToken: mapboxgl.accessToken,
-        //     mapboxgl: mapboxgl
-        //     });
-             
-        //     document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
-              
-          
-          
-      
-
-
-        // search
-        // map.addControl(
-        //     //  定位當下使用者
-        //     // new mapboxgl.GeolocateControl({
-        //     //     positionOptions: {
-        //     //     enableHighAccuracy: true
-        //     //     },
-        //     //     trackUserLocation: true
-        //     //     }),
-
-
-
-        //     new MapboxGeocoder({
-        //     accessToken: mapboxgl.accessToken,
-        //     mapboxgl: mapboxgl
-        //     })
-        // );
-
-        // function onMapClick(e) {
-        //     // 顯示點擊區域的經緯度
-        //     alert("You clicked the map at " + e.latlng);
-        // }
-        
-        // map.on('click', onMapClick);
-
-
-
 
         // // draw line between click points
         // var distanceContainer = document.getElementById('distance');
@@ -236,50 +147,12 @@ class Map extends React.Component {
         //         : 'crosshair';
         // });
         
-        
-
-        //--------------------
-        // mapboxgl.accessToken = 'pk.eyJ1IjoidXNoaTczMSIsImEiOiJja2Mwa2llMmswdnk4MnJsbWF1YW8zMzN6In0._Re0cs24SGBi93Bwl_w0Ig';
-        // var map = new mapboxgl.Map({
-        //     container: 'map',
-        //     style: 'mapbox://styles/mapbox/streets-v11',
-        //     zoom: 3,
-        //     center: [100, 30]
-        // });
-        // map.setStyle('mapbox://styles/mapbox/satellite-v9')
-
-        // var layerList = document.getElementById('menu');
-        // var inputs = layerList.getElementsByTagName('input');
-
-        // function switchLayer(layer) {
-        //     var layerId = layer.target.id;
-        //     map.setStyle('mapbox://styles/mapbox/' + layerId);
-        // }
-
-        // for (var i = 0; i < inputs.length; i++) {
-        //     inputs[i].onclick = switchLayer;
-        // } 
-        // console.log('mappppppp') 
-
-
-        //------------------------
-          //     var xhr = new XMLHttpRequest();
-  //     xhr.open(
-  //       "GET",
-  //       "https://api.mapbox.com/geocoding/v5/mapbox.places/big%20ben%20london.json?access_token=pk.eyJ1IjoidXNoaTczMSIsImEiOiJja2Mwa2llMmswdnk4MnJsbWF1YW8zMzN6In0._Re0cs24SGBi93Bwl_w0Ig&limit=10"
-  //     );
-  //     xhr.onload = function() {
-  //       var response = JSON.parse(this.responseText);
-  //       console.log(response)
-  //       // console.log(response.features[0].center[0],response.features[0].center[1]);      
-  //     };
-  //     xhr.send();
     }  
       
   render() {
     return  <div className='map-page'>
                 <div id="map"></div>
-                <div id="distance" className="distance-container"></div>
+                {/* <div id="distance" className="distance-container"></div> */}
 
                 {/* <div id="menu">
                     <input
