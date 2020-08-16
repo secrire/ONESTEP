@@ -1,12 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  Redirect,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
 import "../../css/style.css";
 
 import firebase from "firebase/app";
@@ -14,7 +8,7 @@ import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
 
-import Search from "../search";
+// import Search from "../search";
 
 class Header extends React.Component {
 	constructor(props) {
@@ -40,7 +34,6 @@ class Header extends React.Component {
 
 	loginToSignup(e) {
 		e.preventDefault();
-		console.log(this.state);
 		this.setState({
 			showSignupPage: true,
 			showLoginPage: false,
@@ -49,7 +42,6 @@ class Header extends React.Component {
 
 	signupToLogin(e) {
 		e.preventDefault();
-		console.log(this.state);
 		this.setState({
 			showSignupPage: false,
 			showLoginPage: true,
@@ -57,11 +49,10 @@ class Header extends React.Component {
 	}
 
 	/*          --------------   S I G N    U P       --------------      */
-	// ----- facebook sign up -----
 	FBsignUp(e) {
 		e.preventDefault();
 
-		var provider = new firebase.auth.FacebookAuthProvider();
+		let provider = new firebase.auth.FacebookAuthProvider();
 		firebase
 		.auth()
 		.signInWithPopup(provider)
@@ -76,23 +67,22 @@ class Header extends React.Component {
 		});
 	}
 
-	// ----- email sign up -----
 	emailSignUp(e) {
 		e.preventDefault();
 
 		firebase
-		.auth()
-		.createUserWithEmailAndPassword(
-		this.props.state.email,
-		this.props.state.password
-		)
-		.then(() => {
-			console.log("email create member ok");
-		})
-		.catch((err) => {
-			console.log(err.message);
-			alert(`${this.state.username} sign up noooooooo`);
-		});
+			.auth()
+			.createUserWithEmailAndPassword(
+			this.props.state.email,
+			this.props.state.password
+			)
+			.then(() => {
+				console.log("email create member ok");
+			})
+			.catch((err) => {
+				console.log(err.message);
+				alert('Sign Up failed, please check the info again. Thank you');
+			});
 	}
 
 	hideSignupPage(e) {
@@ -103,42 +93,61 @@ class Header extends React.Component {
 	}
 
 	/*          --------------   L O G I N       --------------      */
-	// ----- facebook log in ----- //
 	FBlogin(e) {
 		e.preventDefault();
-		var provider = new firebase.auth.FacebookAuthProvider();
+		let provider = new firebase.auth.FacebookAuthProvider();
 
 		firebase
-		.auth()
-		.signInWithPopup(provider)
-		.then((result) => {
-			let token = result.credential.accessToken;
-			let user = result.user;
-			console.log(`fb login`,user);
-		})
-		.catch((error) => {
-			console.log(error.message);
-		});
+			.auth()
+			.signInWithPopup(provider)
+			.then((result) => {
+				let token = result.credential.accessToken;
+				let user = result.user;
+				console.log(`fb login`, user, token);
+			})
+			.catch((error) => {
+				console.log(error.message);
+			});
 	}
-	// ----- email log in -----
+
 	emailLogIn(e) {
 		e.preventDefault();
 
 		firebase
-		.auth()
-		.signInWithEmailAndPassword(
-		this.props.state.logEmail,
-		this.props.state.logPassword
-		)
-		.then(() => {
-			console.log("email log in ok");
-		})
-		.catch((err) => {
-			console.log(err.message);
-			this.setState({
-				showLoginFailMsg: true,
+			.auth()
+			.signInWithEmailAndPassword(
+			this.props.state.logEmail,
+			this.props.state.logPassword
+			)
+			.then(() => {
+				console.log('email log in ok');
+			})
+			.catch((err) => {
+				console.log(err.message);
+				this.setState({
+					showLoginFailMsg: true,
+				});
 			});
-		});
+	}
+
+	testAccountLogIn(e) {
+		e.preventDefault();
+
+		firebase
+			.auth()
+			.signInWithEmailAndPassword(
+			'test@g.com',
+			'111111'
+			)
+			.then(() => {
+				console.log('test account log in ok');
+			})
+			.catch((err) => {
+				console.log(err.message);
+				this.setState({
+					showLoginFailMsg: true,
+				});
+			});
 	}
 
 	hideLoginPage(e) {
@@ -150,7 +159,7 @@ class Header extends React.Component {
 
 	render() {
 		if (this.props.state.islogin === true) {
-			return <Redirect to={"/m" + this.props.state.userUid} />;
+			return <Redirect to={"/m" + this.props.state.userUid} />
 		}
 
 		let signupPage = null;
@@ -215,6 +224,7 @@ class Header extends React.Component {
 						onChange={this.props.updateInput}
 					/>
 					{signupSubmit}
+					<div className='test-account' onClick={this.testAccountLogIn.bind(this)} >Test account Log in</div> 
 					<div className="signup-to-login">
 					<p>Already have an account?</p>
 					<div onClick={this.signupToLogin.bind(this)}>Log in</div>
@@ -270,6 +280,7 @@ class Header extends React.Component {
 						<div onClick={this.emailLogIn.bind(this)} className="login-submit">
 						Log in
 						</div>
+						<div className='test-account' onClick={this.testAccountLogIn.bind(this)} >Test account Log in</div> 
 						<div className="signup-to-login">
 							<p>New to ONESTEP?</p>
 							<div onClick={this.loginToSignup.bind(this)}>
@@ -282,10 +293,10 @@ class Header extends React.Component {
 		}
 
 		return (
-			<div>
+			<>
 				<div id="header">
 
-				<Search />
+				{/* <Search /> */}
 				<div className="logo">O N E S T E P</div>
 				<div className="login-signup-box">
 					<div onClick={this.showLoginPage.bind(this)} className="login">
@@ -299,9 +310,9 @@ class Header extends React.Component {
 
 				{signupPage}
 				{loginPage}
-				{/* <img className="log-icon" src="./imgs/q.png" /> */}
+
 				</div>
-			</div>
+			</>
 		);
 	}
 }

@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import {
   BrowserRouter as Router,
-  Switch,
   Route,
   Link,
   Redirect,
@@ -14,7 +13,6 @@ import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
 
-// import mapboxgl from "mapbox-gl";
 import Header from "./Component/HomePage/header";
 import Banner from "./Component/HomePage/banner";
 import Content from "./Component/HomePage/content";
@@ -35,8 +33,7 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-// let db = firebase.firestore();
-// let storage = firebase.storage();
+
 
 
 class App extends React.Component {
@@ -75,8 +72,8 @@ componentDidMount() {
 			console.log("Sign In", user);
 
 			this.setState({
-			islogin: true,
-			userUid: user.uid,
+				islogin: true,
+				userUid: user.uid,
 			});
 
 			if (this.state.logEmail === "" && this.state.email !== "") {
@@ -120,10 +117,10 @@ componentDidMount() {
 		.onSnapshot((querySnapshot) => {
 			let tripID = [];
 			querySnapshot.forEach((doc) => {
-			tripID.push(doc.id);
+				tripID.push(doc.id);
 			});
 			this.setState({
-			tripIDs: tripID,
+				tripIDs: tripID,
 			});
 		});
 }
@@ -152,7 +149,6 @@ updateInput(e) {
 
   render() {
     let tripRoute = [];
-    // console.log(this.state.tripIDs);
     if (this.state.tripIDs !== []) {
 		for (let i = 0; i < this.state.tripIDs.length; i++) {
 			tripRoute.push(
@@ -181,11 +177,11 @@ updateInput(e) {
 			);
 			}
 		}
-    }
+	}
+	
     return (
       <Router>
         <div>
-			{/* <Switch>  */}
 			<Route exact path="/">
 				<Header
 				updateInput={this.updateInput.bind(this)}
@@ -194,6 +190,7 @@ updateInput(e) {
 				<Banner />
 				<Content />
 			</Route>
+
 			<Route exact path={"/m" + this.state.userUid}>
 				<MHeader
 				changeIslogin={this.changeIslogin.bind(this)}
@@ -203,7 +200,6 @@ updateInput(e) {
 			</Route>
 			{tripRoute}
 			{totalUserUIDsRoute}
-			{/* </Switch> */}
         </div>
       </Router>
     );
@@ -212,9 +208,3 @@ updateInput(e) {
 
 ReactDOM.render(<App />, document.querySelector("#root"));
 
-{
-  /* <Login updateInput={this.updateInput.bind(this)} state={this.state}/> */
-}
-{
-  /* <SignUp updateInput={this.updateInput.bind(this)} state={this.state}/> */
-}

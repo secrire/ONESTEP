@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import {BrowserRouter as Router, Switch, Route, Link, Redirect} from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
 import '../css/member.css';
 
 import firebase from 'firebase/app';
@@ -26,6 +26,7 @@ class MContent extends React.Component {
             addTripSum:''
         };    
     }
+
     componentDidMount() {
         let user = firebase.auth().currentUser;
         let urlUserUID = new URL(location.href).pathname.substr(2);
@@ -43,69 +44,73 @@ class MContent extends React.Component {
             'features': []
         };
 
-        firebase.firestore().collection('trips')
-        .orderBy('createTime','desc')
-        .onSnapshot(querySnapshot => {
-            let data=[];      
-            let tripID=[];
-            querySnapshot.forEach(doc => {
-                if(urlUserUID === doc.data().authorUid){
-                    data.push(doc.data());
-                    tripID.push(doc.id);  
-                }
-            })
-            this.setState({
-                userTrips: data,
-                tripIDs: tripID
-            },() =>{
-                let currentUserTotalSteps=[];
-                for(let k= 0; k<this.state.tripIDs.length; k++){
-                    firebase.firestore().collection('trips')
-                    .doc(this.state.tripIDs[k]).collection('plan')
-                        .onSnapshot(querySnapshot => {
-                            querySnapshot.forEach(doc => {
+        firebase
+            .firestore()
+            .collection('trips')
+            .orderBy('createTime','desc')
+            .onSnapshot(querySnapshot => {
+                let data=[];      
+                let tripID=[];
+                querySnapshot.forEach(doc => {
+                    if(urlUserUID === doc.data().authorUid){
+                        data.push(doc.data());
+                        tripID.push(doc.id);  
+                    }
+                })
+                this.setState({
+                    userTrips: data,
+                    tripIDs: tripID
+                },() =>{
+                    let currentUserTotalSteps=[];
+                    for(let k= 0; k<this.state.tripIDs.length; k++){
+                        firebase
+                            .firestore()
+                            .collection('trips')
+                            .doc(this.state.tripIDs[k])
+                            .collection('plan')
+                            .onSnapshot(querySnapshot => {
+                                querySnapshot.forEach(doc => {
                                     currentUserTotalSteps.push(doc.data());        
-                            })
+                                })
 
-                            this.setState({
-                                currentUserTotalSteps: currentUserTotalSteps,
-                            }, () => {
-                                // console.log("Steps", this.state.currentUserTotalSteps);
-                                geojson.features=[];
-                                let arr = this.state.currentUserTotalSteps;
-                                for(let i = 0; i<arr.length; i++){
-                                let item = {
-                                    'type': 'Feature',
-                                    'geometry': {
-                                    'type': 'Point',
-                                    'coordinates': [arr[i].longitude,arr[i].latitude]
-                                    }}
-                                geojson.features.push(item);   
-                                }
-                    
-                                geojson.features.forEach(function(marker){
-                                var el = document.createElement('img');
-                                el.className = 'totalStepPoint';
-
-                                el.src = './imgs/redbgpin.svg';
-                                //   el.style.backgroundColor = '#CC3E55';
-                                el.style.width = '24px';
-                                el.style.height ='24px';
-                                //   el.style.border ='3px white solid';
-                                el.style.boxShadow = 'rgb(253, 253, 254) 0px 0px 3px 1px';
-                                el.style.borderRadius ='50%';
-                                console.log(marker.geometry.coordinates);
-                    
-                                if(marker.geometry.coordinates[0]){
-                                    new mapboxgl.Marker(el)
-                                    .setLngLat(marker.geometry.coordinates)
-                                    .addTo(map);
-                                }
-                                });  
-                            });
-                    })
-                }
-            });
+                                this.setState({
+                                    currentUserTotalSteps: currentUserTotalSteps,
+                                }, () => {
+                                    geojson.features=[];
+                                    let arr = this.state.currentUserTotalSteps;
+                                    for(let i = 0; i<arr.length; i++){
+                                        let item = {
+                                            'type': 'Feature',
+                                            'geometry': {
+                                            'type': 'Point',
+                                            'coordinates': [arr[i].longitude,arr[i].latitude]
+                                            }}
+                                        geojson.features.push(item);   
+                                    }
+                        
+                                    geojson.features.forEach(function(marker){
+                                        let el = document.createElement('img');
+                                        
+                                        el.className = 'totalStepPoint';
+                                        el.src = './imgs/redbgpin.svg';
+                                        //   el.style.backgroundColor = '#CC3E55';
+                                        el.style.width = '24px';
+                                        el.style.height ='24px';
+                                        //   el.style.border ='3px white solid';
+                                        el.style.boxShadow = 'rgb(253, 253, 254) 0px 0px 3px 1px';
+                                        el.style.borderRadius ='50%';
+                                        // console.log(marker.geometry.coordinates);
+                            
+                                        if(marker.geometry.coordinates[0]){
+                                            new mapboxgl.Marker(el)
+                                            .setLngLat(marker.geometry.coordinates)
+                                            .addTo(map);
+                                        }
+                                    });  
+                                });
+                        })
+                    }
+                });
         })
 
         firebase.firestore().collection('users')
@@ -125,15 +130,6 @@ class MContent extends React.Component {
                 isAuthor: true
             });
         }
-
-            // mapboxgl.accessToken = 'pk.eyJ1IjoidXNoaTczMSIsImEiOiJja2Mwa2llMmswdnk4MnJsbWF1YW8zMzN6In0._Re0cs24SGBi93Bwl_w0Ig';
-            // var map = new mapboxgl.Map({
-            //     container: 'map',
-            //     style: 'mapbox://styles/mapbox/streets-v11',
-            //     zoom: 13,
-            //     center: [4.899, 52.372]
-            // });
-
             // var layerList = document.getElementById('menu');
             // var inputs = layerList.getElementsByTagName('input');
 
@@ -170,19 +166,19 @@ class MContent extends React.Component {
         e.preventDefault();
         let user = firebase.auth().currentUser;  
 
-        firebase.firestore().collection('trips')
-        .doc()
-        .set({
-            authorUid: user.uid,
-            planLike: 0,
-            tripName: this.state.addTripName,
-            tripSum: this.state.addTripSum,
-            tripStart: this.state.addTripStart,
-            tripEnd: this.state.addTripEnd,
-            createTime: new Date(),
-            // addPlan:null,
-            // addTrack:null, 
-        })
+        firebase
+            .firestore()
+            .collection('trips')
+            .doc()
+            .set({
+                authorUid: user.uid,
+                planLike: 0,
+                tripName: this.state.addTripName,
+                tripSum: this.state.addTripSum,
+                tripStart: this.state.addTripStart,
+                tripEnd: this.state.addTripEnd,
+                createTime: new Date(),
+            })
         this.setState({
             showAddTripPage: null
         });
@@ -191,17 +187,20 @@ class MContent extends React.Component {
         this.setState({
             addNewTrip: true
         }, () =>{
-            firebase.firestore().collection('trips')
-            .orderBy('createTime','desc').limit(1)
-            .onSnapshot(querySnapshot => {      
-                let newTripID='';
-                querySnapshot.forEach(doc => {
-                    newTripID = doc.id;
+            firebase
+                .firestore()
+                .collection('trips')
+                .orderBy('createTime','desc')
+                .limit(1)
+                .onSnapshot(querySnapshot => {      
+                    let newTripID='';
+                    querySnapshot.forEach(doc => {
+                        newTripID = doc.id;
+                    })
+                    this.setState({
+                        newTripID: newTripID
+                    });
                 })
-                this.setState({
-                    newTripID: newTripID
-                });
-            })
         });
     }
      
@@ -228,10 +227,8 @@ class MContent extends React.Component {
             }
         }
    
-
         let key=0;
         let renderUserTrips = this.state.userTrips.map((n, index)=>{
-
             let cardImg;
             if(n.coverPic){
                 cardImg = <img className='card-img' src={n.coverPic}/>
@@ -245,26 +242,29 @@ class MContent extends React.Component {
             let tripMonth = calTripStart.toString().substring(4,7);
             let tripYear = calTripStart.toString().substring(11,15);
 
-            return  <li key={key++}>
-                        <Link to={"/"+this.state.tripIDs[index]}>
-                            <div className='card'> 
-                                <div className='card-title'>{n.tripName}</div>
-                                <div className='card-title-arrow'>></div>
-                                <div className='card-main-container'>
-                                    <div className='card-main'>
-                                        <div className='card-main-line1'>{tripYear}</div>
-                                        <div className='card-main-line2'>{tripMonth}</div>
-                                    </div>
-                                    <div className='card-main'>
-                                        <div className='card-main-line1'>{tripDays}</div>
-                                        <div className='card-main-line2'>days</div>
-                                    </div>
+            return  (
+                <li key={key++}>
+                    <Link to={"/"+this.state.tripIDs[index]}>
+                        <div className='card'> 
+                            <div className='card-title'>{n.tripName}</div>
+                            <div className='card-title-arrow'>></div>
+                            <div className='card-main-container'>
+                                <div className='card-main'>
+                                    <div className='card-main-line1'>{tripYear}</div>
+                                    <div className='card-main-line2'>{tripMonth}</div>
                                 </div>
-                                {cardImg}
+                                <div className='card-main'>
+                                    <div className='card-main-line1'>{tripDays}</div>
+                                    <div className='card-main-line2'>days</div>
+                                </div>
                             </div>
-                        </Link>
-                    </li>
+                            {cardImg}
+                        </div>
+                    </Link>
+                </li>
+            )
         })
+
         let tripAuthorInfo = null;
         let userCardImg = null;
         let userCardCity = null;
@@ -328,27 +328,29 @@ class MContent extends React.Component {
             )
         }
         
-        return  <div className='MContent'>
-                    <Map/>
-                    
-                    <div className='user-total-trip'>
-                        <div className='user-card'>
-                           {tripAuthorInfo}
-                            <div className='user-card-statis'>
-                                <div className='user-card-trip'>{this.state.userTrips.length} trips</div>
-                            </div>
+        return  (
+            <div className='MContent'>
+                <Map/>
+                
+                <div className='user-total-trip'>
+                    <div className='user-card'>
+                        {tripAuthorInfo}
+                        <div className='user-card-statis'>
+                            <div className='user-card-trip'>{this.state.userTrips.length} trips</div>
                         </div>
-                        <div className='user-title'>Trips</div>
-                        {addTripBtn}
-                    
-                        <ul className='cards'>
-                            {renderUserTrips}
-                        </ul>
                     </div>
-
-                {addTripPage}
-
+                    <div className='user-title'>Trips</div>
+                    {addTripBtn}
+                
+                    <ul className='cards'>
+                        {renderUserTrips}
+                    </ul>
                 </div>
+
+            {addTripPage}
+
+            </div>
+        )
     }
 }  
 

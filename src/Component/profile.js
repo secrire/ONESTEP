@@ -1,45 +1,56 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import {BrowserRouter as Router, Switch, Route, Link, Redirect} from "react-router-dom";
+import {BrowserRouter as Router, Route, Link, Redirect} from "react-router-dom";
 import '../css/eachTrip.css';
 
 import firebase from 'firebase/app';
 import "firebase/auth";
 import "firebase/firestore";
 
-let urlUserUID = new URL(location.href).pathname.substr(2);
+// let urlUserUID = new URL(location.href).pathname.substr(2);
 
 class Profile extends React.Component {
     constructor(props){
         super(props);
+
         this.state ={
+            profilePlace:'',
+            profileAbout:'',
         };
     }
+
     componentDidMount() {
         let user = firebase.auth().currentUser;
         if(user){
-            firebase.firestore().collection('users')
-            .onSnapshot(querySnapshot => {
-                querySnapshot.forEach(doc => {
-                    if(doc.data().email.toLowerCase() === user.email){
-                        this.setState({
-                            currentUser: doc.data(),
-                            currentUserUid: doc.id,
-                            profileUsername: doc.data().username
-                        }); 
-                        if(doc.data().place){
+            firebase
+                .firestore()
+                .collection('users')
+                .onSnapshot(querySnapshot => {
+                    querySnapshot.forEach(doc => {
+                        if(doc.data().email.toLowerCase() === user.email){
                             this.setState({
-                                profilePlace: doc.data().place
+                                currentUser: doc.data(),
+                                currentUserUid: doc.id,
+                                profileUsername: doc.data().username
                             }); 
-                        }
-                        if(doc.data().about){
-                            this.setState({
-                                profileAbout: doc.data().about
-                            }); 
-                        }      
-                    }   
-                })
-            });
+                            if(doc.data().profilePic){
+                                this.setState({
+                                    profilePic: doc.data().profilePic
+                                }); 
+                            }    
+                            if(doc.data().place){
+                                this.setState({
+                                    profilePlace: doc.data().place
+                                }); 
+                            }
+                            if(doc.data().about){
+                                this.setState({
+                                    profileAbout: doc.data().about
+                                }); 
+                            }      
+                        }   
+                    })
+                });
         }else{
             console.log('not a member!!!')
         } 
@@ -94,27 +105,21 @@ class Profile extends React.Component {
         let storage = firebase.storage();
         let file = e.target.files[0];
         let storageRef = storage.ref('pics/'+file.name);
-    
-        let pickedTripID = new URL(location.href).pathname.substr(1);
 
         storageRef.put(file).then((snapshot) => {
-          console.log('Uploaded', file.name);
-    
-          storageRef.getDownloadURL().then(
-            (url) => {
-            console.log('download'+url);
-
-            localStorage.setItem('profilePic',url);
-    
-            this.setState({
-              AddProfilePic: true,
-            },() =>{
-                document.getElementById('profile-pic').src = url;
+            console.log('Uploaded', file.name);
+        
+            storageRef.getDownloadURL()
+            .then((url) => {
+                    console.log('download'+url);
+            
+                    this.setState({
+                        isAddProfilePic: true,
+                        profilePic: url,
+                    });
+            }).catch((error) => {
+                console.log('download fail'+error.message);
             });
-    
-          }).catch((error) => {
-            console.log('download fail'+error.message)
-          });
         });
     }
     
@@ -122,66 +127,51 @@ class Profile extends React.Component {
         e.preventDefault();
 
         let profilePic='';
-        if(localStorage.getItem('profilePic')){
-            profilePic = localStorage.getItem('profilePic');
-            firebase.firestore().collection('users').doc(this.state.currentUserUid)
-            .update({
-                profilePic: profilePic
-            })
-            localStorage.removeItem('profilePic'); 
+        if(this.state.profilePic){
+            profilePic = this.state.profilePic;
+            firebase
+                .firestore()
+                .collection('users')
+                .doc(this.state.currentUserUid)
+                .update({
+                    profilePic: profilePic
+                })
         }
 
         if(this.state.profileUsername){
-            firebase.firestore().collection('users').doc(this.state.currentUserUid)
-            .update({
-                username: this.state.profileUsername
-            })
+            firebase
+                .firestore()
+                .collection('users')
+                .doc(this.state.currentUserUid)
+                .update({
+                    username: this.state.profileUsername,
+                    place: this.state.profilePlace,
+                    about: this.state.profileAbout,
+                })
         }
-
-        if(this.state.profilePlace){
-            firebase.firestore().collection('users').doc(this.state.currentUserUid)
-            .update({
-                place: this.state.profilePlace
-            })
-        }
-
-        if(this.state.profileAbout){
-            firebase.firestore().collection('users').doc(this.state.currentUserUid)
-            .update({
-                about: this.state.profileAbout
-            })
-        }
-        // this.props.hideProfilePage
-        console.log('ok')
-        // document.getElementById(`profile-page`).style.display ='none';
+    
+        console.log('db edit profile ok');
+        this.props.hideProfilePage(e);
     }
 
 
     render() {
-        // console.log(this.props.state);
-        // console.log(this.state);
-
         let profilePic;
         if(this.props.state.currentUser){
-            if(this.props.state.currentUser.profilePic || this.state.AddProfilePic){
-                profilePic = (<img id='profile-pic' src={this.props.state.currentUser.profilePic}/>)
+            if(this.props.state.currentUser.profilePic || this.state.isAddProfilePic){
+                profilePic = (<img id='profile-pic' src={this.state.profilePic}/>)
             }else{
                 profilePic = ( <div className='profile-nopic'>
-                                  <img className='profile-pic-icon' src='./imgs/whiteprofile.svg'/>
+                                  <img className='profile-pic-icon' src='./imgs/whiteprofile.svg' />
                                </div>
                 )      
             }
         }
 
         let profileSetSubmit = <div className='profile-set-submit'>Save changes</div>
-        if(this.state.AddProfilePic || this.state.profileUsername || this.state.profilePlace || this.state.profileAbout){
+        if(this.state.isAddProfilePic || this.state.profileUsername || this.state.profilePlace || this.state.profileAbout){
             profileSetSubmit = <div onClick={this.editProfile.bind(this)} className='profile-set-submit-approve'>Save changes</div>
         }
-
-        // let profileUsername = <input onChange={this.updateInput.bind(this)} type='text' className='profile-input' id='profileUsername'/>
-        // if(this.props.state.currentUser){
-        //     profileUsername = <input onChange={this.updateInput.bind(this)} type='text' className='profile-input' id='profileUsername' value={this.props.state.currentUser.username}/>
-        // }
 
         let searchPlaceBox = null;
         let searchPlacePage =null;
@@ -197,25 +187,22 @@ class Profile extends React.Component {
         }
 
         if(this.state.showSearchProfilePlaceResult){
-        searchPlacePage = (
-            <div id='profile-search-place-pop'>
-                    {searchPlaceBox} 
-            </div>
-        )
+            searchPlacePage = (
+                <div id='profile-search-place-pop'>
+                {searchPlaceBox} 
+                </div>
+            )
         }else{
             searchPlacePage = null;
         }
 
         let profilePage = null;
-        // if(this.state.showProfilePage === false){
-        //     profilePage = null;
-        // }
         if(this.props.state.showProfilePage){
             profilePage =(
-                    <div id='profile-page'>
+                <div id='profile-page'>
                     <div className='profile-pop'>
                         <div onClick={this.props.hideProfilePage} className='profile-close'>x</div>
-                        <div className='add-step-title'>Profile settings</div>
+                        <div className='profile-pop-title'>Profile settings</div>
                         <div className='profile-container'>
                             <div className='profile-title-box'>
                                 <div className='profile-title'>Picture</div>
@@ -228,7 +215,6 @@ class Profile extends React.Component {
                                     {profilePic}
                                     <label className='profile-pic-label'> Upload a photo
                                         <input onChange={this.uploadProfilePic.bind(this)} className='trip-cover-change-pic' id="uploadPicInput" type="file"/>
-                                        {/* <img className='step-upload-pic-icon' src='./imgs/bluecamera.svg'/> */}
                                     </label>
                                 </div>
                                 <input onChange={this.updateInput.bind(this)} type='text' className='profile-input' id='profileUsername' value={this.state.profileUsername}/>

@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import {BrowserRouter as Router, Switch, Route, Link, Redirect} from "react-router-dom";
+import {BrowserRouter as Router, Route, Link, Redirect} from "react-router-dom";
 import '../css/style.css';
 import '../css/member.css';
 
@@ -13,56 +13,61 @@ class Search extends React.Component{
         super(props);
 
         this.state = ({
-            display: null,
         })
     }
-
 
     updateSearchInput(e){
         this.setState({
             searchText: e.target.value,
         });
         
-        let searchUserName= [];
-        let searchUserUID= [];
+        let searchUserUID = [];
+        let searchUserName = [];
+        let searchUserImg = [];
 
-        firebase.firestore().collection('users')
-        .onSnapshot(querySnapshot => {
-            querySnapshot.forEach(doc => {
-                for(let value of doc.data().username){
-                    if(this.state.searchText.toLowerCase() === value.toLowerCase()){
-                        console.log(doc.data().username);
-
-                        searchUserName.push(doc.data().username);
-                        searchUserUID.push(doc.id);
-        
-                        this.setState({
-                            searchUserName: searchUserName,
-                            searchUserUID: searchUserUID
-                        }); 
-                    }   
-                }
-          
-            }) 
-        });
-
-        firebase.firestore().collection('trips')
-        .onSnapshot(querySnapshot => {
-            // let searchUserName=[];
-            // let searchUserPic=[];
-            querySnapshot.forEach(doc => {
-                // planLikeStep.push(doc.data().planLike);
-                if(document.getElementById(`search-input`).value == doc.data().tripName){
-                // console.log(doc.data());
-
+        firebase
+            .firestore()
+            .collection('users')
+            .onSnapshot(querySnapshot => {
+                querySnapshot.forEach(doc => {
+                    for(let value of doc.data().username){
+                        if(this.state.searchText.toLowerCase() == value.toLowerCase()){
+                            searchUserUID.push(doc.id);
+                            searchUserName.push(doc.data().username);
+                            searchUserImg.push(doc.data().profilePic);
+                        }   
+                    }
+                }) 
                 this.setState({
-                    searchTripName: doc.data().tripName,
-                    // searchUserPic: 
-                    searchTripID: doc.id
+                    searchUserUID: searchUserUID,
+                    searchUserName: searchUserName,
+                    searchUserImg: searchUserImg,
                 }); 
-                }    
-            }) 
-        }); 
+            });
+
+        let searchTripID = [];
+        let searchTripName = [];
+        let searchTripImg = [];
+        
+        firebase
+            .firestore()
+            .collection('trips')
+            .onSnapshot(querySnapshot => {
+                querySnapshot.forEach(doc => {       
+                        if(this.state.searchText.toLowerCase() === doc.data().tripName.toLowerCase()){
+                            
+                            searchTripID.push(doc.id);
+                            searchTripName.push(doc.data().tripName);
+                            searchTripImg.push(doc.data().coverPic);
+                        
+                        }       
+                }) 
+                this.setState({
+                    searchTripID: searchTripID,
+                    searchTripName: searchTripName,
+                    searchTripImg: searchTripImg,
+                }); 
+            }); 
     }
 
     search(e){
@@ -74,42 +79,61 @@ class Search extends React.Component{
     }
 
     render(){
+        console.log(this.state.searchTripName)
+        console.log(this.state.searchTripImg)
+
         let searchPage = null;
         let searchUserBox = null;
         let searchTripBox = null;
 
-        // console.log(this.state.searchUserName)
-        // console.log(this.state.searchUserUID)
+        let searchUserImg = (
+            <div className="search-user-noimg">
+                <img className="search-user-noimg-icon" src="./imgs/whiteprofile.svg" />
+            </div>
+        );
 
         if(this.state.searchUserName){
             searchUserBox = this.state.searchUserName.map((n, index)=>{
-                <Link to={"/m"+this.state.searchUserUID[index]} key={this.state.searchUserUID[index]}>
-                    <div className='search-user-box'>
-                        <img className='search-user-img' src='./imgs/q.png'></img>
-                        <div className='search-user-name'>{n}</div>
-                    </div>
-                </Link>
+                if(this.state.searchUserImg[index]!== undefined){
+                    searchUserImg = <img className='search-user-img' src={this.state.searchUserImg[index]} key={this.state.searchUserImg[index]} />
+                }
+
+                return(
+                    <Link to={"/m"+this.state.searchUserUID[index]} key={this.state.searchUserUID[index]}>
+                        <div className='search-user-box'>
+                            {searchUserImg}
+                            <div className='search-user-name'>{n}</div>
+                        </div>
+                    </Link>
+                )    
             })
         }
 
+        let searchTripImg = (
+            <div className="search-trip-noimg" />        
+        );
 
         if(this.state.searchTripName){
-            searchTripBox = (
-                <Link to={"/"+this.state.searchTripID}>
-                    <div className='search-trip-box'>
-                        <img className='search-user-img' src='./imgs/q.png'></img>
-                        <div className='search-user-name'>{this.state.searchTripName}</div>
-                    </div>
-                </Link>
-                
-            )
+            searchTripBox = this.state.searchTripName.map((n, index)=>{
+                if(this.state.searchTripImg[index]!== undefined){
+                    searchTripImg = <img className='search-user-img' src={this.state.searchTripImg[index]} key={this.state.searchTripImg[index]} />
+                }
+
+                return(
+                    <Link to={"/"+this.state.searchTripID[index]} key={this.state.searchTripID[index]}>
+                        <div className='search-trip-box'>
+                            {searchTripImg}
+                            <div className='search-user-name'>{n}</div>
+                        </div>
+                    </Link>
+                )    
+            })
         }
         
         if(this.state.searchText){
             searchPage = (
                 <div id='search-page'>
                     <div className='search-pop'>
-                        <div className='search-title'>Results</div>
                         <div className='search-container'>
                             {searchUserBox}
                             {searchTripBox}

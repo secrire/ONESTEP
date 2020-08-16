@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import {BrowserRouter as Router, Switch, Route, Link, Redirect} from "react-router-dom";
+import {BrowserRouter as Router, Route, Link, Redirect} from "react-router-dom";
 import "../../css/eachTrip.css";
 
 import firebase from 'firebase/app';
@@ -15,12 +15,12 @@ import AddStepPic from "./addStepPic";
 
 
 let map;
-let today = new Date().toJSON().slice(0,10);
 let pickedTripID = new URL(location.href).pathname.substr(1);
 
 class TripID extends React.Component {
     constructor(props){
         super(props);
+
         this.state = {
             trip:[],
             planSteps:[],
@@ -37,6 +37,7 @@ class TripID extends React.Component {
             addPlanStepStory: '',  
         };        
     }
+
     componentDidMount() {
         mapboxgl.accessToken =
 		"pk.eyJ1IjoidXNoaTczMSIsImEiOiJja2Mwa2llMmswdnk4MnJsbWF1YW8zMzN6In0._Re0cs24SGBi93Bwl_w0Ig";
@@ -44,18 +45,21 @@ class TripID extends React.Component {
 			container: "map",
 			style: "mapbox://styles/mapbox/satellite-v9",
 			zoom: 1,
-			center: [30, 50],
+            center: [30, 50],
+            // transition: {
+            //     "duration": 300,
+            //     "delay": 0.5
+            // }
 		});
 		
 		let geojson = {
 			type: "FeatureCollection",
 			features: [],
-		};
-
-        // let user = firebase.auth().currentUser;
+        };
+        
         let pickedTripID = new URL(location.href).pathname.substr(1);
-
-        firebase.firestore()
+        firebase
+        .firestore()
         .collection('trips')
         .doc(pickedTripID)
         .onSnapshot(querySnapshot => {
@@ -67,7 +71,6 @@ class TripID extends React.Component {
                         isauthor: true
                     });
                 }
-                console.log(this.state.trip);
 
                 let calTripStart= new Date(this.state.trip.tripStart);
                 let calTripEnd = new Date(this.state.trip.tripEnd);
@@ -97,7 +100,8 @@ class TripID extends React.Component {
             // });  
         })
         
-        firebase.firestore()
+        firebase
+        .firestore()
         .collection('trips')
         .doc(pickedTripID)
         .collection('plan')
@@ -120,14 +124,14 @@ class TripID extends React.Component {
             });
         })
 
-        firebase.firestore()
+        firebase
+        .firestore()
 		.collection("trips")
 		.doc(pickedTripID)
 		.collection("plan")
 		.orderBy("stepArrDate", "asc")
 		.onSnapshot((querySnapshot) => {
 			let data = [];
-
 			querySnapshot.docChanges().forEach((doc) => {
 				if (doc.type === "added") {
 					data.push(doc.doc.data());
@@ -153,7 +157,7 @@ class TripID extends React.Component {
 				}
 
 				geojson.features.forEach(function (marker) {
-					var el = document.createElement("div");
+					let el = document.createElement("div");
 					el.className = "stepPoint";
 					el.id = marker.geometry.coordinates[1];
 
@@ -162,7 +166,6 @@ class TripID extends React.Component {
 					el.style.height = "16px";
 					el.style.border = "5px #CC3E55 solid";
 					el.style.borderRadius = "50%";
-					console.log(marker.geometry.coordinates);
 
 					if (marker.geometry.coordinates[0]) {
 						new mapboxgl.Marker(el)
@@ -173,7 +176,6 @@ class TripID extends React.Component {
 			}
 			);
 		});
-		// console.log(geojson.features);
     }
 
     updateInput(e){
@@ -190,12 +192,12 @@ class TripID extends React.Component {
         });
         let pickedTripID = new URL(location.href).pathname.substr(1);
 
-        firebase.firestore()
+        firebase
+        .firestore()
         .collection('trips')
         .doc(pickedTripID)
         .get().then(
             doc => {
-                console.log(doc.data());
                 this.setState({
                     editTripName: doc.data().tripName,
                     editTripSum: doc.data().tripSum,
@@ -216,7 +218,8 @@ class TripID extends React.Component {
         e.preventDefault();
         let user = firebase.auth().currentUser;  
 
-        firebase.firestore()
+        firebase
+        .firestore()
         .collection('trips')
         .doc(pickedTripID)
         .update({
@@ -237,7 +240,8 @@ class TripID extends React.Component {
         e.preventDefault(); 
         // alert('Warning! all the steps including text, photos, locations for this trip will be deleted FOREVER!')
 
-        firebase.firestore()
+        firebase
+        .firestore()
         .collection('trips')
         .doc(pickedTripID)
         .delete()
@@ -252,10 +256,10 @@ class TripID extends React.Component {
     //     ----------------  Search & Pick Place  ----------------     //    
     updatePlaceInput(e) {
 		if (document.getElementById("newestTag")) {
-		let node = document.getElementById("newestTag");
-		if (node.parentNode) {
-			node.parentNode.removeChild(node);
-		}
+            let node = document.getElementById("newestTag");
+            if (node.parentNode) {
+                node.parentNode.removeChild(node);
+            }
 		}
 
 		this.setState({
@@ -278,7 +282,6 @@ class TripID extends React.Component {
 		.then((res) => res.json())
 		.then(
 			(result) => {
-                console.log(result);
 				let data = [];
 				data.push(result);
 
@@ -294,8 +297,6 @@ class TripID extends React.Component {
     
     pickStepPlace(e) {
 		e.preventDefault();
-		console.log(e.target.getAttribute("longitude"));
-		console.log(e.target.getAttribute("latitude"));
 
 		map.flyTo({
 		center: [
@@ -303,7 +304,7 @@ class TripID extends React.Component {
 			e.target.getAttribute("latitude"),
 		],
 		zoom: 16,
-		essential: true, // this animation is considered essential with respect to prefers-reduced-motion
+		essential: true, 
 		});
 
 		localStorage.setItem("longitude", e.target.getAttribute("longitude"));
@@ -332,11 +333,9 @@ class TripID extends React.Component {
 
 		el.src = "./imgs/redbgmaptag.svg";
 		el.style.zIndex = "2";
-		// el.style.backgroundColor = '#CC3E55';
-		el.style.width = "70px";
-		el.style.height = "70px";
+		el.style.width = "54px";
+		el.style.height = "54px";
 		el.style.borderRadius = "50%";
-		// el.style.border ='3px white solid';
 
 		if (marker.geometry.coordinates[0]) {
 			new mapboxgl.Marker(el)
@@ -358,10 +357,7 @@ class TripID extends React.Component {
 				editPlanStepName: e.target.getAttribute("place"),
 			});
 		}
-		// this.setState({
-		// placeText: null,
-		// });
-
+		
 		this.setState({
 			hideSearchPlacePage: true,
 		});
@@ -398,7 +394,8 @@ class TripID extends React.Component {
 			latitude = localStorage.getItem("latitude");
 		}
 
-		firebase.firestore()
+        firebase
+        .firestore()
 		.collection("trips")
 		.doc(pickedTripID)
 		.collection("plan")
@@ -448,8 +445,12 @@ class TripID extends React.Component {
             pickedEdit:'plan',
         },() =>console.log(this.state.pickedStepID))
 
-        firebase.firestore().collection('trips')
-        .doc(pickedTripID).collection('plan').doc(e.target.getAttribute('stepid'))
+        firebase
+        .firestore()
+        .collection('trips')
+        .doc(pickedTripID)
+        .collection('plan')
+        .doc(e.target.getAttribute('stepid'))
         .onSnapshot(
             doc => {
                 this.setState({
@@ -490,15 +491,12 @@ class TripID extends React.Component {
     
     editPlanStep(e) {
         e.preventDefault();
-		// let stepPic = "";
-		// if (localStorage.getItem("pic")) {
-		// 	stepPic = localStorage.getItem("pic");
-        // }
         
 		let longitude;
 		let latitude;
 
-		firebase.firestore()
+        firebase
+        .firestore()
 		.collection("trips")
 		.doc(pickedTripID)
 		.collection("plan")
@@ -548,11 +546,9 @@ class TripID extends React.Component {
 			el.style.height = "24px";
 			el.style.border = "3px white solid";
 			el.style.borderRadius = "50%";
-			// console.log(marker.geometry.coordinates);
 
 			new mapboxgl.Marker(el).setLngLat([longitude, latitude]).addTo(map);
 
-			// localStorage.removeItem("pic");
 			localStorage.removeItem("longitude");
 			localStorage.removeItem("latitude");
 
@@ -577,14 +573,12 @@ class TripID extends React.Component {
 
     deletePlanStep(e){
         e.preventDefault();
-        // let pickedTripID = new URL(location.href).pathname.substr(1);
         let pickedStepID = e.target.getAttribute('stepid');
 
         firebase.firestore()
         .collection('trips').doc(pickedTripID)
         .collection('plan').doc(pickedStepID)
         .onSnapshot(doc =>{
-            // console.log(doc.data().latitude)
             let node1 = document.getElementById(doc.data().latitude);
             if(node1){
                 if(node1.parentNode){
@@ -647,8 +641,6 @@ class TripID extends React.Component {
 			.then((url) => {
 				console.log("download" + url);
 
-				// localStorage.setItem("pic", url);
-
 				this.setState({
                     addStepPic: true,
                     editStepPic: url,
@@ -704,6 +696,8 @@ class TripID extends React.Component {
     //     ----------------  Step Box  ----------------     //  
         let tripPlanStep = null;
         let renderPlanSteps =null;
+        let stepLastAddBtn = null;
+
         let tripPlanStepAddBtn =(
                 <div className='trip-step-add-btn-box'>
                     <div className='trip-plan-step-no-add-btn'></div>
@@ -741,11 +735,6 @@ class TripID extends React.Component {
                         <div className='trip-detail-number'> {this.state.tripDays}</div>
                         <div className='trip-detail-p'>days</div>
                     </div>
-                    {/* <div className='trip-detail-box'>
-                        <img className='trip-detail-earth' src='./imgs/white-earth.svg'/>
-                        <div className='trip-detail-number'> {this.state.trip.planLike}</div>
-                        <div className='trip-detail-p'>countries</div>
-                    </div> */}
                     <div className='trip-detail-box'>
                         <img className='trip-detail-photo' src='./imgs/white-photo.svg'/>
                         {tripTotalPicNumber}
@@ -770,11 +759,11 @@ class TripID extends React.Component {
             )
 
             eachTripEnd =(
-                <div className='trip-end'>
-                    <img className='trip-start-end-icon' src='./imgs/flagc-256.png'></img>
+                <>
+                    <img className='trip-end-icon' src='./imgs/flagc-256.png'></img>
                     <div className='trip-start-end-p'>Trip Finish</div> 
                     <div className='trip-start-end-date'>{this.state.trip.tripEnd}</div>      
-                </div>    
+                </>    
             )
         } 
 
@@ -784,29 +773,9 @@ class TripID extends React.Component {
             tripPlanStepAddBtn =(<div className='trip-step-add-btn-box'>
                                     <div onClick={this.showAddPlanStep.bind(this)} className='trip-step-add-btn'>+</div>
                                 </div>)
+
             if(this.state.planStepIDs){
                 renderPlanSteps = this.state.planSteps.map((n, index)=>{
-                    // let planStepLike = null;
-                    // if(this.props.state.userUid){
-                    //     planStepLike =  (<div onClick={this.likePlanStep.bind(this)} stepid={this.state.planStepIDs[index]}    
-                    //                           className='plan-step-like'>
-                    //                         <img className='plan-step-like-icon' stepid={this.state.planStepIDs[index]} src='./imgs/blueheart.svg'/>
-                    //                         <p stepid={this.state.planStepIDs[index]}>Like</p>
-                    //                     </div>)
-
-                    //     if(this.state.planLikeSteps){
-                    //         for(let k=0; k<this.state.planLikeSteps[0].length; k++){
-                    //             if(this.state.planLikeSteps[0][k] === this.state.planStepIDs[index]){
-                    //                 planStepLike = (<div onClick={this.unLikePlanStep.bind(this)} stepid={this.state.planStepIDs[index]} className='plan-step-like'>
-                    //                                     <img className='plan-step-like-icon' stepid={this.state.planStepIDs[index]} src='./imgs/redheart.svg'/>
-                    //                                     <p stepid={this.state.planStepIDs[index]}>Like</p>
-                    //                                 </div>)
-                    //             }
-                    //         }
-                    //     }
-                    // }
-              
-                    
                     return  <li className='trip-btn-step-box' key={this.state.planStepIDs[index]}>    
                                 {tripPlanStepAddBtn}
                                 <div className='trip-step'>
@@ -829,6 +798,14 @@ class TripID extends React.Component {
                             </li>
                 }) 
             }
+
+
+            stepLastAddBtn =(
+                <div className='step-last-add-btn-box'>
+                    <div className='step-last-add-blue-btn-line' />
+                    <div onClick={this.showAddPlanStep.bind(this)} className='step-last-add-blue-btn'>+</div>
+                </div>
+            )
             
             if(this.state.trip){
                 tripPlanStep =(
@@ -844,7 +821,8 @@ class TripID extends React.Component {
                         <ul className='trip-steps-box'>
                             {eachTripStart}
                             {renderPlanSteps}
-                            {tripPlanStepAddBtn}
+                            {/* {tripPlanStepAddBtn} */}
+                            {stepLastAddBtn}
                     
                             <div onClick={this.showAddPlanStep.bind(this)} className='trip-step-add-last-box'>
                                 <div className='trip-step-add-last-decoration'></div>
@@ -855,7 +833,9 @@ class TripID extends React.Component {
                             </div>
                             <li className='author-trip-end-box'>
                                 <div className='author-trip-end-box-line'/>
-                                {eachTripEnd}
+                                <div className='author-trip-end'>
+                                    {eachTripEnd}
+                                </div>
                             </li> 
                         </ul> 
                     </div>
@@ -893,7 +873,9 @@ class TripID extends React.Component {
                             {renderPlanSteps}
 
                             <li className='trip-end-box'>
+                                <div className='trip-end'>
                                 {eachTripEnd}
+                                </div>
                             </li> 
                         </ul> 
                     </div>
@@ -1227,14 +1209,6 @@ class TripID extends React.Component {
                     </div> 
                     
                     {editTripPage}
-
-                    {/* <Step 
-                    state={this.state} 
-                    hideAddPlanStep={this.hideAddPlanStep.bind(this)}  
-                    hideEditPlanStep={this.hideEditPlanStep.bind(this)} 
-                    updateInput={this.updateInput.bind(this)}
-                    updatePlaceInput={this.updatePlaceInput.bind(this)}/>
-                     */}
 
                     {addPlanStepPage}
 		            {editPlanStepPage}

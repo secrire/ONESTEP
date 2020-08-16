@@ -1,11 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import {BrowserRouter as Router, Switch, Route, Link, Redirect} from "react-router-dom";
+import {BrowserRouter as Router, Route, Link, Redirect} from "react-router-dom";
 import '../css/member.css';
 
-import firebase from 'firebase/app';
-import "firebase/auth";
-import "firebase/firestore";
 
 class Map extends React.Component {
     constructor(props){
@@ -13,25 +10,6 @@ class Map extends React.Component {
     }
     
     componentDidMount() {
-        // mapboxgl.accessToken = 'pk.eyJ1IjoidXNoaTczMSIsImEiOiJja2Mwa2llMmswdnk4MnJsbWF1YW8zMzN6In0._Re0cs24SGBi93Bwl_w0Ig';
-        // var map = new mapboxgl.Map({
-        //     container: 'map',
-        //     style: 'mapbox://styles/mapbox/streets-v11',
-        //     zoom: 7,
-        //     center: [122, 24.5],
-        //     // transition: {
-        //     //     "duration": 300,
-        //     //     "delay": 0.5
-        //     //   }
-        // });
-        // map.setStyle('mapbox://styles/mapbox/satellite-v9')
-
-        if(new URL(location.href).pathname.substr(0,2) !== '/m'){
-            console.log('got you')
-            document.getElementById("map").style.cssText += 'left: 600px;width:100%;';
-        }
-
-        // // draw line between click points
         // var distanceContainer = document.getElementById('distance');
 
         // // GeoJSON object to hold our measurement features
@@ -86,9 +64,6 @@ class Map extends React.Component {
         //             layers: ['measure-points']
         //         });
 
-
-
-
         //         // Remove the linestring from the group
         //         // So we can redraw it based on the points collection
         //         if (geojson.features.length > 1) geojson.features.pop();
@@ -132,11 +107,9 @@ class Map extends React.Component {
         //             //     'km';
         //             // distanceContainer.appendChild(value);
         //         }
-
         //         map.getSource('geojson').setData(geojson);
         //     });
         // });
-
         // map.on('mousemove', function(e) {
         //     var features = map.queryRenderedFeatures(e.point, {
         //         layers: ['measure-points']
@@ -145,37 +118,15 @@ class Map extends React.Component {
         //     map.getCanvas().style.cursor = features.length
         //         ? 'pointer'
         //         : 'crosshair';
-        // });
-        
+        // });    
     }  
       
   render() {
     return  <div className='map-page'>
-                <div id="map"></div>
-                {/* <div id="distance" className="distance-container"></div> */}
-
-                {/* <div id="menu">
-                    <input
-                        id="streets-v11"
-                        type="radio"
-                        name="rtoggle"
-                        value="streets"
-                        checked="checked"
-                    />
-                    <label for="streets-v11">streets</label>
-                    <input id="light-v10" type="radio" name="rtoggle" value="light" />
-                    <label for="light-v10">light</label>
-                    <input id="dark-v10" type="radio" name="rtoggle" value="dark" />
-                    <label for="dark-v10">dark</label>
-                    <input id="outdoors-v11" type="radio" name="rtoggle" value="outdoors" />
-                    <label for="outdoors-v11">outdoors</label>
-                    <input id="satellite-v9" type="radio" name="rtoggle" value="satellite" />
-                    <label for="satellite-v9">satellite</label>
-                </div> */}
+                <div id="map" />
             </div>
       }
 } 
-
 
 
 export default Map;

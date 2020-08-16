@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import {BrowserRouter as Router, Switch, Route, Link, Redirect} from "react-router-dom";
+import {BrowserRouter as Router, Route, Link, Redirect} from "react-router-dom";
 import '../../css/eachTrip.css';
 
 import firebase from 'firebase/app';
@@ -11,9 +11,9 @@ import "firebase/storage";
 
 class AddStepPic extends React.Component{
     constructor(props){
-      super(props);
+		super(props);
+		  
         this.state = {
-
         };
     }
 
@@ -26,8 +26,7 @@ class AddStepPic extends React.Component{
 		storageRef.put(file).then((snapshot) => {
 			console.log("Uploaded", file.name);
 
-			storageRef
-			.getDownloadURL()
+			storageRef.getDownloadURL()
 			.then((url) => {
 				console.log("download" + url);
 				localStorage.setItem("pic", url);

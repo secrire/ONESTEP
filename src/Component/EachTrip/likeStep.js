@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import {BrowserRouter as Router, Switch, Route, Link, Redirect} from "react-router-dom";
+import {BrowserRouter as Router, Route, Link, Redirect} from "react-router-dom";
 import '../../css/eachTrip.css';
 
 import firebase from 'firebase/app';
@@ -11,9 +11,9 @@ import "firebase/storage";
 
 class LikeStep extends React.Component{
     constructor(props){
-      super(props);
-        this.state = {
+        super(props);
 
+        this.state = {
         };
     }
 
@@ -25,67 +25,88 @@ class LikeStep extends React.Component{
                 currentUserUid: user.uid,
             }); 
 
-            firebase.firestore().collection('users')
-            .onSnapshot(querySnapshot => {
-                let planLikeStep=[];
-                querySnapshot.forEach(doc => {
-                    if(doc.data().email.toLowerCase() === user.email){
-                        if(doc.data().planLike){
-                            planLikeStep.push(doc.data().planLike);
-        
-                            this.setState({
-                                planLikeSteps: planLikeStep
-                            }); 
+            firebase
+                .firestore()
+                .collection('users')
+                .onSnapshot(querySnapshot => {
+                    let planLikeStep=[];
+                    querySnapshot.forEach(doc => {
+                        if(doc.data().email.toLowerCase() === user.email){
+                            if(doc.data().planLike){
+                                planLikeStep.push(doc.data().planLike);
+            
+                                this.setState({
+                                    planLikeSteps: planLikeStep
+                                }); 
+                            }
                         }
-                    }
-                }) 
-            });
+                    }) 
+                });
         }
     }
 
     likePlanStep(e){
         e.preventDefault();
 
-        firebase.firestore().collection('users').doc(this.state.currentUserUid)
-        .update({
-           planLike: firebase.firestore.FieldValue.arrayUnion(e.target.getAttribute('stepid'))
-        })
+        firebase
+            .firestore()
+            .collection('users')
+            .doc(this.state.currentUserUid)
+            .update({
+            planLike: firebase.firestore.FieldValue.arrayUnion(e.target.getAttribute('stepid'))
+            })
 
         let pickedTripID = new URL(location.href).pathname.substr(1);
-        firebase.firestore().collection('trips').doc(pickedTripID)
-        .collection('plan').doc(e.target.getAttribute('stepid'))
-        .update({
-           stepLike: firebase.firestore.FieldValue.increment(1)
-        })
+        firebase
+            .firestore()
+            .collection('trips')
+            .doc(pickedTripID)
+            .collection('plan')
+            .doc(e.target.getAttribute('stepid'))
+            .update({
+            stepLike: firebase.firestore.FieldValue.increment(1)
+            })
         console.log('db like plan step ok');
 
-        firebase.firestore().collection('trips').doc(pickedTripID)
-        .update({
-           planLike: firebase.firestore.FieldValue.increment(1)
-        })   
+        firebase
+            .firestore()
+            .collection('trips')
+            .doc(pickedTripID)
+            .update({
+            planLike: firebase.firestore.FieldValue.increment(1)
+            })   
     }
 
     unLikePlanStep(e){
         e.preventDefault();
-        console.log(e.target.getAttribute('stepid'));
 
         let pickedTripID = new URL(location.href).pathname.substr(1);
-        firebase.firestore().collection('trips').doc(pickedTripID)
-        .collection('plan').doc(e.target.getAttribute('stepid'))
-        .update({
-           stepLike: firebase.firestore.FieldValue.increment(-1)
-        })
+        firebase
+            .firestore()
+            .collection('trips')
+            .doc(pickedTripID)
+            .collection('plan')
+            .doc(e.target.getAttribute('stepid'))
+            .update({
+            stepLike: firebase.firestore.FieldValue.increment(-1)
+            })
         console.log('db unlike step');
 
-        firebase.firestore().collection('trips').doc(pickedTripID)
-        .update({
-           planLike: firebase.firestore.FieldValue.increment(-1)
-        })
+        firebase
+            .firestore()
+            .collection('trips')
+            .doc(pickedTripID)
+            .update({
+            planLike: firebase.firestore.FieldValue.increment(-1)
+            })
 
-        firebase.firestore().collection('users').doc(this.state.currentUserUid)
-        .update({
-           planLike: firebase.firestore.FieldValue.arrayRemove(e.target.getAttribute('stepid'))
-        })
+        firebase
+            .firestore()
+            .collection('users')
+            .doc(this.state.currentUserUid)
+            .update({
+            planLike: firebase.firestore.FieldValue.arrayRemove(e.target.getAttribute('stepid'))
+            })
     }
 
     

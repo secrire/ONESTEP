@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import {BrowserRouter as Router, Switch, Route, Link, Redirect} from "react-router-dom";
+import {BrowserRouter as Router, Route, Link, Redirect} from "react-router-dom";
 import '../../css/eachTrip.css';
 
 import firebase from 'firebase/app';
@@ -20,25 +20,29 @@ class TripHeaderAuthorInfo extends React.Component{
     componentDidMount(){
         let pickedTripID = new URL(location.href).pathname.substr(1);
 
-        firebase.firestore().collection('trips')
-        .doc(pickedTripID)
-        .get().then(querySnapshot => {
-            this.setState({
-                authorUid: querySnapshot.data().authorUid,
-            }, () => {
-                firebase.firestore().collection('users')
-                .onSnapshot(querySnapshot =>{
-                    querySnapshot.forEach(doc => {
-                        if(doc.id === this.state.authorUid){
-                            this.setState({
-                                authorName: doc.data().username,
-                                authorPic: doc.data().profilePic
-                            });
-                        }
-                    })    
-                });
-            }
-            )
+        firebase
+            .firestore()
+            .collection('trips')
+            .doc(pickedTripID)
+            .get().then(querySnapshot => {
+                this.setState({
+                    authorUid: querySnapshot.data().authorUid,
+                }, () => {
+                    firebase
+                        .firestore()
+                        .collection('users')
+                        .onSnapshot(querySnapshot =>{
+                            querySnapshot.forEach(doc => {
+                                if(doc.id === this.state.authorUid){
+                                    this.setState({
+                                        authorName: doc.data().username,
+                                        authorPic: doc.data().profilePic
+                                    });
+                                }
+                            })    
+                        });
+                }
+                )
             });
     }
     
