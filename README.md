@@ -34,6 +34,7 @@
 ## 👀 Demonstration
     
 #### Ranked Popular Trips  
+![image](https://github.com/ushi731/ONESTEP/blob/master/Screen%20Recording%202020-08-17%20at%2007.23.33.mov)
   
 #### Trips / Steps Editing In Chronological Order
 
