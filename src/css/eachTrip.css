@@ -1116,8 +1116,8 @@ html{
     width: 100%;
 }
 .add-step-title {
-    font-size: 20px;
-    margin: 10px 0;
+    font-size: 19px;
+    margin: 7px 0;
     padding-bottom: 12px;
     border-bottom-right-radius: 0px;
     border-bottom-left-radius: 0px;
@@ -1125,9 +1125,9 @@ html{
 .add-step-pop{
     left: unset;
     width: 320px;
-    margin: 70px auto;
+    margin: 0px auto;
     padding: 6px 14px 4px 14px;
-    top: -36px;
+    top: 0px;
     height:auto;
 }
 .add-step-p-box{
@@ -1139,11 +1139,11 @@ html{
     width: 210px;
 }
 .add-step-p,.add-step-p-photo{
-    font-size: 14px;
-    margin: 20px 0px 27px 0px;
+    font-size: 13px;
+    margin: 18px 0px 20px 0px;
 }
 .add-step-p-photo{
-    margin: 152px 0px 40px 0px;
+    margin: 120px 0px 40px 0px;
 }
 .add-step-place,.add-step-name,
 .add-step-arrive-date,.add-step-arrive-time,
@@ -1151,36 +1151,43 @@ html{
 .add-step-story,
 .add-step-pic-box{
     width: 210px;
-    padding: 10px;
+    padding: 8px;
     margin: 5px 0;
 }
 .add-step-story {
-    height: 130px;
+    height: 120px;
 }
 .add-step-arrive-date,.add-step-depart-date{
     width: 134px;
-    margin: 8px 10px 8px 0;
-    padding: 10px 3px;
+    margin: 0px 10px 0px 0;
+    padding: 6px 3px;
 }
 .add-step-arrive-time,.add-step-depart-time{
     width: 66px;
-    padding: 10px 3px;
+    padding: 6px 3px;
 }
 .add-step-pic-box{
     width: 210px;
-    margin: 5px auto;
+    margin: 0px auto;
 }
 .step-pic-label {
-    padding: 12px 14px;
+    padding: 8px 12px;
+}
+.step-upload-pic-icon {
+    width: 18px;
+    height: 18px;
 }
 #step-pic, #editStepPic {
-    width: 54px;
-    height: 54px;
-    margin-right: 16px;
+    width: 42px;
+    height: 42px;
+    margin-right: 14px;
+    padding: 4px;
 }
 .add-step-submit{
     width: 120px;
-    margin: -10px auto 6px auto;
+    margin: 5px auto 6px auto;
+    padding: 5px 6px;
+    font-size: 14px;
 }
 .search-plan-place-box{
     padding: 3px 12px;
