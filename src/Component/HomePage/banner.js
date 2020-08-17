@@ -18,9 +18,9 @@ class Banner extends React.Component{
 				let element = document.getElementById('elem');
 				let desiredPosition = 700;
 				if (window.pageYOffset > desiredPosition) {
-					element.style.cssText += 'transform: matrix(1.4, 0, 0, 1.7, 0, 0); position: fixed; top: 28px; right: 47%; z-index: 5;';
+					element.style.cssText += 'transform: matrix(1.4, 0, 0, 1.7, 0, 0); top: 28px; z-index: 5;';
 				} else {
-					element.style.cssText += 'transform: matrix(8, 0, 0, 7, 0, 70); position: fixed; top: 90px; right: 47%; z-index: 0';
+					element.style.cssText += 'transform: matrix(8, 0, 0, 7, 0, 70); top: 90px; z-index: 0';
 				}
 			}
 		}
