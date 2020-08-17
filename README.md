@@ -1,8 +1,8 @@
 # ONESTEP
 #### A Travel Itinerary Website.
   
-🏫 AppWorks Personal Project  
-🖥 https://surprise-85f1d.web.app/
+🏫  AppWorks Personal Project  
+🖥  https://surprise-85f1d.web.app/
   
   
 * To log in member system by Email / Facebook.  
