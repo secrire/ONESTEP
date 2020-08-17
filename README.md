@@ -33,16 +33,9 @@
   
 ## 👀 Demonstration
     
-#### Ranked Popular Trips  
-  
-#### Trips / Steps Editing In Chronological Order
 ![image](https://github.com/ushi731/ONESTEP/blob/master/timeline.gif)
   
-#### Location Search and Visualise 
-
-#### Mobile Device Layout by RWD
-  
-  
+    
 ## 💪🏼 ToDo
 
 * Search feature for travellers or trips
