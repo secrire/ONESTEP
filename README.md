@@ -1,8 +1,8 @@
 # ONESTEP
 #### A Travel Itinerary Website.
   
-🏫 AppWorks Personal Project  
-🖥 https://surprise-85f1d.web.app/
+🏫  AppWorks Personal Project  
+🖥  https://surprise-85f1d.web.app/
   
   
 * To log in member system by Email / Facebook.  
@@ -42,6 +42,14 @@
 #### Mobile Device Layout by RWD
   
   
+## 💪🏼 ToDo
+
+* Search feature for travellers or trips
+* Co-edit by invite people 
+* Call weather / national flag APIs
+* Step likes / saved page
+
+
 ## 📬 Contact
 E-mail: allie.shwu@gmail.com 
 
