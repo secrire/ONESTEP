@@ -443,7 +443,7 @@ class TripID extends React.Component {
         this.setState({
             pickedStepID: e.target.getAttribute('stepid'),
             pickedEdit:'plan',
-        },() =>console.log(this.state.pickedStepID))
+        },() =>console.log('pickedStep ok'))
 
         firebase
         .firestore()
@@ -614,7 +614,7 @@ class TripID extends React.Component {
     
           storageRef.getDownloadURL().then(
             (url) => {
-            console.log('download'+url);
+            // console.log('download'+url);
       
             firebase.firestore().collection('trips').doc(pickedTripID)
             .update({
@@ -639,7 +639,7 @@ class TripID extends React.Component {
 			storageRef
 			.getDownloadURL()
 			.then((url) => {
-				console.log("download" + url);
+				// console.log("download" + url);
 
 				this.setState({
                     addStepPic: true,
@@ -686,8 +686,8 @@ class TripID extends React.Component {
     
 
     render() {
-        console.log(this.state)
-        console.log(this.props.state);
+        // console.log(this.state)
+        // console.log(this.props.state);
         
         if(this.state.deletePickedTrip === true){
             return <Redirect to={"/m"+this.props.state.userUid}/>

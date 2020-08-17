@@ -69,7 +69,7 @@ componentDidMount() {
 
     firebase.auth().onAuthStateChanged((user) => {
 		if (user) {
-			console.log("Sign In", user);
+			// console.log("Sign In", user);
 
 			this.setState({
 				islogin: true,

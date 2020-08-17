@@ -209,7 +209,7 @@ class MContent extends React.Component {
             return <Redirect to={'/'+this.state.newTripID}/>
         }
 
-        console.log(this.state);
+        // console.log(this.state);
 
         let addTripBtn = null;
         if(this.state.isAuthor){

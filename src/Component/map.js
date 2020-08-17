@@ -9,7 +9,7 @@ class Map extends React.Component {
         super(props);
     }
     
-    componentDidMount() {
+    // componentDidMount() {
         // var distanceContainer = document.getElementById('distance');
 
         // // GeoJSON object to hold our measurement features
@@ -119,7 +119,7 @@ class Map extends React.Component {
         //         ? 'pointer'
         //         : 'crosshair';
         // });    
-    }  
+    // }  
       
   render() {
     return  <div className='map-page'>

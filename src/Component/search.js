@@ -79,8 +79,8 @@ class Search extends React.Component{
     }
 
     render(){
-        console.log(this.state.searchTripName)
-        console.log(this.state.searchTripImg)
+        // console.log(this.state.searchTripName)
+        // console.log(this.state.searchTripImg)
 
         let searchPage = null;
         let searchUserBox = null;

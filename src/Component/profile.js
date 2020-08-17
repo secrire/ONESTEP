@@ -111,7 +111,7 @@ class Profile extends React.Component {
         
             storageRef.getDownloadURL()
             .then((url) => {
-                    console.log('download'+url);
+                    // console.log('download'+url);
             
                     this.setState({
                         isAddProfilePic: true,

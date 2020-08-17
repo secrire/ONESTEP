@@ -28,7 +28,7 @@ class AddStepPic extends React.Component{
 
 			storageRef.getDownloadURL()
 			.then((url) => {
-				console.log("download" + url);
+				// console.log("download" + url);
 				localStorage.setItem("pic", url);
 
 				this.setState({
@@ -43,7 +43,7 @@ class AddStepPic extends React.Component{
 	}
     
     render(){
-        console.log(this.state);
+        // console.log(this.state);
 
         let addStepPic = null;
         if (this.state.isAddStepPic) {
