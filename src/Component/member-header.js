@@ -131,13 +131,13 @@ class MHeader extends React.Component {
 							<img src="./imgs/fb.svg" />
 							<img src="./imgs/ig.svg" />
 						</div>
-						<div className="menu-title">About ONESTEP</div>
+						{/* <div className="menu-title">About ONESTEP</div>
 						<Link to="/">
 							<div className="menu-story">Our story</div>
 						</Link>
 						<Link to="/">
 							<div className="menu-cookie">Cookie policy</div>
-						</Link>
+						</Link> */}
 						<div onClick={this.props.changeIslogin} className="menu-logout">
 						Logout
 						</div>

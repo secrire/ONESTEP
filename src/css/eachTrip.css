@@ -1115,11 +1115,20 @@ html{
 #add-plan-step,#edit-plan-step{
     width: 100%;
 }
+.add-step-title {
+    font-size: 20px;
+    margin: 10px 0;
+    padding-bottom: 12px;
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
 .add-step-pop{
     left: unset;
     width: 320px;
-    margin: 0 auto;
-    padding: 6px 14px 30px 14px;
+    margin: 70px auto;
+    padding: 6px 14px 4px 14px;
+    top: -36px;
+    height:auto;
 }
 .add-step-p-box{
     width: fit-content;
@@ -1131,7 +1140,7 @@ html{
 }
 .add-step-p,.add-step-p-photo{
     font-size: 14px;
-    margin: 20px 0px 30px 0px;
+    margin: 20px 0px 27px 0px;
 }
 .add-step-p-photo{
     margin: 152px 0px 40px 0px;
@@ -1143,6 +1152,10 @@ html{
 .add-step-pic-box{
     width: 210px;
     padding: 10px;
+    margin: 5px 0;
+}
+.add-step-story {
+    height: 130px;
 }
 .add-step-arrive-date,.add-step-depart-date{
     width: 134px;
@@ -1155,10 +1168,19 @@ html{
 }
 .add-step-pic-box{
     width: 210px;
-    margin: 7px auto;
+    margin: 5px auto;
+}
+.step-pic-label {
+    padding: 12px 14px;
+}
+#step-pic, #editStepPic {
+    width: 54px;
+    height: 54px;
+    margin-right: 16px;
 }
 .add-step-submit{
     width: 120px;
+    margin: -10px auto 6px auto;
 }
 .search-plan-place-box{
     padding: 3px 12px;

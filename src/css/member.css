@@ -634,7 +634,7 @@ animation: glow 500ms ease-out infinite alternate;
 
 } 
 
-@media (max-width: 370px){
+@media (max-width: 480px){
 /*       --------   add & edit trip page   --------     */
 .add-pop{
     top: 0;
@@ -644,15 +644,18 @@ animation: glow 500ms ease-out infinite alternate;
 .add-title,.add-when{
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
-    padding-bottom: 14px;
-    margin: 22px 0 14px 0;
+    padding-bottom: 10px;
+    margin: 10px 0 14px 0;
 }
 .each-tripName,.each-tripSum,.each-tripStart,.each-tripEnd{
     width: 85%;
 }
+.each-tripSum {
+    height: 53px;
+}
 #add-trip-submit,#edit-trip-submit,#delete-trip-submit,#add-trip-submit-approve,#edit-trip-submit-approve{
     width: 66%;
-    margin: 16px auto;
+    margin: 10px auto;
 }
 
 }
