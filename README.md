@@ -42,6 +42,14 @@
 #### Mobile Device Layout by RWD
   
   
+## 💪🏼 ToDo
+
+* Search feature for travellers or trips
+* Co-edit by invite people 
+* Call weather / national flag APIs
+* Step likes / saved page
+
+
 ## 📬 Contact
 E-mail: allie.shwu@gmail.com 
 
