@@ -1159,11 +1159,13 @@ html{
 }
 .add-step-arrive-date,.add-step-depart-date{
     width: 134px;
+    height: 37px;
     margin: 0px 10px 0px 0;
     padding: 6px 3px;
 }
 .add-step-arrive-time,.add-step-depart-time{
     width: 66px;
+    height: 37px;
     padding: 6px 3px;
 }
 .add-step-pic-box{
@@ -1212,15 +1214,15 @@ html{
     transform: none;
     width: 320px;
     position: relative;
-    top: 60px;
+    top: 10px;
     padding: 6px 0;
 }
 .profile-close{
     position: absolute;
 }
 .profile-pop-title{
-    margin: 12px 0;
-    padding-bottom: 18px;
+    margin: 10px 0 0 0;
+    padding-bottom: 10px;
 }
 .profile-title-box{
     margin: 10px 14px;
@@ -1255,6 +1257,9 @@ html{
     width: 210px;
     padding: 14px;
 }
+.profile-about {
+    height: 120px;
+}
 #profile-search-place-pop{
     top: 245px;
     left: 0px;
@@ -1263,8 +1268,8 @@ html{
 }
 .profile-set-submit, .profile-set-submit-approve{
     width: 130px;
-    margin: 20px auto;
-    padding: 13px 10px;
+    margin: 8px auto;
+    padding: 10px;
     font-size: 14px;
 }
 }
