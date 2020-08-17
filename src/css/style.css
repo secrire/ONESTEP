@@ -539,7 +539,7 @@ a{
     right: 50%;
     transform: translate(50%);
     width: 400px;
-    height: 580px;
+    /* height: 580px; */
     margin: auto;
     background-color: #FDFDFE;
     border-top-left-radius: 15px;
@@ -547,7 +547,7 @@ a{
     text-align: center;
 }
 .login-pop{
-    height: 525px;
+    /* height: 525px; */
 }
 .signup-close{
     position: fixed;
@@ -895,10 +895,10 @@ a{
 .signup-pop,
 .login-pop{
     width: 300px;
-    height: 560px;
+    /* height: 560px; */
 }
 .login-pop{
-    height: 500px;
+    /* height: 500px; */
 }
 .signup-close{
     top: 10px;
