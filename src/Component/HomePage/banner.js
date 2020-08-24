@@ -13,7 +13,7 @@ class Banner extends React.Component{
 	}
 
     render(){
-		function myFunction() {
+		function moveLogo() {
 			if(document.getElementById('elem')){
 				let element = document.getElementById('elem');
 				let desiredPosition = 700;
@@ -24,19 +24,12 @@ class Banner extends React.Component{
 				}
 			}
 		}
-		window.onscroll = myFunction;
+		window.onscroll = moveLogo;
 		
 		return  (
 			<>
 				<div className='banner'>
-					<img className='banner-img' src='./imgs/bmin.jpg'>
-						{/* <div className='mob-intro-box'>
-						<div className='mob-intro'>EXPLORE</div>
-						<div className='mob-intro'>WANDER</div> 
-						<div className='mob-intro'>COLLECT</div>  
-						<div className='mob-banner-desc'>Every journey starts from the first one step, and each one writes the future. Make your way to see the world.</div>                  
-						</div> */}
-					</img>
+					<img className='banner-img' src='./imgs/bmin.jpg' />
 					<div className='intro-line1'>EXPLORE</div>
 					<div className='intro-line2'>WANDER</div> 
 					<div className='intro-line3'>COLLECT</div>  

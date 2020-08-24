@@ -30,7 +30,9 @@ class TripID extends React.Component {
             editTripEnd: '',
             editStepPic:'',
 
+            addPlanStepPlace:'',
             addPlanStepName: '',
+            addPlanStepArriveDate: '',
 			addPlanStepArriveTime: '',
 			addPlanStepDepartDate: '',
 			addPlanStepDepartTime: '',
@@ -58,6 +60,7 @@ class TripID extends React.Component {
         };
         
         let pickedTripID = new URL(location.href).pathname.substr(1);
+
         firebase
         .firestore()
         .collection('trips')
@@ -217,6 +220,7 @@ class TripID extends React.Component {
     editTrip(e){
         e.preventDefault();
         let user = firebase.auth().currentUser;  
+        let pickedTripID = new URL(location.href).pathname.substr(1);
 
         firebase
         .firestore()
@@ -230,7 +234,7 @@ class TripID extends React.Component {
             tripEnd: this.state.editTripEnd,
         })
 
-        console.log('db edit trip ok'); 
+        // console.log('db edit trip ok'); 
         this.setState({
             showEditTripPage: null,
         }); 
@@ -239,6 +243,7 @@ class TripID extends React.Component {
     deleteTrip(e){
         e.preventDefault(); 
         // alert('Warning! all the steps including text, photos, locations for this trip will be deleted FOREVER!')
+        let pickedTripID = new URL(location.href).pathname.substr(1);
 
         firebase
         .firestore()
@@ -246,7 +251,7 @@ class TripID extends React.Component {
         .doc(pickedTripID)
         .delete()
         .then(() =>{
-            console.log('delete trip ok')
+            // console.log('delete trip ok')
         })
         this.setState({
             deletePickedTrip:true
@@ -254,7 +259,7 @@ class TripID extends React.Component {
     }
 
     //     ----------------  Search & Pick Place  ----------------     //    
-    updatePlaceInput(e) {
+    updateAddPlaceInput(e) {
 		if (document.getElementById("newestTag")) {
             let node = document.getElementById("newestTag");
             if (node.parentNode) {
@@ -267,17 +272,17 @@ class TripID extends React.Component {
 			[e.target.id]: e.target.value,
 		});
 
-		let placeSearchText;
-		if (this.state.addPlanStepPlace) {
-			placeSearchText = this.state.addPlanStepPlace;
-		}
+		// let placeSearchText;
+		// if (this.state.addPlanStepPlace) {
+		// 	placeSearchText = this.state.addPlanStepPlace;
+		// }
 
-		if (this.state.editPlanStepPlace) {
-			placeSearchText = this.state.editPlanStepPlace;
-		}
+		// if (this.state.editPlanStepPlace) {
+		// 	placeSearchText = this.state.editPlanStepPlace;
+		// }
 
 		fetch(
-		`https://api.mapbox.com/geocoding/v5/mapbox.places/${placeSearchText}.json?access_token=pk.eyJ1IjoidXNoaTczMSIsImEiOiJja2Mwa2llMmswdnk4MnJsbWF1YW8zMzN6In0._Re0cs24SGBi93Bwl_w0Ig&limit=8`
+		`https://api.mapbox.com/geocoding/v5/mapbox.places/${this.state.addPlanStepPlace}.json?access_token=pk.eyJ1IjoidXNoaTczMSIsImEiOiJja2Mwa2llMmswdnk4MnJsbWF1YW8zMzN6In0._Re0cs24SGBi93Bwl_w0Ig&limit=8`
 		)
 		.then((res) => res.json())
 		.then(
@@ -294,7 +299,39 @@ class TripID extends React.Component {
 			}
 		);
     }
-    
+
+    updateEditPlaceInput(e) {
+		if (document.getElementById("newestTag")) {
+            let node = document.getElementById("newestTag");
+            if (node.parentNode) {
+                node.parentNode.removeChild(node);
+            }
+		}
+
+		this.setState({
+			placeText: true,
+			[e.target.id]: e.target.value,
+		});
+
+		fetch(
+		`https://api.mapbox.com/geocoding/v5/mapbox.places/${this.state.editPlanStepPlace}.json?access_token=pk.eyJ1IjoidXNoaTczMSIsImEiOiJja2Mwa2llMmswdnk4MnJsbWF1YW8zMzN6In0._Re0cs24SGBi93Bwl_w0Ig&limit=8`
+		)
+		.then((res) => res.json())
+		.then(
+			(result) => {
+				let data = [];
+				data.push(result);
+
+				this.setState({
+					searchPlaceResult: data[0].features,
+				});
+			},
+			(error) => {
+				console.log(error.message);
+			}
+		);
+    }
+
     pickStepPlace(e) {
 		e.preventDefault();
 
@@ -368,6 +405,8 @@ class TripID extends React.Component {
         e.preventDefault();
         this.setState({
             pickedAdd:'plan',
+            addPlanStepPlace:'',
+            addPlanStepName:'',
         })
         localStorage.removeItem('pic');  
     }  
@@ -380,7 +419,8 @@ class TripID extends React.Component {
     }  
     
     addPlanStep(e) {
-		e.preventDefault();
+        e.preventDefault();
+        let pickedTripID = new URL(location.href).pathname.substr(1);
 
 		let stepPic = null;
 		if (localStorage.getItem("pic")) {
@@ -412,7 +452,7 @@ class TripID extends React.Component {
 			longitude: longitude,
 			latitude: latitude,
 		});
-		console.log("db plan step ok");
+		// console.log("db plan step ok");
 		localStorage.removeItem("pic");
 		localStorage.removeItem("longitude");
         localStorage.removeItem("latitude");
@@ -444,6 +484,8 @@ class TripID extends React.Component {
             pickedStepID: e.target.getAttribute('stepid'),
             pickedEdit:'plan',
         },() =>console.log('pickedStep ok'))
+
+        let pickedTripID = new URL(location.href).pathname.substr(1);
 
         firebase
         .firestore()
@@ -491,6 +533,7 @@ class TripID extends React.Component {
     
     editPlanStep(e) {
         e.preventDefault();
+        let pickedTripID = new URL(location.href).pathname.substr(1);
         
 		let longitude;
 		let latitude;
@@ -610,12 +653,13 @@ class TripID extends React.Component {
         let storageRef = storage.ref('pics/'+file.name);
     
         storageRef.put(file).then((snapshot) => {
-          console.log('Uploaded', file.name);
+        //   console.log('Uploaded', file.name);
     
           storageRef.getDownloadURL().then(
             (url) => {
             // console.log('download'+url);
-      
+            let pickedTripID = new URL(location.href).pathname.substr(1);
+
             firebase.firestore().collection('trips').doc(pickedTripID)
             .update({
               coverPic: url
@@ -634,7 +678,7 @@ class TripID extends React.Component {
 		let storageRef = storage.ref("pics/" + file.name);
 
 		storageRef.put(file).then((snapshot) => {
-			console.log("Uploaded", file.name);
+			// console.log("Uploaded", file.name);
 
 			storageRef
 			.getDownloadURL()
@@ -976,7 +1020,7 @@ class TripID extends React.Component {
                 Add step
             </div>
         );
-        if (this.state.addPlanStepPlace && this.state.addPlanStepArriveDate) {
+        if (this.state.addPlanStepPlace!=='' && this.state.addPlanStepArriveDate!=='') {
             addStepSubmit = (
                 <div
                 className="add-step-submit"
@@ -1032,7 +1076,7 @@ class TripID extends React.Component {
                             </div>
                             <div className="add-step-input-box">
                                 <input
-                                onChange={this.updatePlaceInput.bind(this)}
+                                onChange={this.updateAddPlaceInput.bind(this)}
                                 type="text"
                                 className="add-step-place"
                                 id="addPlanStepPlace"
@@ -1117,7 +1161,7 @@ class TripID extends React.Component {
                     </div>
                     <div className="add-step-input-box">
                     <input
-                        onChange={this.updatePlaceInput.bind(this)}
+                        onChange={this.updateEditPlaceInput.bind(this)}
                         type="text"
                         className="add-step-place"
                         id="editPlanStepPlace"
