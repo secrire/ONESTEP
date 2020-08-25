@@ -18,32 +18,31 @@ class AddStepPic extends React.Component{
     }
 
     AddPlanStepPic(e) {
-		e.preventDefault();
-		let storage = firebase.storage();
-		let file = e.target.files[0];
-		let storageRef = storage.ref("pics/" + file.name);
+      e.preventDefault();
+      let storage = firebase.storage();
+      let file = e.target.files[0];
+      let storageRef = storage.ref("pics/" + file.name);
 
-		storageRef.put(file).then((snapshot) => {
-			console.log("Uploaded", file.name);
+      storageRef.put(file).then((snapshot) => {
+        console.log("Uploaded", file.name);
 
-			storageRef.getDownloadURL()
-			.then((url) => {
-				// console.log("download" + url);
-				localStorage.setItem("pic", url);
+        storageRef.getDownloadURL()
+        .then((url) => {
+          // console.log("download" + url);
+          localStorage.setItem("pic", url);
 
-				this.setState({
-                    isAddStepPic: true,
-                    addStepPic: url
-				});
-			})
-			.catch((error) => {
-				console.log("download fail" + error.message);
-			});
-		});
-	}
+          this.setState({
+                      isAddStepPic: true,
+                      addStepPic: url
+          });
+        })
+        .catch((error) => {
+          console.log("download fail" + error.message);
+        });
+      });
+    }
     
     render(){
-        // console.log(this.state);
 
         let addStepPic = null;
         if (this.state.isAddStepPic) {

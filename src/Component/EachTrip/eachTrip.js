@@ -616,6 +616,7 @@ class TripID extends React.Component {
 
     deletePlanStep(e){
         e.preventDefault();
+        let pickedTripID = new URL(location.href).pathname.substr(1);
         let pickedStepID = e.target.getAttribute('stepid');
 
         firebase.firestore()
