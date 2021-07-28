@@ -1,242 +1,212 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import {BrowserRouter as Router, Route, Link, Redirect} from "react-router-dom";
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+import React, { useState, useEffect } from 'react';
 import '../css/eachTrip.css';
 
 import firebase from 'firebase/app';
-import "firebase/auth";
-import "firebase/firestore";
+import 'firebase/auth';
+import 'firebase/firestore';
 
 // let urlUserUID = new URL(location.href).pathname.substr(2);
+const Profile = (props) => {
+  const {
+    currentUser, showProfilePage, hideProfilePage,
+  } = props;
+  const [profilePlace, setProfilePlace] = useState('');
+  const [profileAbout, setProfileAbout] = useState('');
+  const [profileUsername, setProfileUsername] = useState(null);
+  // const [currentUser, setCurrentUser] = useState(null);
+  const [currentUserUid, setCurrentUserUid] = useState(null);
+  const [showSearchProfilePlaceResult, setShowSearchProfilePlaceResult] = useState(false);
+  const [searchProfilePlace, setSearchProfilePlace] = useState([]);
+  const [isAddProfilePic, setIsAddProfilePic] = useState(false);
+  const [profilePic, setProfilePic] = useState(null);
 
-class Profile extends React.Component {
-    constructor(props){
-        super(props);
+  //   const updateInput = (e) => {
+  //     this.setState({
+  //       [e.target.id]: e.target.value,
+  //     });
+  //   }
 
-        this.state ={
-            profilePlace:'',
-            profileAbout:'',
-        };
-    }
+  const updateProfilePlaceInput = (e) => {
+    setProfilePlace(e.target.value);
+    setShowSearchProfilePlaceResult(true);
 
-    componentDidMount() {
-        let user = firebase.auth().currentUser;
-        if(user){
-            firebase
-                .firestore()
-                .collection('users')
-                .onSnapshot(querySnapshot => {
-                    querySnapshot.forEach(doc => {
-                        if(doc.data().email.toLowerCase() === user.email){
-                            this.setState({
-                                currentUser: doc.data(),
-                                currentUserUid: doc.id,
-                                profileUsername: doc.data().username
-                            }); 
-                            if(doc.data().profilePic){
-                                this.setState({
-                                    profilePic: doc.data().profilePic
-                                }); 
-                            }    
-                            if(doc.data().place){
-                                this.setState({
-                                    profilePlace: doc.data().place
-                                }); 
-                            }
-                            if(doc.data().about){
-                                this.setState({
-                                    profileAbout: doc.data().about
-                                }); 
-                            }      
-                        }   
-                    })
-                });
-        }else{
-            console.log('not a member!!!')
-        } 
-    }
-    
-    updateInput(e){
-        this.setState({
-            [e.target.id]: e.target.value
-        });
-    }
-
-    updateProfilePlaceInput(e){  
-        this.setState({
-            profilePlace: e.target.value,
-            showSearchProfilePlaceResult: true
-        });
-    
-        fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${this.state.profilePlace}.json?access_token=pk.eyJ1IjoidXNoaTczMSIsImEiOiJja2Mwa2llMmswdnk4MnJsbWF1YW8zMzN6In0._Re0cs24SGBi93Bwl_w0Ig&limit=8`)
-        .then(res => res.json())
-        .then(
+    fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${profilePlace}.json?access_token=pk.eyJ1IjoidXNoaTczMSIsImEiOiJja2Mwa2llMmswdnk4MnJsbWF1YW8zMzN6In0._Re0cs24SGBi93Bwl_w0Ig&limit=8`)
+      .then((res) => res.json())
+      .then(
         (result) => {
-            let data = [];       
-            data.push(result);
+          const data = [];
+          data.push(result);
 
-            let searchProfilePlace = [];
-            for( let i=0; i< data[0].features.length; i++ ){
-                if(data[0].features[i].place_type[0]=== 'region' || data[0].features[i].place_type[0]=== 'country' || data[0].features[i].place_type[0]=== 'place'){
-                    searchProfilePlace.push(data[0].features[i]);
-                    this.setState({
-                        searchProfilePlace: searchProfilePlace
-                    });
-                }
+          const tempSearchProfilePlace = [];
+          for (let i = 0; i < data[0].features.length; i++) {
+            if (data[0].features[i].place_type[0] === 'region' || data[0].features[i].place_type[0] === 'country' || data[0].features[i].place_type[0] === 'place') {
+              tempSearchProfilePlace.push(data[0].features[i]);
+              setSearchProfilePlace(tempSearchProfilePlace);
             }
+          }
         },
         (error) => {
-            console.log(error.message)
-        }
-        )
-    }
+          console.log(error.message);
+        },
+      );
+  };
 
-    pickStepPlace(e){
-        e.preventDefault();
+  const pickStepPlace = (e) => {
+    e.preventDefault();
+    setShowSearchProfilePlaceResult(false);
+    const tempProfilePlace = e.target.getAttribute('place');
+    setProfilePlace(tempProfilePlace);
+  };
 
-        this.setState({
-            showSearchProfilePlaceResult: null,
-            profilePlace: e.target.getAttribute('place'),
+  const uploadProfilePic = (e) => {
+    e.preventDefault();
+    const storage = firebase.storage();
+    const file = e.target.files[0];
+    const storageRef = storage.ref(`pics/${file.name}`);
+
+    storageRef.put(file).then((snapshot) => {
+    //   console.log('Uploaded', file.name);
+      storageRef.getDownloadURL()
+        .then((url) => {
+          // console.log('download'+url);
+          setIsAddProfilePic(true);
+          setProfilePic(url);
+        }).catch((error) => {
+          console.log(`download fail${error.message}`);
+        });
+    });
+  };
+
+  const editProfile = (e) => {
+    e.preventDefault();
+
+    if (profilePic) {
+      firebase
+        .firestore()
+        .collection('users')
+        .doc(currentUserUid)
+        .update({
+          profilePic,
         });
     }
 
-    uploadProfilePic(e){
-        e.preventDefault();
-        let storage = firebase.storage();
-        let file = e.target.files[0];
-        let storageRef = storage.ref('pics/'+file.name);
-
-        storageRef.put(file).then((snapshot) => {
-            console.log('Uploaded', file.name);
-        
-            storageRef.getDownloadURL()
-            .then((url) => {
-                    // console.log('download'+url);
-            
-                    this.setState({
-                        isAddProfilePic: true,
-                        profilePic: url,
-                    });
-            }).catch((error) => {
-                console.log('download fail'+error.message);
-            });
+    if (profileUsername) {
+      firebase
+        .firestore()
+        .collection('users')
+        .doc(currentUserUid)
+        .update({
+          username: profileUsername,
+          place: profilePlace,
+          about: profileAbout,
         });
     }
-    
-    editProfile(e){
-        e.preventDefault();
 
-        let profilePic='';
-        if(this.state.profilePic){
-            profilePic = this.state.profilePic;
-            firebase
-                .firestore()
-                .collection('users')
-                .doc(this.state.currentUserUid)
-                .update({
-                    profilePic: profilePic
-                })
-        }
+    // console.log('db edit profile ok');
+    hideProfilePage();
+  };
 
-        if(this.state.profileUsername){
-            firebase
-                .firestore()
-                .collection('users')
-                .doc(this.state.currentUserUid)
-                .update({
-                    username: this.state.profileUsername,
-                    place: this.state.profilePlace,
-                    about: this.state.profileAbout,
-                })
-        }
-    
-        console.log('db edit profile ok');
-        this.props.hideProfilePage(e);
+  let renderProfilePic;
+  if (currentUser) {
+    if (currentUser.profilePic || isAddProfilePic) {
+      renderProfilePic = (<img id="profile-pic" src={profilePic} alt="" />);
+    } else {
+      renderProfilePic = (
+        <div className="profile-nopic">
+          <img className="profile-pic-icon" src="./imgs/whiteprofile.svg" alt="" />
+        </div>
+      );
     }
+  }
 
+  let profileSetSubmit = <div className="profile-set-submit">Save changes</div>;
+  if (isAddProfilePic || profileUsername || profilePlace || profileAbout) {
+    profileSetSubmit = <div onClick={() => editProfile()} className="profile-set-submit-approve">Save changes</div>;
+  }
 
-    render() {
-        let profilePic;
-        if(this.props.state.currentUser){
-            if(this.props.state.currentUser.profilePic || this.state.isAddProfilePic){
-                profilePic = (<img id='profile-pic' src={this.state.profilePic}/>)
-            }else{
-                profilePic = ( <div className='profile-nopic'>
-                                  <img className='profile-pic-icon' src='./imgs/whiteprofile.svg' />
-                               </div>
-                )      
+  const searchPlaceBox = searchProfilePlace ? searchProfilePlace.map((n) => (
+    <div key={n} className="search-plan-place-box">
+      <div onClick={this.pickStepPlace.bind(this)} className="search-plan-placeName" place={n.place_name} longitude={n.center[0]} latitude={n.center[1]}>
+        {n.place_name}
+      </div>
+    </div>
+  )) : null;
+
+  const searchPlacePage = showSearchProfilePlaceResult ? (
+    <div id="profile-search-place-pop">
+      {searchPlaceBox}
+    </div>
+  ) : null;
+
+  const profilePage = showProfilePage ? (
+    <div id="profile-page">
+      <div className="profile-pop">
+        <div onClick={() => hideProfilePage()} className="profile-close">x</div>
+        <div className="profile-pop-title">Profile settings</div>
+        <div className="profile-container">
+          <div className="profile-title-box">
+            <div className="profile-title">Picture</div>
+            <div className="profile-title">Username</div>
+            <div className="profile-title">City</div>
+            <div className="profile-title">About</div>
+          </div>
+          <div className="profile-input-box">
+            <div className="profile-pic-box">
+              {renderProfilePic}
+              <label className="profile-pic-label">
+                {' '}
+                Upload a photo
+                <input onChange={uploadProfilePic()} className="trip-cover-change-pic" id="uploadPicInput" type="file" />
+              </label>
+            </div>
+            <input onChange={(e) => setProfileUsername(e.target.value)} type="text" className="profile-input" id="profileUsername" value={profileUsername} />
+            <input onChange={() => updateProfilePlaceInput()} type="text" className="profile-input" id="profilePlace" value={profilePlace} />
+            {searchPlacePage}
+            <textarea onChange={(e) => setProfileAbout(e.target.value)} type="text" className="profile-about" id="profileAbout" placeholder="Description of yourself" value={profileAbout} />
+          </div>
+        </div>
+        {profileSetSubmit}
+      </div>
+    </div>
+  ) : null;
+
+  useEffect(() => {
+    const user = firebase.auth().currentUser;
+    if (user) {
+      firebase
+        .firestore()
+        .collection('users')
+        .onSnapshot((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            if (doc.data().email.toLowerCase() === user.email) {
+              // setCurrentUser(doc.data());
+              setCurrentUserUid(doc.id);
+              setProfileUsername(doc.data().username);
+              if (doc.data().profilePic) {
+                setProfilePic(doc.data().profilePic);
+              }
+              if (doc.data().place) {
+                setProfilePlace(doc.data().place);
+              }
+              if (doc.data().about) {
+                setProfileAbout(doc.data().about);
+              }
             }
-        }
-
-        let profileSetSubmit = <div className='profile-set-submit'>Save changes</div>
-        if(this.state.isAddProfilePic || this.state.profileUsername || this.state.profilePlace || this.state.profileAbout){
-            profileSetSubmit = <div onClick={this.editProfile.bind(this)} className='profile-set-submit-approve'>Save changes</div>
-        }
-
-        let searchPlaceBox = null;
-        let searchPlacePage =null;
-        let key=0;
-
-        if(this.state.searchProfilePlace){
-        searchPlaceBox = this.state.searchProfilePlace.map((n)=>{
-            return  <div key={key++} className='search-plan-place-box'>   
-                        <div onClick={this.pickStepPlace.bind(this)} className='search-plan-placeName' place={n.place_name} longitude={n.center[0]} latitude={n.center[1]}>{n.place_name}
-                        </div>
-                    </div>
-        })
-        }
-
-        if(this.state.showSearchProfilePlaceResult){
-            searchPlacePage = (
-                <div id='profile-search-place-pop'>
-                {searchPlaceBox} 
-                </div>
-            )
-        }else{
-            searchPlacePage = null;
-        }
-
-        let profilePage = null;
-        if(this.props.state.showProfilePage){
-            profilePage =(
-                <div id='profile-page'>
-                    <div className='profile-pop'>
-                        <div onClick={this.props.hideProfilePage} className='profile-close'>x</div>
-                        <div className='profile-pop-title'>Profile settings</div>
-                        <div className='profile-container'>
-                            <div className='profile-title-box'>
-                                <div className='profile-title'>Picture</div>
-                                <div className='profile-title'>Username</div>
-                                <div className='profile-title'>City</div>
-                                <div className='profile-title'>About</div>
-                            </div>
-                            <div className='profile-input-box'>
-                                <div className='profile-pic-box'>
-                                    {profilePic}
-                                    <label className='profile-pic-label'> Upload a photo
-                                        <input onChange={this.uploadProfilePic.bind(this)} className='trip-cover-change-pic' id="uploadPicInput" type="file"/>
-                                    </label>
-                                </div>
-                                <input onChange={this.updateInput.bind(this)} type='text' className='profile-input' id='profileUsername' value={this.state.profileUsername}/>
-                                <input onChange={this.updateProfilePlaceInput.bind(this)} type='text' className='profile-input' id='profilePlace' value={this.state.profilePlace}/>
-                                {searchPlacePage}
-                                <textarea onChange={this.updateInput.bind(this)} type='text' className='profile-about' id='profileAbout' placeholder='Description of yourself' value={this.state.profileAbout}/>
-                            </div>
-                        </div>  
-                        {profileSetSubmit}       
-                    </div>
-                </div>
-            )
-        }
-
-        return(  
-            <>
-                {profilePage}
-            </>
-        )
+          });
+        });
+    } else {
+      console.log('not a member!!!');
     }
-} 
+  }, []);
 
-
+  return (
+    <>
+      {profilePage}
+    </>
+  );
+};
 
 export default Profile;

@@ -1,320 +1,274 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
-import "../../css/style.css";
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+import React, { useState } from 'react';
+import {
+  BrowserRouter as Router, Route, Link, Redirect,
+} from 'react-router-dom';
+import '../../css/style.css';
 
-import firebase from "firebase/app";
-import "firebase/auth";
-import "firebase/firestore";
-import "firebase/storage";
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/firestore';
+import 'firebase/storage';
 
 // import Search from "../search";
 
-class Header extends React.Component {
-	constructor(props) {
-		super(props);
+const Header = (props) => {
+  const {
+    changeUserInput, userData, islogin, userUid,
+  } = props;
+  const [showSignupPage, setShowSignupPage] = useState(false);
+  const [showLoginPage, setShowLoginPage] = useState(false);
+  const [showLoginFailMsg, setShowLoginFailMsg] = useState(false);
+  const {
+    username, email, password, logEmail, logPassword,
+  } = userData;
 
-		this.state = {};
-	}
+  const clickLogin = (e) => {
+    e.preventDefault();
+    setShowLoginPage(true);
+    setShowLoginFailMsg(null);
+  };
 
-	showSignupPage(e) {
-		e.preventDefault();
-		this.setState({
-			showSignupPage: true,
-		});
-	}
+  const loginToSignup = (e) => {
+    e.preventDefault();
+    setShowSignupPage(true);
+    setShowLoginPage(false);
+  };
 
-	showLoginPage(e) {
-		e.preventDefault();
-		this.setState({
-			showLoginPage: true,
-			showLoginFailMsg: null,
-		});
-	}
+  const signupToLogin = (e) => {
+    e.preventDefault();
+    setShowSignupPage(false);
+    setShowLoginPage(true);
+  };
 
-	loginToSignup(e) {
-		e.preventDefault();
-		this.setState({
-			showSignupPage: true,
-			showLoginPage: false,
-		});
-	}
+  /*          --------------   S I G N    U P       --------------      */
+  const signUpByFb = (e) => {
+    e.preventDefault();
 
-	signupToLogin(e) {
-		e.preventDefault();
-		this.setState({
-			showSignupPage: false,
-			showLoginPage: true,
-		});
-	}
+    const provider = new firebase.auth.FacebookAuthProvider();
+    firebase
+      .auth()
+      .signInWithPopup(provider)
+      .then((result) => {
+        const token = result.credential.accessToken;
+        const { user } = result;
+        // console.log(`fb sign up`,user);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
 
-	/*          --------------   S I G N    U P       --------------      */
-	FBsignUp(e) {
-		e.preventDefault();
+  const signUpByEmail = (e) => {
+    e.preventDefault();
 
-		let provider = new firebase.auth.FacebookAuthProvider();
-		firebase
-		.auth()
-		.signInWithPopup(provider)
-		.then((result) => {
-			let token = result.credential.accessToken;
-			let user = result.user;
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(
+        email,
+        password,
+      )
+      .then(() => {
+        console.log('email create member ok');
+      })
+      .catch((err) => {
+        console.log(err.message);
+        alert('Sign Up failed, please check the info again. Thank you');
+      });
+  };
 
-			console.log(`fb sign up`,user);
-		})
-		.catch((error) => {
-			console.log(error.message);
-		});
-	}
+  /*          --------------   L O G I N       --------------      */
+  const loginByFb = (e) => {
+    e.preventDefault();
+    const provider = new firebase.auth.FacebookAuthProvider();
 
-	emailSignUp(e) {
-		e.preventDefault();
+    firebase
+      .auth()
+      .signInWithPopup(provider)
+      .then((result) => {
+        const token = result.credential.accessToken;
+        const { user } = result;
+        // console.log(`fb login`, user, token);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
 
-		firebase
-			.auth()
-			.createUserWithEmailAndPassword(
-			this.props.state.email,
-			this.props.state.password
-			)
-			.then(() => {
-				console.log("email create member ok");
-			})
-			.catch((err) => {
-				console.log(err.message);
-				alert('Sign Up failed, please check the info again. Thank you');
-			});
-	}
+  const loginByEmail = (e) => {
+    e.preventDefault();
 
-	hideSignupPage(e) {
-		e.preventDefault();
-		this.setState({
-			showSignupPage: false,
-		});
-	}
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(
+        logEmail,
+        logPassword,
+      )
+      .then(() => {
+        console.log('email log in ok');
+      })
+      .catch((err) => {
+        console.log(err.message);
+        setShowLoginFailMsg(true);
+      });
+  };
 
-	/*          --------------   L O G I N       --------------      */
-	FBlogin(e) {
-		e.preventDefault();
-		let provider = new firebase.auth.FacebookAuthProvider();
+  const loginByTestAccount = (e) => {
+    e.preventDefault();
 
-		firebase
-			.auth()
-			.signInWithPopup(provider)
-			.then((result) => {
-				let token = result.credential.accessToken;
-				let user = result.user;
-				console.log(`fb login`, user, token);
-			})
-			.catch((error) => {
-				console.log(error.message);
-			});
-	}
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(
+        'test@g.com',
+        '111111',
+      )
+      .then(() => {
+        console.log('test account log in ok');
+      })
+      .catch((err) => {
+        console.log(err.message);
+        setShowLoginFailMsg(true);
+      });
+  };
 
-	emailLogIn(e) {
-		e.preventDefault();
+  if (islogin) {
+    return <Redirect to={`/m${userUid}`} />;
+  }
 
-		firebase
-			.auth()
-			.signInWithEmailAndPassword(
-			this.props.state.logEmail,
-			this.props.state.logPassword
-			)
-			.then(() => {
-				console.log('email log in ok');
-			})
-			.catch((err) => {
-				console.log(err.message);
-				this.setState({
-					showLoginFailMsg: true,
-				});
-			});
-	}
+  const signupSubmit = (
+    <div onClick={() => signUpByEmail()} className={showSignupPage && username && email && password ? 'signup-submit-approve' : 'signup-submit'}>
+      Create new account
+    </div>
+  );
 
-	testAccountLogIn(e) {
-		e.preventDefault();
+  const signupPage = showSignupPage ? (
+    <div id="signup-page">
+      <div className="signup-pop">
+        <div
+          onClick={() => setShowSignupPage(false)}
+          className="signup-close"
+        >
+          x
+        </div>
+        <div className="signup-title">New account</div>
+        <div className="signup-fb-btn" onClick={() => signUpByFb()}>
+          Create new account with Facebook
+        </div>
+        <div className="signup-fb-note">
+          We will never post to Facebook without your permission.
+        </div>
+        <div className="signup-or">or</div>
+        <input
+          type="text"
+          className="signup-name"
+          id="username"
+          placeholder="Username"
+          onChange={changeUserInput(username, e)}
+          value={username}
+        />
+        <input
+          type="email"
+          className="signup-email"
+          id="email"
+          placeholder="Email"
+          onChange={changeUserInput(email, e)}
+          value={email}
+        />
+        <input
+          type="password"
+          className="signup-psw"
+          id="password"
+          placeholder="Password: at least 6 characters"
+          onChange={changeUserInput(password, e)}
+          value={password}
+        />
+        {signupSubmit}
+        <div className="test-account" onClick={() => loginByTestAccount()}>Test account Log in</div>
+        <div className="signup-to-login">
+          <p>Already have an account?</p>
+          <div onClick={() => signupToLogin()}>Log in</div>
+        </div>
+      </div>
+    </div>
+  ) : null;
 
-		firebase
-			.auth()
-			.signInWithEmailAndPassword(
-			'test@g.com',
-			'111111'
-			)
-			.then(() => {
-				console.log('test account log in ok');
-			})
-			.catch((err) => {
-				console.log(err.message);
-				this.setState({
-					showLoginFailMsg: true,
-				});
-			});
-	}
+  const loginFailMsg = showLoginFailMsg ? (
+    <div id="login-fail-msg">
+      Sorry, your username or password is wrong.
+    </div>
+  ) : null;
 
-	hideLoginPage(e) {
-		e.preventDefault();
-		this.setState({
-			showLoginPage: false,
-		});
-	}
+  const loginPage = showLoginPage ? (
+    <div id="login-page">
+      <div className="login-pop">
+        <div
+          onClick={() => showLoginPage(false)}
+          className="signup-close"
+        >
+          x
+        </div>
+        <div className="signup-title">Log in to ONESTEP</div>
+        <div className="signup-fb-btn" onClick={() => loginByFb()}>
+          Log in with Facebook
+        </div>
+        <div className="signup-fb-note">
+          We will never post to Facebook without your permission.
+        </div>
+        <div className="signup-or">or</div>
+        <input
+          type="text"
+          onChange={changeUserInput(logEmail, e)}
+          value={logEmail}
+          id="logEmail"
+          className="login-username"
+          placeholder="Email"
+        />
+        <input
+          type="password"
+          onChange={changeUserInput(logPassword, e)}
+          value={logPassword}
+          id="logPassword"
+          className="login-psw"
+          placeholder="Password"
+        />
+        {loginFailMsg}
+        <div onClick={() => loginByEmail()} className="login-submit">
+          Log in
+        </div>
+        <div className="test-account" onClick={() => loginByTestAccount()}>Test account Log in</div>
+        <div className="signup-to-login">
+          <p>New to ONESTEP?</p>
+          <div onClick={() => loginToSignup()}>
+            Create an account
+          </div>
+        </div>
+      </div>
+    </div>
+  ) : null;
 
-	render() {
-		if (this.props.state.islogin === true) {
-			return <Redirect to={"/m" + this.props.state.userUid} />
-		}
+  return (
+    <>
+      <div id="header">
 
-		let signupPage = null;
-		let signupSubmit = (
-			<div onClick={this.emailSignUp.bind(this)} className="signup-submit">
-			Create new account
-			</div>
-		);
+        {/* <Search /> */}
+        <div className="logo">O N E S T E P</div>
+        <div className="login-signup-box">
+          <div onClick={() => clickLogin()} className="login">
+            Login
+          </div>
+          <div className="login-signup-line">/</div>
+          <div onClick={() => setShowSignupPage(true)} className="signup">
+            Register
+          </div>
+        </div>
 
-		if (this.state.showSignupPage === true) {
-			if (
-				this.props.state.username &&
-				this.props.state.email &&
-				this.props.state.password
-			) {
-				signupSubmit = (
-					<div
-						onClick={this.emailSignUp.bind(this)}
-						className="signup-submit-approve"
-					>
-					Create new account
-					</div>
-				);
-			}
+        {signupPage}
+        {loginPage}
 
-			signupPage = (
-				<div id="signup-page">
-				<div className="signup-pop">
-					<div
-					onClick={this.hideSignupPage.bind(this)}
-					className="signup-close"
-					>
-					x
-					</div>
-					<div className="signup-title">New account</div>
-					<div className="signup-fb-btn" onClick={this.FBsignUp.bind(this)}>
-					Create new account with Facebook
-					</div>
-					<div className="signup-fb-note">
-					We'll never post to Facebook without your permission.
-					</div>
-					<div className="signup-or">or</div>
-					<input
-						type="text"
-						className="signup-name"
-						id="username"
-						placeholder="Username"
-						onChange={this.props.updateInput}
-					/>
-					<input
-						type="email"
-						className="signup-email"
-						id="email"
-						placeholder="Email"
-						onChange={this.props.updateInput}
-					/>
-					<input
-						type="password"
-						className="signup-psw"
-						id="password"
-						placeholder="Password: at least 6 characters"
-						onChange={this.props.updateInput}
-					/>
-					{signupSubmit}
-					<div className='test-account' onClick={this.testAccountLogIn.bind(this)} >Test account Log in</div> 
-					<div className="signup-to-login">
-					<p>Already have an account?</p>
-					<div onClick={this.signupToLogin.bind(this)}>Log in</div>
-					</div>
-				</div>
-				</div>
-			);				
-		}
-
-		let loginPage = null;
-		let loginFailMsg = null;
-		if(this.state.showLoginFailMsg){
-			loginFailMsg = (
-				<div id="login-fail-msg">
-				Sorry, your username or password is wrong.
-				</div>
-			)
-		}
-
-		if (this.state.showLoginPage === true) {
-			loginPage = (
-				<div id="login-page">
-					<div className="login-pop">
-						<div
-						onClick={this.hideLoginPage.bind(this)}
-						className="signup-close"
-						>
-						x
-						</div>
-						<div className="signup-title">Log in to ONESTEP</div>
-						<div className="signup-fb-btn" onClick={this.FBlogin.bind(this)}>
-						Log in with Facebook
-						</div>
-						<div className="signup-fb-note">
-						We'll never post to Facebook without your permission.
-						</div>
-						<div className="signup-or">or</div>
-						<input
-							type="text"
-							onChange={this.props.updateInput}
-							id="logEmail"
-							className="login-username"
-							placeholder="Email"
-						/>
-						<input
-							type="password"
-							onChange={this.props.updateInput}
-							id="logPassword"
-							className="login-psw"
-							placeholder="Password"
-						/>
-						{loginFailMsg}
-						<div onClick={this.emailLogIn.bind(this)} className="login-submit">
-						Log in
-						</div>
-						<div className='test-account' onClick={this.testAccountLogIn.bind(this)} >Test account Log in</div> 
-						<div className="signup-to-login">
-							<p>New to ONESTEP?</p>
-							<div onClick={this.loginToSignup.bind(this)}>
-							Create an account
-							</div>
-						</div>
-					</div>
-				</div>
-			);
-		}
-
-		return (
-			<>
-				<div id="header">
-
-				{/* <Search /> */}
-				<div className="logo">O N E S T E P</div>
-				<div className="login-signup-box">
-					<div onClick={this.showLoginPage.bind(this)} className="login">
-					Login
-					</div>
-					<div className="login-signup-line">/</div>
-					<div onClick={this.showSignupPage.bind(this)} className="signup">
-					Register
-					</div>
-				</div>
-
-				{signupPage}
-				{loginPage}
-
-				</div>
-			</>
-		);
-	}
-}
+      </div>
+    </>
+  );
+};
 
 export default Header;
